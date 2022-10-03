@@ -8,28 +8,30 @@ const { createCategorySchema } = require('../schemas/categorySchema');
 const categoryController = require('../controllers/categoryControler');
 //middlewares
 const validatorHandler = require('../middlewares/validatorHandler');
-// const rolVerification = require('../middlewares/rolVerification');
+const roleVerification = require('../middlewares/roleVerification');
 const { verifyJWT } = require('../middlewares/verifyJWT');
 router.use(verifyJWT);
 
-router.get('/', 
-// rolVerification.generic,
- categoryController.listCategory);
+router.get(
+	'/',
+	roleVerification('admin', 'god', 'guest'),
+	categoryController.listCategory
+);
 router.post(
 	'/',
-	// rolVerification.admin,
+  roleVerification("admin", "god"),
 	validatorHandler(createCategorySchema, 'body'),
 	categoryController.createCategory
 );
 router.delete(
 	'/:id',
-	// rolVerification.admin,
+  roleVerification("admin", "god", "guest"),
 	validatorHandler(idByParamsSchema, 'params'),
 	categoryController.deleteCategory
 );
 router.put(
 	'/:id',
-	// rolVerification.admin,
+  roleVerification("admin", "god", "guest"),
 	validatorHandler(createCategorySchema, 'body'),
 	validatorHandler(idByParamsSchema, 'params'),
 	categoryController.updateCategory

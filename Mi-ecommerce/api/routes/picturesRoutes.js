@@ -17,7 +17,7 @@ const { idByParamsSchema } = require('../schemas/genericSchema');
 // Middlewares
 const { verifyJWT } = require('../middlewares/verifyJWT');
 const validatorHandler = require('../middlewares/validatorHandler');
-const roleVerification = require('../middlewares/rolVerification');
+const roleVerification = require('../middlewares/roleVerification');
 
 const router = express.Router();
 
@@ -25,7 +25,7 @@ router.use(verifyJWT);
 
 router.get(
 	'/',
-	// rolVerification.generic,
+	roleVerification("admin", "god", "guest"),
 	validatorHandler(getProductPicturesSchema, 'query'),
 	getPictures
 );
@@ -39,14 +39,14 @@ router.get(
 
 router.post(
 	'/',
-	// rolVerification.admin,
+  roleVerification("admin", "god"),
 	validatorHandler(createSchema, 'body'),
 	createPicture
 );
 
 router.put(
 	'/:id',
-  // rolVerification.admin,
+  roleVerification("admin", "god"),
 	validatorHandler(idByParamsSchema, 'params'),
 	validatorHandler(updateSchema, 'body'),
 	updatePicture
@@ -54,7 +54,7 @@ router.put(
 
 router.delete(
 	'/:id',
-  // rolVerification.admin,
+  roleVerification("admin", "god"),
 	validatorHandler(idByParamsSchema, 'params'),
 	deletePicture
 );

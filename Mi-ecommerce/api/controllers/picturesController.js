@@ -1,9 +1,3 @@
-const fs = require('fs');
-const {
-	getProducts,
-	getImages,
-	guardarPictures,
-} = require('../../helpers/filesHelpers');
 const responses = require('../network/responses');
 const db = require('../database/models');
 
