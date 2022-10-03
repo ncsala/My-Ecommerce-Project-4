@@ -43,7 +43,7 @@ route.use('/users', usersRoutes);
 route.use('/products', productsRoutes);
 route.use('/pictures', picturesRoutes);
 route.use('/carts', cartsRoutes);
-route.use('/category', categoryRoutes);
+// route.use('/category', categoryRoutes);
 route.use('/cargar',cargarDatosRoutes),
 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
