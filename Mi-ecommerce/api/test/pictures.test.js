@@ -1,6 +1,6 @@
 const request = require('supertest');
-const { app, server } = require('../server');
-const models = require('../api/database/models');
+const { app, server } = require('../../server');
+const models = require('../database/models');
 const sinon = require('sinon');
 const { generateToken } = require('./helpers');
 

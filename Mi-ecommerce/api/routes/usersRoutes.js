@@ -13,7 +13,7 @@ const { verifyJWT } = require('../middlewares/verifyJWT');
 const validatorHandler = require('../middlewares/validatorHandler');
 const userAuthMiddleware = require('../middlewares/userAuthMiddleware');
 
-router = express.Router();
+const router = express.Router();
 
 router.post(
 	'/',

@@ -46,9 +46,9 @@ app.use(logErrors);
 app.use(clientErrorHandler);
 
 const server = app.listen(process.env.PORT, () => {
-	sequelize.sync(
+	// sequelize.sync(
 		 //{ force: true } 
-		);
+		// );
 
 	console.log(`Servidor corriendo en el puerto ${process.env.PORT}`);
 });
