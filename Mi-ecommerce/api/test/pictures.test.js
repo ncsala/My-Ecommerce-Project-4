@@ -78,7 +78,7 @@ describe('POST /api/v1/pictures', () => {
 		);
 	});
 
-  it('should return 404 if product does not exist', async () => {
+	it('should return 404 if product does not exist', async () => {
 		const token = await generateToken('god');
 
 		const response = await request(app)
@@ -125,7 +125,7 @@ describe('POST /api/v1/pictures', () => {
 	it('should return 500 if there is an error on the server', async () => {
 		const token = await generateToken('god');
 
-    //Simulo un error en la base de datos
+		//Simulo un error en la base de datos
 		const stub = sinon.stub(db.Picture, 'findAll').throws();
 
 		const response = await request(app)
@@ -136,11 +136,92 @@ describe('POST /api/v1/pictures', () => {
 			.expect(500);
 		expect(response.body).toHaveProperty('error');
 		expect(response.body).toHaveProperty('msg');
-    expect(response.body.error).toBe(true);
+		expect(response.body.error).toBe(true);
 
-    //Restauro el metodo findAll
+		//Restauro el metodo findAll
 		stub.restore();
 	});
 });
 //------------------------------------------------------------------------------
 
+describe('GET /api/v1/pictures', () => {
+
+
+  /// probar si funciona con varias imagenes
+	it('should return all pictures of a product', async () => {
+		const token = await generateToken('god');
+
+		const response = await request(app)
+			.get('/api/v1/pictures?product=1')
+			.auth(token, { type: 'bearer' })
+			.set('Accept', 'application/json')
+			.expect('Content-Type', /json/)
+			.expect(200);
+		expect(response.body.data).toEqual(
+			expect.arrayContaining([
+				expect.objectContaining({
+					picture_id: expect.any(Number),
+					picture_url: expect.any(String),
+					picture_description: null,
+					product_id: expect.any(Number),
+				}),
+			])
+		);
+	});
+
+  it('should return 400 if product is not a valid option, for example `abc`', async () => {
+		const token = await generateToken('god');
+
+		const response = await request(app)
+			.get('/api/v1/pictures?product=abc')
+			.auth(token, { type: 'bearer' })
+			.set('Accept', 'application/json')
+			.expect('Content-Type', /json/)
+			.expect(400);
+		expect(response.body).toHaveProperty('error');
+		expect(response.body).toHaveProperty('msg');
+	});
+
+	it('should return 404 if product does not exist', async () => {
+		const token = await generateToken('god');
+
+		const response = await request(app)
+			.get('/api/v1/pictures?product=4000')
+			.auth(token, { type: 'bearer' })
+			.set('Accept', 'application/json')
+			.expect('Content-Type', /json/)
+			.expect(404);
+		expect(response.body.msg).toBe('Product not found');
+	});
+
+  it('should return 404 if the product does not have any picture', async () => {
+    const token = await generateToken('god');
+
+    const response = await request(app)
+      .get('/api/v1/pictures?product=2')
+      .auth(token, { type: 'bearer' })
+      .set('Accept', 'application/json')
+      .expect('Content-Type', /json/)
+      .expect(404);
+    expect(response.body.msg).toBe('The product does not have images');
+  });
+
+
+	it('should return 500 if there is an error on the server', async () => {
+		const token = await generateToken('god');
+
+		const stub = sinon.stub(db.Picture, 'findAll').throws();
+
+		const response = await request(app)
+			.get('/api/v1/pictures?product=1')
+			.auth(token, { type: 'bearer' })
+			.set('Accept', 'application/json')
+			.expect('Content-Type', /json/)
+			.expect(500);
+		expect(response.body).toHaveProperty('error');
+		expect(response.body).toHaveProperty('msg');
+		expect(response.body.error).toBe(true);
+
+		stub.restore();
+	});
+});
