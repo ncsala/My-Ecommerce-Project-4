@@ -45,10 +45,14 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.use(logErrors);
 app.use(clientErrorHandler);
 
-app.listen(process.env.PORT, () => {
-	sequelize.sync(
-		 { force: true } 
-		);
+
+const server = app.listen(process.env.PORT, () => {
+	// sequelize.sync(
+	// 	//  { force: true } 
+	// );
 
 	console.log(`Servidor corriendo en el puerto ${process.env.PORT}`);
 });
+
+
+module.exports = {app, server}
