@@ -1,19 +1,21 @@
 const { generateJWT } = require('../../helpers/generateJWT');
-
 const users = require('../data.json/user.json');
 const products = require('../data.json/products.json');
 const categories = require('../data.json/categories.json');
 const pictures = require('../data.json/pictures.json');
 const cartProducts = require('../data.json/cartProduct.json');
 const db = require('../database/models');
+const { Op } = require('sequelize');
 
+// Genera JWT para pruebas con el rol pasado como argumento
 const generateToken = async (role) => {
 	return await generateJWT({
 		role: role,
 	});
 };
 
-async function carga(){
+// Carga datos en la base de datos
+async function loadingDataInTestingDB() {
 	for await (let u of users) {
 		await db.User.upsert({
 			first_name: u.first_name,
@@ -50,7 +52,7 @@ async function carga(){
 			title: product.title,
 			stock: product.stock,
 			mostwanted: product.mostwanted,
-  description: product.description,
+			description: product.description,
 			category_id: product.category,
 		});
 	}
@@ -73,4 +75,39 @@ async function carga(){
 	}
 }
 
-module.exports = { generateToken , carga};
+// Vacía las tablas para empezar de cero
+const destroyTables = async () => {
+	db.User.destroy({
+		where: {
+			user_id: {
+				[Op.gt]: 0,
+			},
+		},
+	});
+
+	db.Product.destroy({
+		where: {
+			product_id: {
+				[Op.gt]: 0,
+			},
+		},
+	});
+
+	db.Picture.destroy({
+		where: {
+			picture_id: {
+				[Op.gt]: 0,
+			},
+		},
+	});
+
+	db.Cart.destroy({
+		where: {
+			cart_id: {
+				[Op.gt]: 0,
+			},
+		},
+	});
+};
+
+module.exports = { generateToken, loadingDataInTestingDB, destroyTables };
