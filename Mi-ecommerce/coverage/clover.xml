@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1664828990445" clover="3.2.0">
-  <project timestamp="1664828990445" name="All files">
+<coverage generated="1664829230908" clover="3.2.0">
+  <project timestamp="1664829230908" name="All files">
     <metrics statements="670" coveredstatements="305" conditionals="201" coveredconditionals="13" methods="68" coveredmethods="17" elements="939" coveredelements="335" complexity="0" loc="670" ncloc="670" packages="10" files="37" classes="37"/>
     <package name="Mi-ecommerce">
       <metrics statements="31" coveredstatements="30" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
-      <file name="server.js" path="/Users/juanfelipeparada/Desktop/Sprint 3 bootcamp nodeJS/My-Ecommerce-Project-4/Mi-ecommerce/server.js">
+      <file name="server.js" path="/Users/nicolasmartincaceres/Desktop/My ecommerce-project-4-main/Mi-ecommerce/server.js">
         <metrics statements="31" coveredstatements="30" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
         <line num="1" count="1" type="stmt"/>
         <line num="2" count="1" type="stmt"/>
@@ -41,7 +41,7 @@
     </package>
     <package name="Mi-ecommerce.api.controllers">
       <metrics statements="321" coveredstatements="38" conditionals="129" coveredconditionals="0" methods="28" coveredmethods="0"/>
-      <file name="cargarDatosControler.js" path="/Users/juanfelipeparada/Desktop/Sprint 3 bootcamp nodeJS/My-Ecommerce-Project-4/Mi-ecommerce/api/controllers/cargarDatosControler.js">
+      <file name="cargarDatosControler.js" path="/Users/nicolasmartincaceres/Desktop/My ecommerce-project-4-main/Mi-ecommerce/api/controllers/cargarDatosControler.js">
         <metrics statements="26" coveredstatements="8" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="0"/>
         <line num="1" count="1" type="stmt"/>
         <line num="5" count="1" type="stmt"/>
@@ -70,7 +70,7 @@
         <line num="81" count="0" type="stmt"/>
         <line num="85" count="1" type="stmt"/>
       </file>
-      <file name="cartController.js" path="/Users/juanfelipeparada/Desktop/Sprint 3 bootcamp nodeJS/My-Ecommerce-Project-4/Mi-ecommerce/api/controllers/cartController.js">
+      <file name="cartController.js" path="/Users/nicolasmartincaceres/Desktop/My ecommerce-project-4-main/Mi-ecommerce/api/controllers/cartController.js">
         <metrics statements="42" coveredstatements="5" conditionals="21" coveredconditionals="0" methods="2" coveredmethods="0"/>
         <line num="1" count="1" type="stmt"/>
         <line num="2" count="1" type="stmt"/>
@@ -115,7 +115,7 @@
         <line num="140" count="0" type="stmt"/>
         <line num="150" count="1" type="stmt"/>
       </file>
-      <file name="categoryControler.js" path="/Users/juanfelipeparada/Desktop/Sprint 3 bootcamp nodeJS/My-Ecommerce-Project-4/Mi-ecommerce/api/controllers/categoryControler.js">
+      <file name="categoryControler.js" path="/Users/nicolasmartincaceres/Desktop/My ecommerce-project-4-main/Mi-ecommerce/api/controllers/categoryControler.js">
         <metrics statements="30" coveredstatements="3" conditionals="6" coveredconditionals="0" methods="4" coveredmethods="0"/>
         <line num="1" count="1" type="stmt"/>
         <line num="2" count="1" type="stmt"/>
@@ -148,7 +148,7 @@
         <line num="86" count="0" type="stmt"/>
         <line num="91" count="1" type="stmt"/>
       </file>
-      <file name="picturesController.js" path="/Users/juanfelipeparada/Desktop/Sprint 3 bootcamp nodeJS/My-Ecommerce-Project-4/Mi-ecommerce/api/controllers/picturesController.js">
+      <file name="picturesController.js" path="/Users/nicolasmartincaceres/Desktop/My ecommerce-project-4-main/Mi-ecommerce/api/controllers/picturesController.js">
         <metrics statements="57" coveredstatements="8" conditionals="18" coveredconditionals="0" methods="5" coveredmethods="0"/>
         <line num="1" count="1" type="stmt"/>
         <line num="2" count="1" type="stmt"/>
@@ -208,7 +208,7 @@
         <line num="173" count="0" type="stmt"/>
         <line num="177" count="1" type="stmt"/>
       </file>
-      <file name="productsController.js" path="/Users/juanfelipeparada/Desktop/Sprint 3 bootcamp nodeJS/My-Ecommerce-Project-4/Mi-ecommerce/api/controllers/productsController.js">
+      <file name="productsController.js" path="/Users/nicolasmartincaceres/Desktop/My ecommerce-project-4-main/Mi-ecommerce/api/controllers/productsController.js">
         <metrics statements="102" coveredstatements="8" conditionals="54" coveredconditionals="0" methods="9" coveredmethods="0"/>
         <line num="1" count="1" type="stmt"/>
         <line num="2" count="1" type="stmt"/>
@@ -313,7 +313,7 @@
         <line num="498" count="0" type="stmt"/>
         <line num="506" count="1" type="stmt"/>
       </file>
-      <file name="usersController.js" path="/Users/juanfelipeparada/Desktop/Sprint 3 bootcamp nodeJS/My-Ecommerce-Project-4/Mi-ecommerce/api/controllers/usersController.js">
+      <file name="usersController.js" path="/Users/nicolasmartincaceres/Desktop/My ecommerce-project-4-main/Mi-ecommerce/api/controllers/usersController.js">
         <metrics statements="64" coveredstatements="6" conditionals="30" coveredconditionals="0" methods="6" coveredmethods="0"/>
         <line num="1" count="1" type="stmt"/>
         <line num="2" count="1" type="stmt"/>
@@ -383,7 +383,7 @@
     </package>
     <package name="Mi-ecommerce.api.database.config">
       <metrics statements="3" coveredstatements="3" conditionals="12" coveredconditionals="6" methods="0" coveredmethods="0"/>
-      <file name="config.js" path="/Users/juanfelipeparada/Desktop/Sprint 3 bootcamp nodeJS/My-Ecommerce-Project-4/Mi-ecommerce/api/database/config/config.js">
+      <file name="config.js" path="/Users/nicolasmartincaceres/Desktop/My ecommerce-project-4-main/Mi-ecommerce/api/database/config/config.js">
         <metrics statements="3" coveredstatements="3" conditionals="12" coveredconditionals="6" methods="0" coveredmethods="0"/>
         <line num="1" count="1" type="stmt"/>
         <line num="3" count="1" type="stmt"/>
@@ -392,7 +392,7 @@
     </package>
     <package name="Mi-ecommerce.api.database.models">
       <metrics statements="73" coveredstatements="72" conditionals="9" coveredconditionals="7" methods="14" coveredmethods="14"/>
-      <file name="Cart.js" path="/Users/juanfelipeparada/Desktop/Sprint 3 bootcamp nodeJS/My-Ecommerce-Project-4/Mi-ecommerce/api/database/models/Cart.js">
+      <file name="Cart.js" path="/Users/nicolasmartincaceres/Desktop/My ecommerce-project-4-main/Mi-ecommerce/api/database/models/Cart.js">
         <metrics statements="10" coveredstatements="10" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="2"/>
         <line num="1" count="1" type="stmt"/>
         <line num="3" count="1" type="stmt"/>
@@ -405,7 +405,7 @@
         <line num="42" count="1" type="stmt"/>
         <line num="45" count="1" type="stmt"/>
       </file>
-      <file name="CartProduct.js" path="/Users/juanfelipeparada/Desktop/Sprint 3 bootcamp nodeJS/My-Ecommerce-Project-4/Mi-ecommerce/api/database/models/CartProduct.js">
+      <file name="CartProduct.js" path="/Users/nicolasmartincaceres/Desktop/My ecommerce-project-4-main/Mi-ecommerce/api/database/models/CartProduct.js">
         <metrics statements="7" coveredstatements="7" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
         <line num="1" count="1" type="stmt"/>
         <line num="3" count="1" type="stmt"/>
@@ -415,7 +415,7 @@
         <line num="32" count="1" type="stmt"/>
         <line num="35" count="1" type="stmt"/>
       </file>
-      <file name="Category.js" path="/Users/juanfelipeparada/Desktop/Sprint 3 bootcamp nodeJS/My-Ecommerce-Project-4/Mi-ecommerce/api/database/models/Category.js">
+      <file name="Category.js" path="/Users/nicolasmartincaceres/Desktop/My ecommerce-project-4-main/Mi-ecommerce/api/database/models/Category.js">
         <metrics statements="9" coveredstatements="9" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="2"/>
         <line num="1" count="1" type="stmt"/>
         <line num="2" count="1" type="stmt"/>
@@ -427,7 +427,7 @@
         <line num="29" count="1" type="stmt"/>
         <line num="32" count="1" type="stmt"/>
       </file>
-      <file name="Picture.js" path="/Users/juanfelipeparada/Desktop/Sprint 3 bootcamp nodeJS/My-Ecommerce-Project-4/Mi-ecommerce/api/database/models/Picture.js">
+      <file name="Picture.js" path="/Users/nicolasmartincaceres/Desktop/My ecommerce-project-4-main/Mi-ecommerce/api/database/models/Picture.js">
         <metrics statements="8" coveredstatements="8" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="2"/>
         <line num="1" count="1" type="stmt"/>
         <line num="2" count="1" type="stmt"/>
@@ -438,7 +438,7 @@
         <line num="39" count="1" type="stmt"/>
         <line num="46" count="1" type="stmt"/>
       </file>
-      <file name="Product.js" path="/Users/juanfelipeparada/Desktop/Sprint 3 bootcamp nodeJS/My-Ecommerce-Project-4/Mi-ecommerce/api/database/models/Product.js">
+      <file name="Product.js" path="/Users/nicolasmartincaceres/Desktop/My ecommerce-project-4-main/Mi-ecommerce/api/database/models/Product.js">
         <metrics statements="11" coveredstatements="11" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="2"/>
         <line num="1" count="1" type="stmt"/>
         <line num="3" count="1" type="stmt"/>
@@ -452,7 +452,7 @@
         <line num="72" count="1" type="stmt"/>
         <line num="75" count="1" type="stmt"/>
       </file>
-      <file name="User.js" path="/Users/juanfelipeparada/Desktop/Sprint 3 bootcamp nodeJS/My-Ecommerce-Project-4/Mi-ecommerce/api/database/models/User.js">
+      <file name="User.js" path="/Users/nicolasmartincaceres/Desktop/My ecommerce-project-4-main/Mi-ecommerce/api/database/models/User.js">
         <metrics statements="8" coveredstatements="8" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="2"/>
         <line num="1" count="1" type="stmt"/>
         <line num="2" count="1" type="stmt"/>
@@ -463,7 +463,7 @@
         <line num="50" count="1" type="stmt"/>
         <line num="58" count="1" type="stmt"/>
       </file>
-      <file name="index.js" path="/Users/juanfelipeparada/Desktop/Sprint 3 bootcamp nodeJS/My-Ecommerce-Project-4/Mi-ecommerce/api/database/models/index.js">
+      <file name="index.js" path="/Users/nicolasmartincaceres/Desktop/My ecommerce-project-4-main/Mi-ecommerce/api/database/models/index.js">
         <metrics statements="20" coveredstatements="19" conditionals="9" coveredconditionals="7" methods="3" coveredmethods="3"/>
         <line num="3" count="1" type="stmt"/>
         <line num="4" count="1" type="stmt"/>
@@ -489,14 +489,14 @@
     </package>
     <package name="Mi-ecommerce.api.middlewares">
       <metrics statements="70" coveredstatements="14" conditionals="44" coveredconditionals="0" methods="17" coveredmethods="2"/>
-      <file name="errorHandler.js" path="/Users/juanfelipeparada/Desktop/Sprint 3 bootcamp nodeJS/My-Ecommerce-Project-4/Mi-ecommerce/api/middlewares/errorHandler.js">
+      <file name="errorHandler.js" path="/Users/nicolasmartincaceres/Desktop/My ecommerce-project-4-main/Mi-ecommerce/api/middlewares/errorHandler.js">
         <metrics statements="4" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="0"/>
         <line num="2" count="0" type="stmt"/>
         <line num="3" count="0" type="stmt"/>
         <line num="7" count="0" type="stmt"/>
         <line num="13" count="1" type="stmt"/>
       </file>
-      <file name="productDataValidation.js" path="/Users/juanfelipeparada/Desktop/Sprint 3 bootcamp nodeJS/My-Ecommerce-Project-4/Mi-ecommerce/api/middlewares/productDataValidation.js">
+      <file name="productDataValidation.js" path="/Users/nicolasmartincaceres/Desktop/My ecommerce-project-4-main/Mi-ecommerce/api/middlewares/productDataValidation.js">
         <metrics statements="7" coveredstatements="1" conditionals="8" coveredconditionals="0" methods="1" coveredmethods="0"/>
         <line num="2" count="0" type="stmt"/>
         <line num="4" count="0" type="cond" truecount="0" falsecount="4"/>
@@ -506,7 +506,7 @@
         <line num="18" count="0" type="stmt"/>
         <line num="21" count="1" type="stmt"/>
       </file>
-      <file name="roleVerification.js" path="/Users/juanfelipeparada/Desktop/Sprint 3 bootcamp nodeJS/My-Ecommerce-Project-4/Mi-ecommerce/api/middlewares/roleVerification.js">
+      <file name="roleVerification.js" path="/Users/nicolasmartincaceres/Desktop/My ecommerce-project-4-main/Mi-ecommerce/api/middlewares/roleVerification.js">
         <metrics statements="7" coveredstatements="2" conditionals="2" coveredconditionals="0" methods="4" coveredmethods="1"/>
         <line num="3" count="0" type="stmt"/>
         <line num="10" count="9" type="stmt"/>
@@ -516,7 +516,7 @@
         <line num="16" count="0" type="stmt"/>
         <line num="21" count="1" type="stmt"/>
       </file>
-      <file name="userAuthMiddleware.js" path="/Users/juanfelipeparada/Desktop/Sprint 3 bootcamp nodeJS/My-Ecommerce-Project-4/Mi-ecommerce/api/middlewares/userAuthMiddleware.js">
+      <file name="userAuthMiddleware.js" path="/Users/nicolasmartincaceres/Desktop/My ecommerce-project-4-main/Mi-ecommerce/api/middlewares/userAuthMiddleware.js">
         <metrics statements="28" coveredstatements="3" conditionals="26" coveredconditionals="0" methods="6" coveredmethods="0"/>
         <line num="1" count="1" type="stmt"/>
         <line num="3" count="1" type="stmt"/>
@@ -547,7 +547,7 @@
         <line num="56" count="0" type="stmt"/>
         <line num="61" count="1" type="stmt"/>
       </file>
-      <file name="validatorHandler.js" path="/Users/juanfelipeparada/Desktop/Sprint 3 bootcamp nodeJS/My-Ecommerce-Project-4/Mi-ecommerce/api/middlewares/validatorHandler.js">
+      <file name="validatorHandler.js" path="/Users/nicolasmartincaceres/Desktop/My ecommerce-project-4-main/Mi-ecommerce/api/middlewares/validatorHandler.js">
         <metrics statements="7" coveredstatements="2" conditionals="2" coveredconditionals="0" methods="2" coveredmethods="1"/>
         <line num="2" count="28" type="stmt"/>
         <line num="3" count="0" type="stmt"/>
@@ -557,7 +557,7 @@
         <line num="8" count="0" type="stmt"/>
         <line num="12" count="1" type="stmt"/>
       </file>
-      <file name="verifyJWT.js" path="/Users/juanfelipeparada/Desktop/Sprint 3 bootcamp nodeJS/My-Ecommerce-Project-4/Mi-ecommerce/api/middlewares/verifyJWT.js">
+      <file name="verifyJWT.js" path="/Users/nicolasmartincaceres/Desktop/My ecommerce-project-4-main/Mi-ecommerce/api/middlewares/verifyJWT.js">
         <metrics statements="17" coveredstatements="5" conditionals="6" coveredconditionals="0" methods="2" coveredmethods="0"/>
         <line num="1" count="1" type="stmt"/>
         <line num="2" count="1" type="stmt"/>
@@ -580,7 +580,7 @@
     </package>
     <package name="Mi-ecommerce.api.network">
       <metrics statements="2" coveredstatements="1" conditionals="3" coveredconditionals="0" methods="1" coveredmethods="0"/>
-      <file name="responses.js" path="/Users/juanfelipeparada/Desktop/Sprint 3 bootcamp nodeJS/My-Ecommerce-Project-4/Mi-ecommerce/api/network/responses.js">
+      <file name="responses.js" path="/Users/nicolasmartincaceres/Desktop/My ecommerce-project-4-main/Mi-ecommerce/api/network/responses.js">
         <metrics statements="2" coveredstatements="1" conditionals="3" coveredconditionals="0" methods="1" coveredmethods="0"/>
         <line num="3" count="0" type="stmt"/>
         <line num="10" count="1" type="stmt"/>
@@ -588,7 +588,7 @@
     </package>
     <package name="Mi-ecommerce.api.routes">
       <metrics statements="83" coveredstatements="83" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
-      <file name="cargarDatosRoutes.js" path="/Users/juanfelipeparada/Desktop/Sprint 3 bootcamp nodeJS/My-Ecommerce-Project-4/Mi-ecommerce/api/routes/cargarDatosRoutes.js">
+      <file name="cargarDatosRoutes.js" path="/Users/nicolasmartincaceres/Desktop/My ecommerce-project-4-main/Mi-ecommerce/api/routes/cargarDatosRoutes.js">
         <metrics statements="5" coveredstatements="5" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
         <line num="1" count="1" type="stmt"/>
         <line num="2" count="1" type="stmt"/>
@@ -596,7 +596,7 @@
         <line num="5" count="1" type="stmt"/>
         <line num="7" count="1" type="stmt"/>
       </file>
-      <file name="cartRoutes.js" path="/Users/juanfelipeparada/Desktop/Sprint 3 bootcamp nodeJS/My-Ecommerce-Project-4/Mi-ecommerce/api/routes/cartRoutes.js">
+      <file name="cartRoutes.js" path="/Users/nicolasmartincaceres/Desktop/My ecommerce-project-4-main/Mi-ecommerce/api/routes/cartRoutes.js">
         <metrics statements="11" coveredstatements="11" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
         <line num="1" count="1" type="stmt"/>
         <line num="2" count="1" type="stmt"/>
@@ -610,7 +610,7 @@
         <line num="16" count="1" type="stmt"/>
         <line num="18" count="1" type="stmt"/>
       </file>
-      <file name="categoryRoutes.js" path="/Users/juanfelipeparada/Desktop/Sprint 3 bootcamp nodeJS/My-Ecommerce-Project-4/Mi-ecommerce/api/routes/categoryRoutes.js">
+      <file name="categoryRoutes.js" path="/Users/nicolasmartincaceres/Desktop/My ecommerce-project-4-main/Mi-ecommerce/api/routes/categoryRoutes.js">
         <metrics statements="14" coveredstatements="14" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
         <line num="1" count="1" type="stmt"/>
         <line num="2" count="1" type="stmt"/>
@@ -627,7 +627,7 @@
         <line num="32" count="1" type="stmt"/>
         <line num="39" count="1" type="stmt"/>
       </file>
-      <file name="picturesRoutes.js" path="/Users/juanfelipeparada/Desktop/Sprint 3 bootcamp nodeJS/My-Ecommerce-Project-4/Mi-ecommerce/api/routes/picturesRoutes.js">
+      <file name="picturesRoutes.js" path="/Users/nicolasmartincaceres/Desktop/My ecommerce-project-4-main/Mi-ecommerce/api/routes/picturesRoutes.js">
         <metrics statements="16" coveredstatements="16" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
         <line num="1" count="1" type="stmt"/>
         <line num="2" count="1" type="stmt"/>
@@ -646,7 +646,7 @@
         <line num="55" count="1" type="stmt"/>
         <line num="62" count="1" type="stmt"/>
       </file>
-      <file name="productsRoutes.js" path="/Users/juanfelipeparada/Desktop/Sprint 3 bootcamp nodeJS/My-Ecommerce-Project-4/Mi-ecommerce/api/routes/productsRoutes.js">
+      <file name="productsRoutes.js" path="/Users/nicolasmartincaceres/Desktop/My ecommerce-project-4-main/Mi-ecommerce/api/routes/productsRoutes.js">
         <metrics statements="18" coveredstatements="18" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
         <line num="1" count="1" type="stmt"/>
         <line num="2" count="1" type="stmt"/>
@@ -667,7 +667,7 @@
         <line num="53" count="1" type="stmt"/>
         <line num="60" count="1" type="stmt"/>
       </file>
-      <file name="usersRoutes.js" path="/Users/juanfelipeparada/Desktop/Sprint 3 bootcamp nodeJS/My-Ecommerce-Project-4/Mi-ecommerce/api/routes/usersRoutes.js">
+      <file name="usersRoutes.js" path="/Users/nicolasmartincaceres/Desktop/My ecommerce-project-4-main/Mi-ecommerce/api/routes/usersRoutes.js">
         <metrics statements="19" coveredstatements="19" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
         <line num="1" count="1" type="stmt"/>
         <line num="2" count="1" type="stmt"/>
@@ -692,7 +692,7 @@
     </package>
     <package name="Mi-ecommerce.api.schemas">
       <metrics statements="47" coveredstatements="47" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
-      <file name="cartSchema.js" path="/Users/juanfelipeparada/Desktop/Sprint 3 bootcamp nodeJS/My-Ecommerce-Project-4/Mi-ecommerce/api/schemas/cartSchema.js">
+      <file name="cartSchema.js" path="/Users/nicolasmartincaceres/Desktop/My ecommerce-project-4-main/Mi-ecommerce/api/schemas/cartSchema.js">
         <metrics statements="6" coveredstatements="6" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
         <line num="1" count="1" type="stmt"/>
         <line num="3" count="1" type="stmt"/>
@@ -701,21 +701,21 @@
         <line num="18" count="1" type="stmt"/>
         <line num="23" count="1" type="stmt"/>
       </file>
-      <file name="categorySchema.js" path="/Users/juanfelipeparada/Desktop/Sprint 3 bootcamp nodeJS/My-Ecommerce-Project-4/Mi-ecommerce/api/schemas/categorySchema.js">
+      <file name="categorySchema.js" path="/Users/nicolasmartincaceres/Desktop/My ecommerce-project-4-main/Mi-ecommerce/api/schemas/categorySchema.js">
         <metrics statements="4" coveredstatements="4" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
         <line num="1" count="1" type="stmt"/>
         <line num="3" count="1" type="stmt"/>
         <line num="8" count="1" type="stmt"/>
         <line num="12" count="1" type="stmt"/>
       </file>
-      <file name="genericSchema.js" path="/Users/juanfelipeparada/Desktop/Sprint 3 bootcamp nodeJS/My-Ecommerce-Project-4/Mi-ecommerce/api/schemas/genericSchema.js">
+      <file name="genericSchema.js" path="/Users/nicolasmartincaceres/Desktop/My ecommerce-project-4-main/Mi-ecommerce/api/schemas/genericSchema.js">
         <metrics statements="4" coveredstatements="4" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
         <line num="1" count="1" type="stmt"/>
         <line num="3" count="1" type="stmt"/>
         <line num="9" count="1" type="stmt"/>
         <line num="13" count="1" type="stmt"/>
       </file>
-      <file name="picturesSchema.js" path="/Users/juanfelipeparada/Desktop/Sprint 3 bootcamp nodeJS/My-Ecommerce-Project-4/Mi-ecommerce/api/schemas/picturesSchema.js">
+      <file name="picturesSchema.js" path="/Users/nicolasmartincaceres/Desktop/My ecommerce-project-4-main/Mi-ecommerce/api/schemas/picturesSchema.js">
         <metrics statements="8" coveredstatements="8" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
         <line num="1" count="1" type="stmt"/>
         <line num="3" count="1" type="stmt"/>
@@ -726,7 +726,7 @@
         <line num="34" count="1" type="stmt"/>
         <line num="40" count="1" type="stmt"/>
       </file>
-      <file name="productsSchema.js" path="/Users/juanfelipeparada/Desktop/Sprint 3 bootcamp nodeJS/My-Ecommerce-Project-4/Mi-ecommerce/api/schemas/productsSchema.js">
+      <file name="productsSchema.js" path="/Users/nicolasmartincaceres/Desktop/My ecommerce-project-4-main/Mi-ecommerce/api/schemas/productsSchema.js">
         <metrics statements="13" coveredstatements="13" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
         <line num="1" count="1" type="stmt"/>
         <line num="3" count="1" type="stmt"/>
@@ -742,7 +742,7 @@
         <line num="71" count="1" type="stmt"/>
         <line num="75" count="1" type="stmt"/>
       </file>
-      <file name="usersSchema.js" path="/Users/juanfelipeparada/Desktop/Sprint 3 bootcamp nodeJS/My-Ecommerce-Project-4/Mi-ecommerce/api/schemas/usersSchema.js">
+      <file name="usersSchema.js" path="/Users/nicolasmartincaceres/Desktop/My ecommerce-project-4-main/Mi-ecommerce/api/schemas/usersSchema.js">
         <metrics statements="12" coveredstatements="12" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
         <line num="1" count="1" type="stmt"/>
         <line num="3" count="1" type="stmt"/>
@@ -760,7 +760,7 @@
     </package>
     <package name="Mi-ecommerce.api.test">
       <metrics statements="24" coveredstatements="11" conditionals="0" coveredconditionals="0" methods="3" coveredmethods="1"/>
-      <file name="helpers.js" path="/Users/juanfelipeparada/Desktop/Sprint 3 bootcamp nodeJS/My-Ecommerce-Project-4/Mi-ecommerce/api/test/helpers.js">
+      <file name="helpers.js" path="/Users/nicolasmartincaceres/Desktop/My ecommerce-project-4-main/Mi-ecommerce/api/test/helpers.js">
         <metrics statements="24" coveredstatements="11" conditionals="0" coveredconditionals="0" methods="3" coveredmethods="1"/>
         <line num="1" count="1" type="stmt"/>
         <line num="3" count="1" type="stmt"/>
@@ -790,7 +790,7 @@
     </package>
     <package name="Mi-ecommerce.helpers">
       <metrics statements="16" coveredstatements="6" conditionals="4" coveredconditionals="0" methods="4" coveredmethods="0"/>
-      <file name="filesHelpers.js" path="/Users/juanfelipeparada/Desktop/Sprint 3 bootcamp nodeJS/My-Ecommerce-Project-4/Mi-ecommerce/helpers/filesHelpers.js">
+      <file name="filesHelpers.js" path="/Users/nicolasmartincaceres/Desktop/My ecommerce-project-4-main/Mi-ecommerce/helpers/filesHelpers.js">
         <metrics statements="7" coveredstatements="3" conditionals="2" coveredconditionals="0" methods="1" coveredmethods="0"/>
         <line num="1" count="1" type="stmt"/>
         <line num="4" count="1" type="stmt"/>
@@ -800,7 +800,7 @@
         <line num="11" count="0" type="stmt"/>
         <line num="14" count="1" type="stmt"/>
       </file>
-      <file name="generateJWT.js" path="/Users/juanfelipeparada/Desktop/Sprint 3 bootcamp nodeJS/My-Ecommerce-Project-4/Mi-ecommerce/helpers/generateJWT.js">
+      <file name="generateJWT.js" path="/Users/nicolasmartincaceres/Desktop/My ecommerce-project-4-main/Mi-ecommerce/helpers/generateJWT.js">
         <metrics statements="9" coveredstatements="3" conditionals="2" coveredconditionals="0" methods="3" coveredmethods="0"/>
         <line num="1" count="1" type="stmt"/>
         <line num="7" count="1" type="stmt"/>
