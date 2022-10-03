@@ -1,0 +1,55 @@
+[
+	{
+		"email": "nico@gmail.com",
+		"username": "nico",
+		"password": "$2b$10$Ln/3PvC3TBuTCX2J1DgVZ.Qak62LgcsXjIZ44XrM7.0mczTs6GFh.",
+		"first_name": "Nicolas",
+		"last_name": "Caceres",
+		"profilepic": "",
+		"role": "guest"
+	},
+	{
+		"email": "juancabrera@gmail.com",
+		"username": "juanc",
+		"password": "$2b$10$ezSIxxeO1vCWWvL0iuNurO/A.3qlhZlth6jqpfqTqPfeQXWiGxYH.",
+		"first_name": "Juan",
+		"last_name": "Cabrera",
+		"profilepic": "",
+		"role": "admin"
+	},
+	{
+		"email": "juangalvan@gmail.com",
+		"username": "juang",
+		"password": "$2b$10$flCVPOf/g5kb.OeR8O.x1.Dp5fI2LIWpo6/4OQsTFkXYmmF9Hj3Yi",
+		"first_name": "Juan",
+		"last_name": "Galvan",
+		"profilepic": "",
+		"role": "god"
+	},
+	{
+		"email": "marco@gmail.com",
+		"username": "marco",
+		"password": "$2b$10$yWvH1vemXIdpg7nLowKZA.0ag3goTVArUsyVahG3dL4UPxEEbOyqC",
+		"first_name": "Marco",
+		"last_name": "Bonzini",
+		"profilepic": "",
+		"role": "admin"
+	},
+	{
+		"email": "felipe@gmail.com",
+		"password": "$2b$10$R2HGDInOSN19LmkkwhKTi.xwdA9Hl4e6bmqAKK1WSUBNKWUtb8YmG",
+		"username": "feli",
+		"first_name": "Felipe",
+		"last_name": "Parada",
+		"role": "god"
+	},
+  {
+    "email": "agus@gmail.com",
+    "username": "agus",
+    "password": "$2b$10$N//koLDHv8j86vfGii1sOOiRSgbZN8MUzwfwUTMjB0N/u6t.Wl6wm",
+    "first_name": "Agustina",
+    "last_name": "Razquin",
+    "profilepic": "",
+    "role": "guest"
+  }
+]

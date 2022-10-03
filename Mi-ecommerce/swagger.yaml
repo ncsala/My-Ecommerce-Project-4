@@ -1,0 +1,2401 @@
+openapi: 3.0.0
+info:
+  title: Mi ecommerce
+  version: 1.0.0
+  description: |-
+    Esta es la API de Mi ecommerce.
+
+    Links:
+    - [Repositorio de Github](https://github.com/)
+
+servers:
+  - url: http://localhost:3000/api/v1
+    description: Entorno Desarrollo
+
+tags:
+  - name: load
+    description: Todos los endpoints de carga de datos
+  - name: login
+    description: Endpoint del login
+  - name: users
+    description: Todos los endpoints de usuarios
+  - name: products
+    description: Todos los endpoints de productos
+  - name: pictures
+    description: Todos los endpoints de pictures
+  - name: cart
+    description: Todos los endpoints de carrito de usuario
+  - name: category
+    description: Todos los endpoints de categorias
+    
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+paths:
+
+  /cargar:
+    post:
+      tags:
+        - load
+      summary: Carga de datos iniciales de la API, no recibe ningun parametro solo ejecutar.
+
+      responses:
+        "500":
+          description: Internal error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: boolean
+                    example: true
+                  msg:
+                    type: string
+                    example: Server Error
+                    
+        "201":
+          description: Data cargada a la base de datos
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: boolean
+                    example: false
+                  msg:
+                    type: string
+                    example: Se cargaron los datos exitosamente
+  
+  /pictures?product=id:
+    get:
+      security:
+          - bearerAuth: []
+      tags:
+        - pictures
+      summary: Retorna la lista de pictures del prroducto identificado con id
+      responses:
+        "200":
+          description: lista de pictures
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    picture_id:
+                      type: number
+                    picture_url:
+                      type: string
+                    picture_description:
+                      type: string
+                    product_id:
+                      type: number
+        "400":
+          description: Parametro de entrada no es correcto
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: boolean
+                    example: true
+                  msg:
+                    type: string
+                    example: El parametro de entrada no es correcto
+
+        "404":
+          description: Producto no encontrado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: boolean
+                    example: true
+                  msg:
+                    type: string
+                    example: Product nor found
+
+        "401":
+          description: No tiene autorizacion para acceder a este recurso
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:  
+                    type: boolean
+                    example: true
+                  msg:
+                    type: string
+                    example: No esta autorizado para acceder a este recurso
+
+        "500":
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+
+      parameters:
+        - name: product
+          in: query
+          required: true
+          description: id del producto del que queremos obtener sus pictures
+          schema:
+            type: number
+
+  /pictures/{id}:
+    put:
+      security:
+          - bearerAuth: []
+      tags:
+        - pictures
+      summary: modifica la picture creada con la informacion recibida por body.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: id de la picture
+          schema:
+            type: number
+
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - pictureUrl
+                - pictureDescription
+              properties:
+                pictureUrl:
+                  type: string
+                  example: http://www.google.com.uy
+                pictureDescription:
+                  type: string
+                  example: ESTA ES UNA IMAGENE MODIFICADA
+
+      responses:
+        "200":
+          description: lista de pictures
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  picture_id:
+                    type: number
+                  picture_url:
+                    type: string
+                  picture_description:
+                    type: string
+                  product_id:
+                    type: number
+
+        "400":
+          description: Parametro de entrada no es correcto
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: boolean
+                    example: true
+                  msg:
+                    type: string
+                    example: El parametro de entrada no es correcto
+
+        "404":
+          description: Picture no encontrado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                  msg:
+                    type: string
+                    example: Picture not found
+
+        "401":
+          description: No tiene autorizacion para acceder a este recurso
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:  
+                    type: boolean
+                    example: true
+                  msg:
+                    type: string
+                    example: You are not authorized to access this resource
+
+        "500":
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: boolean
+                    example: true
+                  msg:
+                    type: string
+
+    get:
+      security:
+          - bearerAuth: []
+      tags:
+        - pictures
+      summary: Retorna la picture con el id pasado por parametro
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: id de la picture
+          schema:
+            type: number
+
+      responses:
+        "200":
+          description: detalle de picture
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  picture_id:
+                    type: number
+                  picture_url:
+                    type: string
+                  picture_description:
+                    type: string
+                  product_id:
+                    type: number
+
+        "500":
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: boolean
+                    example: true
+                  msg:
+                    type: string
+
+        "400":
+          description: Parametro de entrada no es correcto
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: boolean
+                    example: true
+                  msg:
+                    type: string
+                    example: El parametro de entrada no es correcto
+
+        "404":
+          description: Picture no encontrado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: boolean
+                    example: true
+                  msg:
+                    type: string
+                    example: Picture not found
+
+        "401":
+          description: No tiene autorizacion para acceder a este recurso
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: boolean
+                    example: true
+                  msg:
+                    type: string
+                    example: No esta autorizado para acceder a este recurso
+
+    delete:
+      security:
+          - bearerAuth: []
+      tags:
+        - pictures
+      summary: Elimina la imagen con el id pasada por parametro
+      responses:
+        "200":
+          description: La imagen fue eliminada correctamente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: boolean
+                    example: false
+                  msg:
+                    type: string
+                  data:
+                    type: object 
+                    properties:
+                      picture_id:
+                        type: number
+                      picture_url:
+                        type: string
+                      picture_description:
+                        type: string
+                      product_id:
+                        type: number
+
+        "400":
+          description: Parametro de entrada no es correcto
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: boolean
+                    example: true
+                  msg:
+                    type: string
+                    example: El parametro de entrada no es correcto
+
+        "404":
+          description: Picture no encontrado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: boolean
+                    example: true
+                  msg:
+                    type: string
+                    example: Picture not found
+
+        "401":
+          description: No tiene autorizacion para acceder a este recurso
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:  
+                    type: boolean
+                    example: true
+                  msg:
+                    type: string
+                    example: No esta autorizado para acceder a este recurso
+        
+        "500":
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: boolean
+                    example: true
+                  msg:
+                    type: string
+
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: number
+
+  /pictures:
+    post:
+      security:
+          - bearerAuth: []
+      tags:
+        - pictures
+      summary: Retorna la picture creada con l informacion recibida por body.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - pictureUrl
+                - pictureDescription
+                - productId
+              properties:
+                pictureUrl:
+                  type: string
+                  example: http://www.google.com
+                pictureDescription:
+                  type: string
+                  example: Creando una imagen de prueba
+                productId:
+                  type: number
+                  example: 1
+      responses:
+        "201":
+          description: Picture creada correctamente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  picture_url:
+                    type: string
+                  picture_description:
+                    type: string
+                  product_id:
+                    type: number
+              
+
+        "400":
+          description: Parametro de entrada no es correcto
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: boolean
+                    example: true
+                  msg:
+                    type: string
+                    example: El parametro de entrada no es correcto
+
+        "401":
+          description: No tiene autorizacion para acceder a este recurso
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:  
+                    type: boolean
+                    example: true
+                  msg:
+                    type: string
+                    example: No esta autorizado para acceder a este recurso
+
+        "500":
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: boolean
+                    example: true
+                  msg:
+                    type: string
+
+  /carts/{id}:
+    get:
+      security:
+          - bearerAuth: []
+      tags:
+        - cart
+      summary: Retorna el carrito del usuario seleccionado
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: number
+
+      responses:
+        "200":
+          description: Cart
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error: 
+                    type: boolean
+                    example: false
+                  msg:
+                    type: string
+                  data:    
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: number
+                          example: 4
+                        quantity:
+                          type: number
+                          example: 2
+        "404":
+          description: Usuario no encontrado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error: 
+                    type: boolean
+                    example: true
+                  msg:
+                    type: string
+                    example: Usuario no encontrado
+
+        "500":
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: boolean
+                    example: true
+                  msg:
+                    type: string
+
+    put:
+      security:
+          - bearerAuth: []
+      tags:
+        - cart
+      summary: Modifica el carrito del usuario pasado por parametro
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: number
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                type: object
+                required:
+                  - quantity
+                  - id
+                properties:
+                  quantity:
+                    type: number
+                  id:
+                    type: number
+      responses:
+        "200":
+          description: Carrito actualizado correctamente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  msg:
+                    type: string
+                    example: Carrito actualizado
+                  cart:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        quantity:
+                          type: number
+                        id:
+                          type: number
+
+        "404":
+          description: Usuario no encontrado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  msg:
+                    type: string
+                    example: Usuario no encontrado
+
+        "403":
+          description: Usuario sin permisos suficientes
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  msg:
+                    type: string
+                    example: Usuario no autorizado
+
+        "400":
+          description: Los parametros de entrada no son los esperados
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  msg:
+                    type: string
+                    example: Se precisan el id de producto y cantidad de ese producto
+
+  /login:
+    post:
+      tags:
+        - login
+      summary: Realiza el login del usuario devolviendo el Json Web Token
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - username
+                - password
+              properties:
+                username:
+                  type: string
+                  example: feli
+                password:
+                  type: string
+                  example: hola
+      responses:
+        "200":
+          description: User logeado correctamente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: authorized
+                  user:
+                    type: object
+                    properties:
+                      idUser:
+                        type: number
+                        example: 4
+                      username:
+                        type: string
+                        example: user1233
+                  token:
+                    type: string
+                    example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NCwiZW1haWwiOiJmZWxpcGVAZ21haWwuY29tIiwidXNlcm5hbWUiOiJmZWxpIiwicGFzc3dvcmQiOiIkMmIkMTAkd2gzYnBUbUFNOFpsQm42Q2VjbmxodUYxYlY3bHVkajIxUWNnMy9OLzhxNFpPTFZqazBnYXkiLCJmaXJzdG5hbWUiOiJGZWxpcGUiLCJsYXN0bmFtZSI6IlBhcmFkYSIsInByb2ZpbGVwaWMiOiIiLCJyb2xlIjoiZ29kIiwiaWF0IjoxNjYzMTc0NDAyLCJleHAiOjE2NjMzNDcyMDJ9.OAMB_2NndVt_TbjyaCA4QsHUl9PjxRfB6ByOhPjKytk
+
+        "401":
+          description: Usuario o contraseña incorrectos
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: boolean
+                    example: true
+                  msg:
+                    type: string
+                    example: Credentials are not valid
+
+        "500":
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: boolean
+                    example: true
+                  msg:
+                    example: Server Error
+                    type: string
+
+  /users:
+    get:
+      security:
+          - bearerAuth: []
+      tags:
+        - users
+      summary: Retorna la lista de usuarios registrados en el sistema
+      responses:
+        "200":
+          description: lista de usuarios
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error: 
+                    type: string
+                    example: false
+                  msg:  
+                    type: string
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: number
+                        email:
+                          type: string
+                        username:
+                          type: string
+                        first-name:
+                          type: string
+                        last-name:
+                          type: string
+                        profilepic:
+                          type: string
+                        role:
+                          type: string
+
+        "500":
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: boolean
+                    example: true
+                  msg:
+                    type: string
+
+        "403":
+          description: request invalida
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: boolean
+                    example: true
+                  msg:
+                    type: string
+                    example: Not authorized
+
+    post:
+      tags:
+        - users
+      summary: Crea un nuevo usuario en el sistema
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - email
+                - username
+                - password
+                - firstname
+                - lastname
+                - role
+              properties:
+                email:
+                  type: string
+                  example: pepe@gmail.com
+                username:
+                  type: string
+                  example: pepe
+                password:
+                  type: string
+                  example: hola
+                firstname:
+                  type: string
+                  example: Pepe
+                lastname:
+                  type: string
+                  example: Perez
+                profilepic:
+                  type: string
+                role:
+                  type: string
+                  example: guest
+
+      responses:
+        "403":
+          description: request invalida
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: boolean
+                    example: true
+                  msg:
+                    type: string
+                    example: Not authorized
+        "201":
+          description: usuario agregado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: boolean
+                    example: false
+                  msg:  
+                    type: string
+                  data: 
+                    type: object
+                    properties:
+                      email:
+                        type: string
+                      username:
+                        type: string
+                      firstname:
+                        type: string
+                      lastname:
+                        type: string
+                      profilepic:
+                        type: string
+                      role:
+                        type: string
+                      cart:
+                        type: array
+                        example: []
+
+        "400":
+          description: bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: boolean
+                    example: true
+                  msg:
+                    type: string
+                    example: user already exists.
+
+        "500":
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                  msg:
+                    type: string
+
+  /users/login:
+    post:
+      tags:
+        - users
+      summary: Realiza el login del usuario devolviendo el Json Web Token
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - username
+                - password
+              properties:
+                username:
+                  type: string
+                  example: feli
+                password:
+                  type: string
+                  example: hola
+      responses:
+        "200":
+          description: User logeado correctamente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: boolean
+                    example: false
+                  msg:
+                    type: string
+                    example: authorized
+                  user:
+                    type: object
+                    properties:
+                      idUser:
+                        type: number
+                        example: 4
+                      username:
+                        type: string
+                        example: user1233
+                  token:
+                    type: string
+                    example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NCwiZW1haWwiOiJmZWxpcGVAZ21haWwuY29tIiwidXNlcm5hbWUiOiJmZWxpIiwicGFzc3dvcmQiOiIkMmIkMTAkd2gzYnBUbUFNOFpsQm42Q2VjbmxodUYxYlY3bHVkajIxUWNnMy9OLzhxNFpPTFZqazBnYXkiLCJmaXJzdG5hbWUiOiJGZWxpcGUiLCJsYXN0bmFtZSI6IlBhcmFkYSIsInByb2ZpbGVwaWMiOiIiLCJyb2xlIjoiZ29kIiwiaWF0IjoxNjYzMTc0NDAyLCJleHAiOjE2NjMzNDcyMDJ9.OAMB_2NndVt_TbjyaCA4QsHUl9PjxRfB6ByOhPjKytk
+
+        "401":
+          description: Usuario o contraseña incorrectos
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: boolean
+                    example: true
+                  msg:
+                    type: string
+                    example: Credentials are not valid
+
+        "500":
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: boolean
+                    example: true
+                  msg:
+                    example: Server Error
+                    type: string
+
+  /users/{id}/carts:
+    get:
+      security:
+          - bearerAuth: []
+      tags:
+        - users
+      summary: Retorna el carrito del usuario seleccionado
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: number
+
+      responses:
+        "200":
+          description: detalle del carrito
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: boolean
+                    example: false
+                  msg:
+                    type: string
+                  data: 
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: number
+                          example: 4
+                        quantity:
+                          type: number
+                          example: 2
+        "404":
+          description: Usuario no encontrado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: boolean
+                    example: true
+                  msg:
+                    type: string
+                    example: Usuario no encontrado
+
+        "500":
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: boolean
+                    example: true
+                  msg :
+                    type: string
+
+    put:
+      security:
+          - bearerAuth: []
+      tags:
+        - users
+      summary: Modifica el carrito del usuario pasado por parametro
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: number
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                type: object
+                required:
+                  - quantity
+                  - id
+                properties:
+                  quantity:
+                    type: number
+                  id:
+                    type: number
+      responses:
+        "200":
+          description: Carrito actualizado correctamente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: boolean
+                    example: true
+                  msg:
+                    type: string
+                    example: Carrito actualizado
+                  cart:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        quantity:
+                          type: number
+                        id:
+                          type: number
+
+        "404":
+          description: Usuario no encontrado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: boolean
+                    example: true
+                  msg:
+                    type: string
+                    example: Usuario no encontrado
+
+        "403":
+          description: Usuario sin permisos suficientes
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: boolean
+                    example: true
+                  msg:
+                    type: string
+                    example: Usuario no autorizado
+
+        "400":
+          description: Los parametros de entrada no son los esperados
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error: 
+                    type: boolean
+                    example: true
+                  msg:
+                    type: string
+                    example: Se precisan el id de producto y cantidad de ese producto
+
+  /users/{id}:
+    get:
+      security:
+          - bearerAuth: []
+      tags:
+        - users
+      summary: Devuelve el detalle de un usuario
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: number
+      responses:
+        "200":
+          description: Detalle de usuario
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error: 
+                    type: boolean
+                    example: false
+                  msg: 
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: number
+                      email:
+                        type: string
+                      username:
+                        type: string
+                      first-name:
+                        type: string
+                      last-name:
+                        type: string
+                      profilepic:
+                        type: string
+                      role:
+                        type: string
+        "404":
+          description: Usuario no encontrado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:  
+                    type: boolean
+                    example: true
+                  msg:
+                    type: string
+                    example: User does not exists
+
+        "500":
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: boolean
+                    example: true
+                  msg:
+                    type: string
+                    example: Server error
+        "403":
+          description: request invalida
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: boolean
+                    example: true
+                  msg:
+                    type: string
+                    example: Not authorized
+    put:
+      security:
+          - bearerAuth: []
+      tags:
+        - users
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - email
+                - username
+                - password
+                - firstname
+                - lastname
+                - role
+                - cart
+              properties:
+                email:
+                  type: string
+                username:
+                  type: string
+                password:
+                  type: string
+                firstname:
+                  type: string
+                lastname:
+                  type: string
+                profilepic:
+                  type: string
+                role:
+                  type: string
+                cart:
+                  type: array
+                  example: []
+      responses:
+        "403":
+          description: request invalida
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: boolean 
+                    example: true
+                  msg:
+                    type: string
+                    example: Not authorized
+        "200":
+          description: usuario modificado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: boolean
+                    example: false
+                  msg:  
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      email:
+                        type: string
+                      username:
+                        type: string
+                      firstname:
+                        type: string
+                      lastname:
+                        type: string
+                      profilepic:
+                        type: string
+                      role:
+                        type: string
+                      cart:
+                        type: array
+                        example: []
+        "400":
+          description: usuario modificado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: boolean
+                    example: true
+                  msg:
+                    type: string
+                    example: bad request
+        "404":
+          description: usuario modificado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: boolean
+                    example: true
+                  msg:
+                    type: string
+                    example: user does not exists.
+        "500":
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+    delete:
+      security:
+          - bearerAuth: []
+      tags:
+        - users
+      summary: Elimina el usuario con id pasado por parametro
+      parameters:
+        - name: id
+          description: "id del usuario que desea eliminar"
+          in: path
+          required: true
+          schema:
+            type: number
+      responses:
+        "400":
+          description: Parametro incorrecto
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: boolean
+                    example: true
+                  msg:
+                    type: string
+                    example: Bad request, User id must be a number
+
+        "403":
+          description: request invalida
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: boolean
+                    example: true
+                  msg:
+                    type: string
+                    example: Not authorized
+
+        "200":
+          description: usuario eliminado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: boolean
+                    example: false
+                  msg: 
+                    type: string
+                  data:
+                    type: object
+                    properties: 
+                      email:
+                        type: string
+                      username:
+                        type: string
+                      firstname:
+                        type: string
+                      lastname:
+                        type: string
+                      profilepic:
+                        type: string
+                      role:
+                        type: string
+                      cart:
+                        type: array
+                        example: []
+        "404":
+          description: usuario modificado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: boolean
+                    example: true
+                  msg:
+                    type: string
+                    example: user does not exists.
+        "500":
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: boolean
+                    example: true
+                  msg:
+                    type: string
+                    example: Server error
+
+  /products:
+    get:
+      security:
+        - bearerAuth: []
+      tags:
+        - products
+      summary: Retorna la lista de productos del sistema, si se pasa el parametro category por query , devuelve los producto registados con la categoria pasada por parametro
+      responses:
+        "500":
+          description: Internal error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: boolean
+                    example: true
+                  msg:
+                    type: string
+                    example: Server Error
+        "200":
+          description: Litsado de productos
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: boolean
+                    example: false
+                  msg:
+                    type: string
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: number
+                        title:
+                          type: string
+                        price:
+                          type: number
+                        description:
+                          type: string
+                        gallery:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              picture_id:
+                                type: number
+                              picture_url:
+                                type: string
+                              picture_descripcion:
+                                type: string
+                              product_id:
+                                type: number
+                        category:
+                          type: string
+                        mostwanted:
+                          type: boolean
+                        stock:
+                          type: number
+
+      parameters:
+        - name: category
+          in: query
+          required: false
+          description: categoria para filtrar
+          schema:
+            type: string
+
+    post:
+      security:
+        - bearerAuth: []
+      tags:
+        - products
+      summary: Crea un nuevo producto en el sistema con los datos que le llegan en el body
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - title
+                - price
+              properties:
+                title:
+                  type: string
+                  example: "Macbook Pro 16.2 M1 Max 32gb 1tb Ssd" 
+                price:
+                  type: number
+                  example: 265080
+                description:
+                  type: string
+                  example: "La mejor Macbook del mercado"
+                category:
+                  type: number
+                  example: 2
+                mostwanted:
+                  type: boolean
+                  example: true
+                stock:
+                  type: number
+                  example: 10
+
+      responses:
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: boolean
+                    example: true
+                  msg:
+                    type: string
+                    example: Error creating product
+        
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: boolean
+                    example: true
+                  msg:
+                    type: string
+                    example: Not authorized
+
+        "500":
+          description: Internal error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: boolean
+                    example: true
+                  msg:
+                    type: string
+                    example: Server Error
+        '201':
+          description: Producto creado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+                    example: true
+                  msg:
+                    type: string
+                    example: Product created
+                  data:
+                    type: object
+                    properties:
+                      product_id:
+                        type: number
+                      title:
+                        type: string
+                      price:
+                        type: number
+                      description:
+                        type: string
+                      category:
+                          type: string
+                      mostwanted:
+                        type: boolean
+                      stock:
+                        type: number
+
+  /products/{id}/pictures:
+    get:
+      security:
+          - bearerAuth: []
+      tags:
+        - products
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: id de producto
+          schema:
+            type: string
+      responses:
+        "500":
+          description: Internal error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: boolean
+                    example: true
+                  msg:
+                    type: string
+                    example: Server Error
+        "404":
+          description: Producto no encontrado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: boolean
+                    example: true
+                  msg:
+                    type: string
+                    example: Product not found
+        "200":
+          description: Producto encontrado
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    picture_id:
+                      type: number
+                    picture_url:
+                      type: string
+                    picture_descripcion:
+                      type: string
+                    product_id:
+                      type: number
+
+  /products/{id}:
+    get:
+      summary: Retorna el producto con el id pasado por parametro
+      security:
+          - bearerAuth: []
+      tags:
+        - products
+      ## recibe id por params
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: id de producto
+          schema:
+            type: string
+
+
+      responses:
+        "500":
+          description: Internal error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: boolean
+                    example: true
+                  msg:
+                    type: string
+                    example: Server Error
+        "404":
+          description: Producto no encontrado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: boolean
+                    example: true
+                  msg:
+                    type: string
+                    example: Producto no encontrado
+        "200":
+          description: Producto encontrado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error: 
+                    type: boolean
+                    example: false 
+                  msg:  
+                    type: string
+                    example: product detail
+                  data: 
+                    type: object
+                    properties:
+                      product_id:
+                        type: number
+                      title:
+                        type: string
+                      price:
+                        type: number
+                      description:
+                        type: string
+                      gallery:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            picture_id:
+                              type: number
+                            picture_url:
+                              type: string
+                            picture_descripcion:
+                              type: string
+                            product_id:
+                              type: number
+                      category:
+                          type: string
+                      mostwanted:
+                        type: boolean
+                      stock:
+                        type: number
+    
+    delete:
+      security:
+          - bearerAuth: []
+      tags:
+        - products
+      responses:
+        "500":
+          description: Internal error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: boolean
+                    example: true
+                  msg:
+                    type: string
+                    example: Server Error
+        "404":
+          description: Producto no encontrado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: boolean
+                    example: true
+                  msg:
+                    type: string
+                    example: Product not found
+        "200":
+          description: Producto eliminado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: boolean
+                    example: false
+                  msg:
+                    type: string
+                    example: Producto eliminado correctamente
+                  data:
+                    type: object
+                    properties:
+                      product_id:
+                        type: number
+                      title:
+                        type: string
+                      price:
+                        type: number
+                      description:
+                        type: string
+                      gallery:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            picture_id:
+                              type: number
+                            picture_url:
+                              type: string
+                            picture_description:
+                              type: string
+                            product_id:
+                              type: number
+                      category:
+                          type: string
+                      mostwanted:
+                        type: boolean
+                      stock:
+                        type: number
+
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: id de producto
+          schema:
+            type: string
+
+    put:
+      security:
+          - bearerAuth: []
+      tags:
+        - products
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                  example: Producto X
+                price:
+                  type: number
+                  example: 100
+                description:
+                  type: string
+                  example: Producto X
+                category:
+                  type: number
+                  example: 1
+                mostwanted:
+                  type: boolean
+                  example: false
+                stock:
+                  type: number
+                  example: 10
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: id de producto
+          schema:
+            type: string
+
+      responses:
+        "500":
+          description: Internal error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: boolean
+                    example: true
+                  msg:
+                    type: string
+                    example: Server Error
+        "404":
+          description: Producto no encontrado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: boolean
+                    example: true
+                  msg:
+                    type: string
+                    example: Product not found
+
+        "400":
+          description: Request invalida
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: boolean
+                    example: true
+                  msg:
+                    type: string
+                    example: Request invalida, Debe modificar por lo menos una propiedad del producto
+
+        "200":
+          description: Producto modificado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: boolean
+                    example: true
+                  msg:
+                    type: string
+                    example: Producto modificado correctamente
+                  data:
+                    type: object
+                    properties:
+                      product_id:
+                        type: number
+                      title:
+                        type: string
+                      price:
+                        type: number
+                      description:
+                        type: string
+                      gallery:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            picture_id:
+                              type: number
+                            picture_url:
+                              type: string
+                            picture_description:
+                              type: string
+                            product_id:
+                              type: number
+                      category:
+                          type: string
+                      mostwanted:
+                        type: boolean
+                      stock:
+                        type: number
+
+  /products/mostwanted:
+    get:
+      security:
+          - bearerAuth: []
+      tags:
+        - products
+      responses:
+        "500":
+          description: Internal error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: boolean
+                    example: true
+                  msg:
+                    type: string
+                    example: Server Error
+
+        "200":
+          description: Listado de productos 'mostwanted'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: boolean
+                    example: false
+                  msg:
+                    type: string
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        product_id:
+                          type: number
+                        title:
+                          type: string
+                        price:
+                          type: number
+                        description:
+                          type: string
+                        gallery:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              picture_id:
+                                type: number
+                              picture_url:
+                                type: string
+                              picture_description:
+                                type: string
+                              product_id:
+                                type: number
+                        category:
+                          type: string
+                        mostwanted:
+                          type: boolean
+                        stock:
+                          type: number
+
+  /products/search:
+    get:
+      security:
+          - bearerAuth: []
+      tags:
+        - products
+
+      parameters:
+        - name: q
+          in: query
+          required: true
+          description: palabra para realizar la busqueda
+          schema:
+            type: string
+
+      responses:
+        "500":
+          description: Internal error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: boolean
+                    example: true
+                  msg:
+                    type: string
+                    example: Server Error
+
+        "200":
+          description: Listado de productos que contengan la o las palabras pasadas por query string en su titulo o descripcion
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: boolean
+                    example: false
+                  msg:
+                    type: string
+                    example: busqueda exitosa
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        product_id:
+                          type: number
+                        title:
+                          type: string
+                        price:
+                          type: number
+                        description:
+                          type: string
+                        gallery:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              picture_id:
+                                type: number
+                              picture_url:
+                                type: string
+                              picture_descripcion:
+                                type: string
+                              product_id:
+                                type: number
+                        category:
+                          type: string
+                        mostwanted:
+                          type: boolean
+                        stock:
+                          type: number
+
+  /category:
+    get:
+      security:
+          - bearerAuth: []
+      tags:
+        - category
+      responses:
+        "500":
+          description: Internal error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: boolean
+                    example: true
+                  msg:
+                    type: string
+                    example: Server Error
+
+        "200":
+          description: Listado de categorias
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: boolean
+                    example: false
+                  msg:
+                    type: string
+                    example: busqueda exitosa
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        category_id:
+                          type: number
+                        category_name:
+                          type: string  
+    
+    post:
+      security:
+          - bearerAuth: []
+      tags:
+        - category
+      requestBody:
+        description: Categoria a crear
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: "categoria 1"
+      responses:
+        "500":
+          description: Internal error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: boolean
+                    example: true
+                  msg:
+                    type: string
+                    example: Server Error
+
+        "400":
+          description: Request invalida
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: boolean
+                    example: true
+                  msg:
+                    type: string
+                    example: Request invalida, Debe enviar el nombre de la categoria
+
+        "201":
+          description: Categoria creada
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: boolean
+                    example: false
+                  msg:
+                    type: string
+                    example: Categoria creada correctamente
+                  data:
+                    type: object
+                    properties:
+                      category_id:
+                        type: number
+                      category_name:
+                        type: string
+
+  /category/{id}:
+    put: 
+      security:
+          - bearerAuth: []
+      tags:
+        - category
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: id de categoria
+          schema:
+            type: string
+      requestBody:
+        description: Categoria a modificar
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: "categoria MODIFICADA"
+      responses:
+        "500":
+          description: Internal error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: boolean
+                    example: true
+                  msg:
+                    type: string
+                    example: Server Error
+
+        "400":
+          description: Categoria invalida
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: boolean
+                    example: true
+                  msg:
+                    type: string
+                    example: Request invalida, Debe ingresar el nombre de la categoria
+
+        "404":
+          description: Categoria no encontrada
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: boolean
+                    example: true
+                  msg:
+                    type: string
+                    example: Category not found
+
+        "200":
+          description: Categoria modificada
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: boolean
+                    example: false
+                  msg:
+                    type: string
+                    example: Categoria modificada correctamente
+                  data:
+                    type: object
+                    properties:
+                      category_id:
+                        type: number
+                      category_name:
+                        type: string
+
+    delete:
+      security:
+          - bearerAuth: []
+      tags:
+        - category
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: id de categoria
+          schema:
+            type: string
+      responses:
+        "500":
+          description: Internal error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: boolean
+                    example: true
+                  msg:
+                    type: string
+                    example: Server Error
+
+        "404":
+          description: Categoria no encontrada
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: boolean
+                    example: true
+                  msg:
+                    type: string
+                    example: Category not found
+
+        "200":
+          description: Categoria eliminada
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: boolean
+                    example: false
+                  msg:
+                    type: string
+                    example: Categoria eliminada correctamente
+                  data:
+                    type: object
+                    properties:
+                      category_id:
+                        type: number
+                      category_name:
+                        type: string
+
