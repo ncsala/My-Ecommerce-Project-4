@@ -77,7 +77,7 @@ const productsController = {
                 return res.status(200).json({
                             error:false,
                             msg: "All products",
-                            productos: products
+                            data: products
                         })
     
             }
