@@ -23,7 +23,6 @@ const categoryRoutes = require('./api/routes/categoryRoutes');
 const usersController = require('./api/controllers/usersController');
 const cargarDatosRoutes = require('./api/routes/cargarDatosRoutes');
 
-
 const route = express.Router();
 const app = express();
 
