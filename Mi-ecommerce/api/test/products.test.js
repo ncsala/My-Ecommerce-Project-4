@@ -58,7 +58,7 @@ describe('/products GET',()=>{
         });
     })
 
-    test('debe devolver un json con error:true si no se da token',async ()=>{
+    test('debe devolver status 401 y un json con error:true si no se da token',async ()=>{
         const token = "aaaaaaaaaaaaaaa"
         let res = await request(app).get('/api/v1/products').auth(token,{type:'bearer'});
         expect(res.statusCode).toBe(401);
