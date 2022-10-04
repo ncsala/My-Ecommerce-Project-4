@@ -83,7 +83,6 @@ const productsController = {
             }
             
         } catch (error) {
-            console.log(error);
             next(error);
         }
     },
@@ -123,7 +122,6 @@ const productsController = {
                        });
         
        } catch (error) {
-            console.log(error);
             next(error);
        }
         
@@ -161,7 +159,6 @@ const productsController = {
                     })
             
         } catch (error) {
-            console.log(error);
             next(error);
         }
 
@@ -210,7 +207,6 @@ const productsController = {
              })
             
         } catch (error) {
-            console.log(error);
             next(error);
         }
     },
@@ -286,7 +282,6 @@ const productsController = {
                     })
             
         } catch (error) {
-            console.log(error);
             next(error);
         }
     },
@@ -335,7 +330,6 @@ const productsController = {
             })
             
         } catch (error) {
-            console.log(error);
             next(error);
         }
     },
@@ -411,7 +405,6 @@ const productsController = {
             })
 
         } catch (error) {
-            console.log(error);
             next(error);
         }
         
