@@ -1,29 +1,26 @@
-const { server,app } = require("../../server.js")
+const { app } = require("../../server.js")
 const request = require('supertest');
 const db = require('../database/models');
 const sinon = require('sinon');
+
 const {
 	generateToken,
 	loadingDataInTestingDB,
 	destroyTables,
 } = require('./helpers');
-const { STRING } = require("sequelize");
-const { boolean } = require("joi");
-const { mostwanted } = require("../controllers/productsController.js");
+const { Op } = require("sequelize");
 
-afterAll(() => {
-});
-
-afterEach(() => {
-	server.close();
-});
 
 beforeAll(async () => {
-	await db.sequelize.sync({ force: true });
+	// await db.sequelize.sync({ force: true });
 	await loadingDataInTestingDB();
 });
 
 describe('/products GET',()=>{
+    // afterEach(() => {
+    //     server.close();
+    // });
+
     test('/products debe devolver un status 200 y con el formato json correcto',async ()=>{
         const token = await generateToken('god');
         let res = await request(app).get('/api/v1/products').auth(token,{type:'bearer'});
@@ -58,8 +55,8 @@ describe('/products GET',()=>{
         });
     })
 
-    test('debe devolver status 401 y un json con error:true si no se da token',async ()=>{
-        const token = "aaaaaaaaaaaaaaa"
+    test.skip('debe devolver status 401 y un json con error:true si se da token erroneo',async ()=>{
+        const token = await generateToken('guest');
         let res = await request(app).get('/api/v1/products').auth(token,{type:'bearer'});
         expect(res.statusCode).toBe(401);
         expect(res.body).toEqual(expect.objectContaining(
@@ -69,6 +66,24 @@ describe('/products GET',()=>{
             }
         ))
     })
+
+    test('deve devolver un status 500 si se da un error interno',async ()=>{
+
+        const stub = await sinon.stub(db.Product, 'findAll').throws();
+        const token = await generateToken('god');
+
+        let res = await request(app).get('/api/v1/products').auth(token,{type:'bearer'});
+
+        expect(res.body).toEqual(expect.objectContaining({
+            error:true,
+            msg:expect.any(String)
+        }))
+
+        stub.restore();
+    
+    })
+
+    
 })
 
 
