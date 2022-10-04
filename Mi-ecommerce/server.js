@@ -10,10 +10,9 @@ const swaggerDocument = YAML.load('./swagger.yaml');
 
 //Middlewares
 const {
-  logErrors,
+	logErrors,
 	clientErrorHandler,
 } = require('./api/middlewares/errorHandler');
-
 
 const usersRoutes = require('./api/routes/usersRoutes');
 const productsRoutes = require('./api/routes/productsRoutes');
@@ -37,29 +36,27 @@ route.use('/products', productsRoutes);
 route.use('/pictures', picturesRoutes);
 route.use('/carts', cartsRoutes);
 route.use('/category', categoryRoutes);
-route.use('/cargar',cargarDatosRoutes),
-
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+route.use('/cargar', cargarDatosRoutes),
+	app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 app.use(logErrors);
 app.use(clientErrorHandler);
 
-
 //const server = app.listen(process.env.PORT, () => {
-	// sequelize.sync(
-	// 	//  { force: true } 
-	// );
-	// console.log(`Servidor corriendo en el puerto ${process.env.PORT}`);
+// sequelize.sync(
+// 	//  { force: true }
+// );
+// console.log(`Servidor corriendo en el puerto ${process.env.PORT}`);
 //});
 
-if(process.env.NODE_ENV !== 'test'){
+if (process.env.NODE_ENV !== 'test') {
 	app.listen(process.env.PORT, () => {
-	 sequelize.sync(
-		 	//  { force: true } 
-		 );
+		sequelize
+			.sync
+			//  { force: true }
+			();
 		// console.log(`Servidor corriendo en el puerto ${process.env.PORT}`)
-})
+	});
 }
 
-
-module.exports = {app}
+module.exports = { app };
