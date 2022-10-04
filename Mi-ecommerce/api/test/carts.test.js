@@ -7,7 +7,8 @@ const { loadingDataInTestingDB } = require('./helpers');
 
 beforeAll(async ()=>{
     // await db.sequelize.sync({force:true})
-    await loadingDataInTestingDB()
+
+    // await loadingDataInTestingDB();
 })
 
 describe('Get /cart/:id', () => {
