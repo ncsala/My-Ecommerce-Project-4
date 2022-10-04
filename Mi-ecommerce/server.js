@@ -45,13 +45,21 @@ app.use(logErrors);
 app.use(clientErrorHandler);
 
 
-const server = app.listen(process.env.PORT, () => {
+//const server = app.listen(process.env.PORT, () => {
 	// sequelize.sync(
 	// 	//  { force: true } 
 	// );
+	// console.log(`Servidor corriendo en el puerto ${process.env.PORT}`);
+//});
 
-	console.log(`Servidor corriendo en el puerto ${process.env.PORT}`);
-});
+if(process.env.NODE_ENV !== 'test'){
+	app.listen(process.env.PORT, () => {
+	 sequelize.sync(
+		 	//  { force: true } 
+		 );
+		// console.log(`Servidor corriendo en el puerto ${process.env.PORT}`)
+})
+}
 
 
-module.exports = {app, server}
+module.exports = {app}
