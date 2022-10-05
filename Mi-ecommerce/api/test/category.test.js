@@ -27,9 +27,18 @@ describe('/category GET',()=>{
 		name:"hielo1424"
 	}
 
-	test("devolver status 201 al crear una categoria", async ()=>{
+	test("must return a status 201 and with the new category", async ()=>{
 		const token = await generateToken('god');
 		const res = await request(app).post('/api/v1/category').auth(token,{type:'bearer'}).send(newCategory);
         expect(res.statusCode).toBe(201);
+	});
+
+	const newcategorymodif = {
+		name:"bebida"
+	}
+	test("must return a status 200 and with new catergory category modificada", async ()=>{
+		const token = await generateToken('god');
+		const res = await request(app).put('/api/v1/category/1').auth(token,{type:'bearer'}).send(newcategorymodif);
+        expect(res.statusCode).toBe(200);
 	});
 });
