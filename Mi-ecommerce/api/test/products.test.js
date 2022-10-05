@@ -11,13 +11,13 @@ const {
 } = require('./helpers');
 const { Op } = require("sequelize");
 
-beforeAll(async () => {
+// beforeAll(async () => {
 
-	// await db.sequelize.sync({ force: true });    
-    await cargarDatos()
+// 	// await db.sequelize.sync({ force: true });    
+//     await cargarDatos()
 
-	// await loadingDataInTestingDB();
-});
+// 	// await loadingDataInTestingDB();
+// });
 
 describe('/products GET',()=>{
     // afterEach(() => {
