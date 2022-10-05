@@ -24,9 +24,9 @@ afterEach(() => {
 
 beforeAll(async () => {
 	// Se la base de datos de testing
-	// await db.sequelize.sync({ force: true });
+	 await db.sequelize.sync({ force: true });
 	//Se cargan con info para pruebas
-	await loadingDataInTestingDB();
+	//await loadingDataInTestingDB();
 });
 
 //CREAR UNA CAGTEGORIA
