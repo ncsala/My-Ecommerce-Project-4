@@ -328,6 +328,26 @@ describe('PUT /pictures/:id', () => {
 		expect(response.body.error).toBe(true);
 	});
 
+  it('should return 400 if pictureUrl is not provided', async () => {
+    const token = await generateToken('god');
+    const updatePicture = {
+      pictureDescription: 'Picture description updated',
+    };
+
+    const response = await request(app)
+      .put('/api/v1/pictures/1')
+      .auth(token, { type: 'bearer' })
+      .send(updatePicture)
+      .set('Accept', 'application/json')
+      .expect('Content-Type', /json/)
+      .expect(400);
+      console.log(response.body);
+    expect(response.body).toHaveProperty('error');
+    expect(response.body).toHaveProperty('msg');
+    expect(response.body.error).toBe(true);
+    expect(response.body.msg).toBe('URL is required');
+  });
+
   it('should return 500 if there is an error on the server', async () => {
     const token = await generateToken('god');
     const updatePicture = {
@@ -352,3 +372,63 @@ describe('PUT /pictures/:id', () => {
   });
 
 });
+
+describe('DELETE /pictures/:id', () => {
+  it('should delete a picture in database with status response 200', async () => {
+    const token = await generateToken('god');
+
+    const response = await request(app)
+      .delete('/api/v1/pictures/1')
+      .auth(token, { type: 'bearer' })
+      .expect('Content-Type', /json/)
+      .expect(200);
+    expect(response.body).toEqual(
+      expect.objectContaining({
+        error: false,
+        msg: 'Picture deleted',
+      })
+    );
+  });
+
+  it('should return 404 if the picture does not exist', async () => {
+    const token = await generateToken('god');
+
+    const response = await request(app)
+      .delete('/api/v1/pictures/4000')
+      .auth(token, { type: 'bearer' })
+      .expect('Content-Type', /json/)
+      .expect(404);
+    expect(response.body.msg).toBe('Picture not found');
+  });
+
+  it('should return 400 if id is not a valid option, for example `abc`', async () => {
+    const token = await generateToken('god');
+
+    const response = await request(app)
+      .delete('/api/v1/pictures/abc')
+      .auth(token, { type: 'bearer' })
+      .expect('Content-Type', /json/)
+      .expect(400);
+    expect(response.body).toHaveProperty('error');
+    expect(response.body).toHaveProperty('msg');
+    expect(response.body.error).toBe(true);
+  });
+
+  it('should return 500 if there is an error on the server', async () => {
+    const token = await generateToken('god');
+
+    const stub = sinon.stub(db.Picture, 'destroy').throws();
+
+    const response = await request(app)
+      .delete('/api/v1/pictures/5')
+      .auth(token, { type: 'bearer' })
+      .expect('Content-Type', /json/)
+      .expect(500);
+    expect(response.body).toHaveProperty('error');
+    expect(response.body).toHaveProperty('msg');
+    expect(response.body.error).toBe(true);
+
+    stub.restore();
+  });
+});
+
