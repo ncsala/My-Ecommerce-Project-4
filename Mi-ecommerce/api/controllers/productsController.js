@@ -9,7 +9,6 @@ const Picture = require('../database/models/Picture');
 const productsController = {
 
     listar: async (req, res, next)=>{
-        console.log(req.newUsers.role);
 
         if(req.newUsers.role != 'guest' && req.newUsers.role != 'admin' && req.newUsers.role != 'god'){
             return res.status(401).json({
@@ -191,19 +190,12 @@ const productsController = {
 
     crear: async (req, res, next)=>{
 
-        if(req.newUsers.role != 'admin' && req.newUsers.role != 'god'){
-            return res.status(401).json({
-                error: true,
-                msg:'You have not enough permission'
-            })
-        }
-
         try {
             const{title, price, description, gallery, stock, mostwanted, category} = req.body;
     
             const rol = req.newUsers.role;
             
-            if(rol == "guest"){
+            if(req.newUsers.role != 'admin' && req.newUsers.role != 'god'){
                 return res.status(401).json({
                     error: true,
                     msg:"You don't have permission to create a product"
@@ -246,18 +238,11 @@ const productsController = {
     
     eliminar: async (req, res, next)=>{
 
-        if(req.newUsers.role != 'admin' && req.newUsers.role != 'god'){
-            return res.status(401).json({
-                error: true,
-                msg:'you have to log in in order to see the products'
-            })
-        }
-
         try {
             const {id} = req.params;
             const rol = req.newUsers.role;
             
-            if(rol == "guest"){
+            if(req.newUsers.role != 'admin' && req.newUsers.role != 'god'){
                 return res.status(401).json({
                     error: true,
                     msg:"You don't have permission to delete a product"
