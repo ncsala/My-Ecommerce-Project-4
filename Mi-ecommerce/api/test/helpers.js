@@ -6,6 +6,7 @@ const pictures = require('../data.json/pictures.json');
 const cartProducts = require('../data.json/cartProduct.json');
 const db = require('../database/models');
 const { Op } = require('sequelize');
+const { sequelize } = require('../database/models');
 
 // Genera JWT para pruebas con el rol pasado como argumento
 const generateToken = async (role) => {
@@ -108,6 +109,22 @@ const destroyTables = async () => {
 			},
 		},
 	});
+
+	db.cart_product.destroy({
+		where: {
+			cart_id: {
+				[Op.gt]: 0,
+			},
+		}
+	})
 };
 
-module.exports = { generateToken, loadingDataInTestingDB, destroyTables };
+const cargarDatos = async ()=>{
+	await db.sequelize.query('CALL spu_DatosDePrueba()')
+}
+
+const limpiarBdTest = async()=>{
+	await db.sequelize.query('CALL spu_DatosDePrueba')
+}
+
+module.exports = { limpiarBdTest,cargarDatos ,generateToken, loadingDataInTestingDB, destroyTables };
