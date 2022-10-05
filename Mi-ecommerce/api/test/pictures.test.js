@@ -19,12 +19,12 @@ afterEach(() => {
 	// db.sequelize.sync({ force: true });
 	// otra forma
 	// db.sequelize.drop();
-	server.close();
+	// server.close();
 });
 
 beforeAll(async () => {
 	// Se la base de datos de testing
-	await db.sequelize.sync({ force: true });
+	// await db.sequelize.sync({ force: true });
 	//Se cargan con info para pruebas
 	await loadingDataInTestingDB();
 });
@@ -46,6 +46,12 @@ beforeAll(async () => {
 
 //Tests para crear una picture ---------------------------------------------------------------------
 describe('POST /api/v1/pictures', () => {
+
+	// afterEach(() => {
+	// 	server.close();
+	// });
+
+
 	it('should create a new picture in the database with status response 201', async () => {
 		//debo logueaerme desde la ruta o desde el test generando un token?
 		const token = await generateToken('god');
@@ -146,6 +152,9 @@ describe('POST /api/v1/pictures', () => {
 
 describe('GET /api/v1/pictures', () => {
 
+	// afterEach(() => {
+	// 	server.close();
+	// });
 
   /// probar si funciona con varias imagenes
 	it('should return all pictures of a product', async () => {
