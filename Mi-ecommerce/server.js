@@ -55,7 +55,7 @@ if (process.env.NODE_ENV !== 'test') {
 			.sync
 			//  { force: true }
 			();
-		// console.log(`Servidor corriendo en el puerto ${process.env.PORT}`)
+		console.log(`Servidor corriendo en el puerto ${process.env.PORT}`)
 	});
 }
 
