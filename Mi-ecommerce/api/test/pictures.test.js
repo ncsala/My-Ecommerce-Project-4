@@ -15,6 +15,154 @@ beforeAll(async () => {
   await cargarDatos();
 });
 
+// Tests para obtener todas las pictures de un producto
+//------------------------------------------------------------------------------
+describe('GET /api/v1/pictures?product=', () => {
+	/// probar si funciona con varias imagenes
+	it('should return all pictures of a product with status response 200', async () => {
+		const token = await generateToken('god');
+
+		const response = await request(app)
+			.get('/api/v1/pictures?product=1')
+			.auth(token, { type: 'bearer' })
+			.set('Accept', 'application/json')
+			.expect('Content-Type', /json/)
+			.expect(200);
+		expect(response.body.data).toEqual(
+			expect.arrayContaining([
+				expect.objectContaining({
+					picture_id: expect.any(Number),
+					picture_url: expect.any(String),
+					picture_description: expect.toBeOneOf([null, expect.any(String)]),
+					product_id: expect.any(Number),
+				}),
+			])
+		);
+	});
+
+	it('should return 400 if product is not a valid option, for example `abc`', async () => {
+		const token = await generateToken('god');
+
+		const response = await request(app)
+			.get('/api/v1/pictures?product=abc')
+			.auth(token, { type: 'bearer' })
+			.set('Accept', 'application/json')
+			.expect('Content-Type', /json/)
+			.expect(400);
+		expect(response.body).toHaveProperty('error');
+		expect(response.body).toHaveProperty('msg');
+		expect(response.body.error).toBe(true);
+	});
+
+	it('should return 404 if product does not exist', async () => {
+		const token = await generateToken('god');
+
+		const response = await request(app)
+			.get('/api/v1/pictures?product=4000')
+			.auth(token, { type: 'bearer' })
+			.set('Accept', 'application/json')
+			.expect('Content-Type', /json/)
+			.expect(404);
+		expect(response.body.msg).toBe('Product not found');
+	});
+
+	it('should return 404 if the product does not have any picture', async () => {
+		const token = await generateToken('god');
+
+		const response = await request(app)
+			.get('/api/v1/pictures?product=7')
+			.auth(token, { type: 'bearer' })
+			.set('Accept', 'application/json')
+			.expect('Content-Type', /json/)
+			.expect(404);
+		expect(response.body.msg).toBe('The product does not have images');
+	});
+
+	it('should return 500 if there is an error on the server', async () => {
+		const token = await generateToken('god');
+
+		const stub = sinon.stub(db.Picture, 'findAll').throws();
+
+		const response = await request(app)
+			.get('/api/v1/pictures?product=1')
+			.auth(token, { type: 'bearer' })
+			.set('Accept', 'application/json')
+			.expect('Content-Type', /json/)
+			.expect(500);
+		expect(response.body).toHaveProperty('error');
+		expect(response.body).toHaveProperty('msg');
+		expect(response.body.error).toBe(true);
+
+		stub.restore();
+	});
+});
+//------------------------------------------------------------------------------
+
+// Tests para obtener una picture por id
+//------------------------------------------------------------------------------
+describe('GET /api/v1/pictures/:id', () => {
+	it('should respond with a 200 status code and get the picture', async () => {
+		const token = await generateToken('god');
+
+		const response = await request(app)
+			.get('/api/v1/pictures/5')
+			.auth(token, { type: 'bearer' })
+			.expect('Content-Type', /json/)
+			.expect(200);
+		expect(response.body).toEqual({
+			error: false,
+			msg: 'Picture found',
+			data: {
+				picture_id: expect.any(Number),
+				picture_url: expect.any(String),
+				product_id: expect.any(Number),
+				picture_description: expect.toBeOneOf([null, expect.any(String)]),
+			},
+		});
+	});
+
+	it('should return 404 if the picture does not exist', async () => {
+		const token = await generateToken('god');
+
+		const response = await request(app)
+			.get('/api/v1/pictures/4000')
+			.auth(token, { type: 'bearer' })
+			.expect('Content-Type', /json/)
+			.expect(404);
+		expect(response.body.msg).toBe('Picture not found');
+	});
+
+	it('should return 400 if id is not a valid option, for example `abc`', async () => {
+		const token = await generateToken('god');
+
+		const response = await request(app)
+			.get('/api/v1/pictures/abc')
+			.auth(token, { type: 'bearer' })
+			.expect('Content-Type', /json/)
+			.expect(400);
+		expect(response.body).toHaveProperty('error');
+		expect(response.body).toHaveProperty('msg');
+		expect(response.body.error).toBe(true);
+	});
+
+	it('should return 500 if there is an error on the server', async () => {
+		const token = await generateToken('god');
+
+		const stub = sinon.stub(db.Picture, 'findOne').throws();
+
+		const response = await request(app)
+			.get('/api/v1/pictures/1')
+			.auth(token, { type: 'bearer' })
+			.expect('Content-Type', /json/)
+			.expect(500);
+		expect(response.body).toHaveProperty('error');
+		expect(response.body).toHaveProperty('msg');
+		expect(response.body.error).toBe(true);
+
+		stub.restore();
+	});
+});
+//-----------------------------------------------------------------------------
 
 //Tests para crear una picture -------------------------------------------------------
 describe('POST /api/v1/pictures', () => {
@@ -132,155 +280,6 @@ describe('POST /api/v1/pictures', () => {
 	});
 });
 // --------------------------------------------------------------------------------------
-
-// Tests para obtener todas las pictures de un producto
-//------------------------------------------------------------------------------
-describe('GET /api/v1/pictures?product=', () => {
-	/// probar si funciona con varias imagenes
-	it('should return all pictures of a product with status response 200', async () => {
-		const token = await generateToken('god');
-
-		const response = await request(app)
-			.get('/api/v1/pictures?product=1')
-			.auth(token, { type: 'bearer' })
-			.set('Accept', 'application/json')
-			.expect('Content-Type', /json/)
-			.expect(200);
-		expect(response.body.data).toEqual(
-			expect.arrayContaining([
-				expect.objectContaining({
-					picture_id: expect.any(Number),
-					picture_url: expect.any(String),
-					picture_description: expect.toBeOneOf([null, expect.any(String)]),
-					product_id: expect.any(Number),
-				}),
-			])
-		);
-	});
-
-	it('should return 400 if product is not a valid option, for example `abc`', async () => {
-		const token = await generateToken('god');
-
-		const response = await request(app)
-			.get('/api/v1/pictures?product=abc')
-			.auth(token, { type: 'bearer' })
-			.set('Accept', 'application/json')
-			.expect('Content-Type', /json/)
-			.expect(400);
-		expect(response.body).toHaveProperty('error');
-		expect(response.body).toHaveProperty('msg');
-		expect(response.body.error).toBe(true);
-	});
-
-	it('should return 404 if product does not exist', async () => {
-		const token = await generateToken('god');
-
-		const response = await request(app)
-			.get('/api/v1/pictures?product=4000')
-			.auth(token, { type: 'bearer' })
-			.set('Accept', 'application/json')
-			.expect('Content-Type', /json/)
-			.expect(404);
-		expect(response.body.msg).toBe('Product not found');
-	});
-
-	it('should return 404 if the product does not have any picture', async () => {
-		const token = await generateToken('god');
-
-		const response = await request(app)
-			.get('/api/v1/pictures?product=7')
-			.auth(token, { type: 'bearer' })
-			.set('Accept', 'application/json')
-			.expect('Content-Type', /json/)
-			.expect(404);
-		expect(response.body.msg).toBe('The product does not have images');
-	});
-
-	it('should return 500 if there is an error on the server', async () => {
-		const token = await generateToken('god');
-
-		const stub = sinon.stub(db.Picture, 'findAll').throws();
-
-		const response = await request(app)
-			.get('/api/v1/pictures?product=1')
-			.auth(token, { type: 'bearer' })
-			.set('Accept', 'application/json')
-			.expect('Content-Type', /json/)
-			.expect(500);
-		expect(response.body).toHaveProperty('error');
-		expect(response.body).toHaveProperty('msg');
-		expect(response.body.error).toBe(true);
-
-		stub.restore();
-	});
-});
-//------------------------------------------------------------------------------
-
-// Tests para obtener una picture por id
-//------------------------------------------------------------------------------
-describe('GET /api/v1/pictures/:id', () => {
-	it('should respond with a 200 status code and get the picture', async () => {
-		const token = await generateToken('god');
-
-		const response = await request(app)
-			.get('/api/v1/pictures/1')
-			.auth(token, { type: 'bearer' })
-			.expect('Content-Type', /json/)
-			.expect(200);
-		expect(response.body).toEqual({
-			error: false,
-			msg: 'Picture found',
-			data: {
-				picture_id: expect.any(Number),
-				picture_url: expect.any(String),
-				product_id: expect.any(Number),
-				picture_description: expect.toBeOneOf([null, expect.any(String)]),
-			},
-		});
-	});
-
-	it('should return 404 if the picture does not exist', async () => {
-		const token = await generateToken('god');
-
-		const response = await request(app)
-			.get('/api/v1/pictures/4000')
-			.auth(token, { type: 'bearer' })
-			.expect('Content-Type', /json/)
-			.expect(404);
-		expect(response.body.msg).toBe('Picture not found');
-	});
-
-	it('should return 400 if id is not a valid option, for example `abc`', async () => {
-		const token = await generateToken('god');
-
-		const response = await request(app)
-			.get('/api/v1/pictures/abc')
-			.auth(token, { type: 'bearer' })
-			.expect('Content-Type', /json/)
-			.expect(400);
-		expect(response.body).toHaveProperty('error');
-		expect(response.body).toHaveProperty('msg');
-		expect(response.body.error).toBe(true);
-	});
-
-	it('should return 500 if there is an error on the server', async () => {
-		const token = await generateToken('god');
-
-		const stub = sinon.stub(db.Picture, 'findOne').throws();
-
-		const response = await request(app)
-			.get('/api/v1/pictures/1')
-			.auth(token, { type: 'bearer' })
-			.expect('Content-Type', /json/)
-			.expect(500);
-		expect(response.body).toHaveProperty('error');
-		expect(response.body).toHaveProperty('msg');
-		expect(response.body.error).toBe(true);
-
-		stub.restore();
-	});
-});
-//-----------------------------------------------------------------------------
 
 // Tests para actualizar una picture ------------------------------------------------
 describe('PUT /pictures/:id', () => {
@@ -452,3 +451,4 @@ describe('DELETE /pictures/:id', () => {
 	});
 });
 // ---------------------------------------------------------------------------------
+
