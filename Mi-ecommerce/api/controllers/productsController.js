@@ -9,6 +9,14 @@ const Picture = require('../database/models/Picture');
 const productsController = {
 
     listar: async (req, res, next)=>{
+
+        if(req.newUsers.role != 'guest' && req.newUsers.role != 'admin' && req.newUsers.role != 'god'){
+            return res.status(401).json({
+                error: true,
+                msg:'you have to log in in order to see the products'
+            })
+        }
+
         try {
             const {category} = req.query
     
@@ -88,6 +96,14 @@ const productsController = {
     },
 
     detalle: async (req, res, next)=>{
+
+        if(req.newUsers.role != 'guest' && req.newUsers.role != 'admin' && req.newUsers.role != 'god'){
+            return res.status(401).json({
+                error: true,
+                msg:'you have to log in in order to see the products'
+            })
+        }
+
        try {
            const {id} = req.params;
            let prod = await db.Product.findByPk(id,{
@@ -128,6 +144,14 @@ const productsController = {
     },
     
     mostwanted: async (req, res, next)=>{
+
+        if(req.newUsers.role != 'guest' && req.newUsers.role != 'admin' && req.newUsers.role != 'god'){
+            return res.status(401).json({
+                error: true,
+                msg:'you have to log in in order to see the products'
+            })
+        }
+
         try {
             let products = await db.Product.findAll({
                 attributes:{   
@@ -165,12 +189,13 @@ const productsController = {
     },
 
     crear: async (req, res, next)=>{
+
         try {
             const{title, price, description, gallery, stock, mostwanted, category} = req.body;
     
             const rol = req.newUsers.role;
             
-            if(rol == "guest"){
+            if(req.newUsers.role != 'admin' && req.newUsers.role != 'god'){
                 return res.status(401).json({
                     error: true,
                     msg:"You don't have permission to create a product"
@@ -212,11 +237,12 @@ const productsController = {
     },
     
     eliminar: async (req, res, next)=>{
+
         try {
             const {id} = req.params;
             const rol = req.newUsers.role;
             
-            if(rol == "guest"){
+            if(req.newUsers.role != 'admin' && req.newUsers.role != 'god'){
                 return res.status(401).json({
                     error: true,
                     msg:"You don't have permission to delete a product"
@@ -287,6 +313,14 @@ const productsController = {
     },
 
     busqueda: async (req, res, next)=>{
+
+        if(req.newUsers.role != 'guest' && req.newUsers.role != 'admin' && req.newUsers.role != 'god'){
+            return res.status(401).json({
+                error: true,
+                msg:'you have to log in in order to see the products'
+            })
+        }
+
         try {
             const {q} = req.query; 
     
@@ -335,6 +369,14 @@ const productsController = {
     },
 
     modificar: async (req, res, next)=>{
+
+        if(req.newUsers.role != 'admin' && req.newUsers.role != 'god'){
+            return res.status(401).json({
+                error: true,
+                msg:'you have to log in in order to see the products'
+            })
+        }
+
         try {
             
             const {id} = req.params;
@@ -411,6 +453,14 @@ const productsController = {
     },
 
     pictures: async (req, res, next) => {
+
+        if(req.newUsers.role != 'guest' && req.newUsers.role != 'admin' && req.newUsers.role != 'god'){
+            return res.status(401).json({
+                error: true,
+                msg:'you have to log in in order to see the products'
+            })
+        }
+
         const { id } = req.params;
 
         try {
@@ -448,6 +498,13 @@ const productsController = {
     },
 
     categoria: async (req, res, next)=>{
+
+        if(req.newUsers.role != 'guest' && req.newUsers.role != 'admin' && req.newUsers.role != 'god'){
+            return res.status(401).json({
+                error: true,
+                msg:'you have to log in in order to see the products'
+            })
+        }
 
         try {
             const {category} = req.query;
