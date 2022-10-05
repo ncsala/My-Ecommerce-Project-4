@@ -6,18 +6,15 @@ const sinon = require('sinon');
 const {
 	generateToken,
 	loadingDataInTestingDB,
-	destroyTables,
+  cargarDatos
 } = require('./helpers');
 
 beforeAll(async () => {
 	// Se la base de datos de testing
-
 	// await db.sequelize.sync({ force: true });
-    
-
 	//Se cargan con info para pruebas
 	// await loadingDataInTestingDB();
-
+  await cargarDatos()
 });
 
 //Tests para crear una picture ---------------------------------------------------------------------
@@ -29,7 +26,7 @@ describe('POST /api/v1/pictures', () => {
 		const newPicture = {
 			pictureUrl: 'http://www.una-linda-picture.com',
 			pictureDescription: 'Picture description',
-			productId: 1,
+			productId: 3,
 		};
 
 		const response = await request(app)
@@ -49,7 +46,7 @@ describe('POST /api/v1/pictures', () => {
 				picture_id: response.body.data.picture_id,
 				picture_url: 'http://www.una-linda-picture.com',
 				picture_description: 'Picture description',
-				product_id: 1,
+				product_id: 3,
 			})
 		);
 	});
@@ -174,7 +171,7 @@ describe('GET /api/v1/pictures?product=', () => {
 		const token = await generateToken('god');
 
 		const response = await request(app)
-			.get('/api/v1/pictures?product=2')
+			.get('/api/v1/pictures?product=7')
 			.auth(token, { type: 'bearer' })
 			.set('Accept', 'application/json')
 			.expect('Content-Type', /json/)
