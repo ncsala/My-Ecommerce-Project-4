@@ -9,18 +9,6 @@ const {
 	destroyTables,
 } = require('./helpers');
 
-afterAll(() => {
-	// db.sequelize.close()
-	// await db.sequelize.sync({ force: true });
-});
-
-afterEach(() => {
-	//borrar base de datos
-	// db.sequelize.sync({ force: true });
-	// otra forma
-	// db.sequelize.drop();
-	// server.close();
-});
 
 beforeAll(async () => {
 	// Se la base de datos de testing
@@ -29,28 +17,9 @@ beforeAll(async () => {
 	//await loadingDataInTestingDB();
 });
 
-//CREAR UNA CAGTEGORIA
-// describe('POST /api/v1/category', () => {
-// 	it('should create a category', async () => {
-// 		const response = await request(app)
-// 			.post('/api/v1/category')
-// 			.send({
-// 				name: 'Categoriaaa',
-// 			})
-// 			.set('Accept', 'application/json')
-// 			.expect('Content-Type', /json/)
-// 			.expect(201);
-// 		expect(response.body.data.category_name).toBe('Categoriaaa');
-// 	});
-// });
 
 //Tests para crear una picture ---------------------------------------------------------------------
 describe('POST /api/v1/pictures', () => {
-
-	// afterEach(() => {
-	// 	server.close();
-	// });
-
 
 	it('should create a new picture in the database with status response 201', async () => {
 		//debo logueaerme desde la ruta o desde el test generando un token?
@@ -148,13 +117,10 @@ describe('POST /api/v1/pictures', () => {
 		stub.restore();
 	});
 });
+
+// Tests para obtener todas las pictures de un producto
 //------------------------------------------------------------------------------
-
-describe('GET /api/v1/pictures', () => {
-
-	// afterEach(() => {
-	// 	server.close();
-	// });
+describe('GET /api/v1/pictures?product=', () => {
 
   /// probar si funciona con varias imagenes
 	it('should return all pictures of a product', async () => {
@@ -171,7 +137,7 @@ describe('GET /api/v1/pictures', () => {
 				expect.objectContaining({
 					picture_id: expect.any(Number),
 					picture_url: expect.any(String),
-					picture_description: null,
+					picture_description: expect.toBeOneOf([null, expect.any(String)]),
 					product_id: expect.any(Number),
 				}),
 			])
@@ -234,3 +200,33 @@ describe('GET /api/v1/pictures', () => {
 		stub.restore();
 	});
 });
+
+// Tests para obtener una picture por id
+//------------------------------------------------------------------------------
+describe('GET /api/v1/pictures/:id', () => {
+
+  it('should respond with a 200 status code', async () => {
+		const token = await generateToken('god');
+
+		const response = await request(app)
+			.get('/api/v1/pictures/1')
+			.auth(token, { type: 'bearer' })
+      .expect('Content-Type', /json/)
+      .expect(200);
+		expect(response.statusCode).toBe(200);
+		expect(response.type).toBe('application/json');
+		expect(response.body).toEqual({
+			error: false,
+			msg: 'Picture found',
+			data: {
+				picture_id: expect.any(Number),
+				picture_url: expect.any(String),
+				product_id: expect.any(Number),
+				//picture description puede se vacio
+				picture_description: expect.toBeOneOf([null, expect.any(String)]),
+			},
+		});
+	}); 
+
+});
+
