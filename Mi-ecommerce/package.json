@@ -6,8 +6,10 @@
   "scripts": {
     "test": "jest --watchAll --verbose --silent"
   },
-  "jest":{
-    "setupFilesAfterEnv": ["jest-extended/all"]
+  "jest": {
+    "setupFilesAfterEnv": [
+      "jest-extended/all"
+    ]
   },
   "keywords": [],
   "author": "",
