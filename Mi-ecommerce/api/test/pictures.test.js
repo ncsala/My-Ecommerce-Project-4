@@ -10,10 +10,11 @@ const {
 } = require('./helpers');
 
 beforeAll(async () => {
-	// await db.sequelize.sync({ force: true });
-	// await loadingDataInTestingDB();
-	await cargarDatos();
+  // await db.sequelize.sync({ force: true });
+  // await loadingDataInTestingDB();
+  await cargarDatos();
 });
+
 
 //Tests para crear una picture -------------------------------------------------------
 describe('POST /api/v1/pictures', () => {
