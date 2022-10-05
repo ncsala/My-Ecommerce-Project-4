@@ -20,7 +20,6 @@ const picturesRoutes = require('./api/routes/picturesRoutes');
 const cartsRoutes = require('./api/routes/cartRoutes');
 const categoryRoutes = require('./api/routes/categoryRoutes');
 const usersController = require('./api/controllers/usersController');
-const cargarDatosRoutes = require('./api/routes/cargarDatosRoutes');
 
 const route = express.Router();
 const app = express();
@@ -36,7 +35,6 @@ route.use('/products', productsRoutes);
 route.use('/pictures', picturesRoutes);
 route.use('/carts', cartsRoutes);
 route.use('/category', categoryRoutes);
-route.use('/cargar', cargarDatosRoutes),
 	app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 app.use(logErrors);
