@@ -9,7 +9,6 @@ const {
 	destroyTables,
 } = require('./helpers');
 
-
 beforeAll(async () => {
 	// Se la base de datos de testing
 	 //await db.sequelize.sync({ force: true });
@@ -17,10 +16,8 @@ beforeAll(async () => {
 	//await loadingDataInTestingDB();
 });
 
-
 //Tests para crear una picture ---------------------------------------------------------------------
 describe('POST /api/v1/pictures', () => {
-
 	it('should create a new picture in the database with status response 201', async () => {
 		//debo logueaerme desde la ruta o desde el test generando un token?
 		const token = await generateToken('god');
@@ -121,9 +118,8 @@ describe('POST /api/v1/pictures', () => {
 // Tests para obtener todas las pictures de un producto
 //------------------------------------------------------------------------------
 describe('GET /api/v1/pictures?product=', () => {
-
-  /// probar si funciona con varias imagenes
-	it('should return all pictures of a product', async () => {
+	/// probar si funciona con varias imagenes
+	it('should return all pictures of a product with status response 200', async () => {
 		const token = await generateToken('god');
 
 		const response = await request(app)
@@ -144,7 +140,7 @@ describe('GET /api/v1/pictures?product=', () => {
 		);
 	});
 
-  it('should return 400 if product is not a valid option, for example `abc`', async () => {
+	it('should return 400 if product is not a valid option, for example `abc`', async () => {
 		const token = await generateToken('god');
 
 		const response = await request(app)
@@ -155,6 +151,7 @@ describe('GET /api/v1/pictures?product=', () => {
 			.expect(400);
 		expect(response.body).toHaveProperty('error');
 		expect(response.body).toHaveProperty('msg');
+		expect(response.body.error).toBe(true);
 	});
 
 	it('should return 404 if product does not exist', async () => {
@@ -169,18 +166,17 @@ describe('GET /api/v1/pictures?product=', () => {
 		expect(response.body.msg).toBe('Product not found');
 	});
 
-  it('should return 404 if the product does not have any picture', async () => {
-    const token = await generateToken('god');
+	it('should return 404 if the product does not have any picture', async () => {
+		const token = await generateToken('god');
 
-    const response = await request(app)
-      .get('/api/v1/pictures?product=2')
-      .auth(token, { type: 'bearer' })
-      .set('Accept', 'application/json')
-      .expect('Content-Type', /json/)
-      .expect(404);
-    expect(response.body.msg).toBe('The product does not have images');
-  });
-
+		const response = await request(app)
+			.get('/api/v1/pictures?product=2')
+			.auth(token, { type: 'bearer' })
+			.set('Accept', 'application/json')
+			.expect('Content-Type', /json/)
+			.expect(404);
+		expect(response.body.msg).toBe('The product does not have images');
+	});
 
 	it('should return 500 if there is an error on the server', async () => {
 		const token = await generateToken('god');
@@ -204,17 +200,14 @@ describe('GET /api/v1/pictures?product=', () => {
 // Tests para obtener una picture por id
 //------------------------------------------------------------------------------
 describe('GET /api/v1/pictures/:id', () => {
-
-  it('should respond with a 200 status code', async () => {
+	it('should respond with a 200 status code and get the picture', async () => {
 		const token = await generateToken('god');
 
 		const response = await request(app)
 			.get('/api/v1/pictures/1')
 			.auth(token, { type: 'bearer' })
-      .expect('Content-Type', /json/)
-      .expect(200);
-		expect(response.statusCode).toBe(200);
-		expect(response.type).toBe('application/json');
+			.expect('Content-Type', /json/)
+			.expect(200);
 		expect(response.body).toEqual({
 			error: false,
 			msg: 'Picture found',
@@ -222,11 +215,220 @@ describe('GET /api/v1/pictures/:id', () => {
 				picture_id: expect.any(Number),
 				picture_url: expect.any(String),
 				product_id: expect.any(Number),
-				//picture description puede se vacio
 				picture_description: expect.toBeOneOf([null, expect.any(String)]),
 			},
 		});
-	}); 
+	});
 
+	it('should return 404 if the picture does not exist', async () => {
+		const token = await generateToken('god');
+
+		const response = await request(app)
+			.get('/api/v1/pictures/4000')
+			.auth(token, { type: 'bearer' })
+			.expect('Content-Type', /json/)
+			.expect(404);
+		expect(response.body.msg).toBe('Picture not found');
+	});
+
+	it('should return 400 if id is not a valid option, for example `abc`', async () => {
+		const token = await generateToken('god');
+
+		const response = await request(app)
+			.get('/api/v1/pictures/abc')
+			.auth(token, { type: 'bearer' })
+			.expect('Content-Type', /json/)
+			.expect(400);
+		expect(response.body).toHaveProperty('error');
+		expect(response.body).toHaveProperty('msg');
+		expect(response.body.error).toBe(true);
+	});
+
+	it('should return 500 if there is an error on the server', async () => {
+		const token = await generateToken('god');
+
+		const stub = sinon.stub(db.Picture, 'findOne').throws();
+
+		const response = await request(app)
+			.get('/api/v1/pictures/1')
+			.auth(token, { type: 'bearer' })
+			.expect('Content-Type', /json/)
+			.expect(500);
+		expect(response.body).toHaveProperty('error');
+		expect(response.body).toHaveProperty('msg');
+		expect(response.body.error).toBe(true);
+
+		stub.restore();
+	});
+});
+
+describe('PUT /pictures/:id', () => {
+	it('should update a picture in database with status response 200', async () => {
+		const token = await generateToken('god');
+		const updatePicture = {
+			pictureUrl: 'http://www.una-linda-picture.com',
+			pictureDescription: 'Picture description updated',
+		};
+
+		const response = await request(app)
+			.put('/api/v1/pictures/1')
+			.auth(token, { type: 'bearer' })
+			.send(updatePicture)
+			.set('Accept', 'application/json')
+			.expect('Content-Type', /json/)
+			.expect(200);
+		console.log(response.body);
+		expect(response.body).toEqual(
+			expect.objectContaining({
+				error: false,
+				msg: 'Picture updated',
+				data: {
+					picture_id: response.body.data.picture_id,
+					picture_url: 'http://www.una-linda-picture.com',
+					product_id: response.body.data.product_id,
+					picture_description: 'Picture description updated',
+				},
+			})
+		);
+	});
+
+	it('should return 404 if the picture does not exist', async () => {
+		const token = await generateToken('god');
+		const updatePicture = {
+			pictureUrl: 'http://www.una-linda-picture.com',
+			pictureDescription: 'Picture description updated',
+		};
+
+		const response = await request(app)
+			.put('/api/v1/pictures/4000')
+			.auth(token, { type: 'bearer' })
+			.send(updatePicture)
+			.set('Accept', 'application/json')
+			.expect('Content-Type', /json/)
+			.expect(404);
+		expect(response.body.msg).toBe('Picture not found');
+	});
+
+	it('should return 400 if id is not a valid option, for example `abc`', async () => {
+		const token = await generateToken('god');
+		const updatePicture = {
+			pictureUrl: 'http://www.una-linda-picture.com',
+			pictureDescription: 'Picture description updated',
+		};
+
+		const response = await request(app)
+			.put('/api/v1/pictures/abc')
+			.auth(token, { type: 'bearer' })
+			.send(updatePicture)
+			.set('Accept', 'application/json')
+			.expect('Content-Type', /json/)
+			.expect(400);
+		expect(response.body).toHaveProperty('error');
+		expect(response.body).toHaveProperty('msg');
+		expect(response.body.error).toBe(true);
+	});
+
+  it('should return 400 if pictureUrl is not provided', async () => {
+    const token = await generateToken('god');
+    const updatePicture = {
+      pictureDescription: 'Picture description updated',
+    };
+
+    const response = await request(app)
+      .put('/api/v1/pictures/1')
+      .auth(token, { type: 'bearer' })
+      .send(updatePicture)
+      .set('Accept', 'application/json')
+      .expect('Content-Type', /json/)
+      .expect(400);
+      console.log(response.body);
+    expect(response.body).toHaveProperty('error');
+    expect(response.body).toHaveProperty('msg');
+    expect(response.body.error).toBe(true);
+    expect(response.body.msg).toBe('URL is required');
+  });
+
+  it('should return 500 if there is an error on the server', async () => {
+    const token = await generateToken('god');
+    const updatePicture = {
+      pictureUrl: 'http://www.una-linda-picture.com',
+      pictureDescription: 'Picture description updated',
+    };
+
+    const stub = sinon.stub(db.Picture, 'update').throws();
+
+    const response = await request(app)
+      .put('/api/v1/pictures/1')
+      .auth(token, { type: 'bearer' })
+      .send(updatePicture)
+      .set('Accept', 'application/json')
+      .expect('Content-Type', /json/)
+      .expect(500);
+    expect(response.body).toHaveProperty('error');
+    expect(response.body).toHaveProperty('msg');
+    expect(response.body.error).toBe(true);
+
+    stub.restore();
+  });
+
+});
+
+describe('DELETE /pictures/:id', () => {
+  it('should delete a picture in database with status response 200', async () => {
+    const token = await generateToken('god');
+
+    const response = await request(app)
+      .delete('/api/v1/pictures/1')
+      .auth(token, { type: 'bearer' })
+      .expect('Content-Type', /json/)
+      .expect(200);
+    expect(response.body).toEqual(
+      expect.objectContaining({
+        error: false,
+        msg: 'Picture deleted',
+      })
+    );
+  });
+
+  it('should return 404 if the picture does not exist', async () => {
+    const token = await generateToken('god');
+
+    const response = await request(app)
+      .delete('/api/v1/pictures/4000')
+      .auth(token, { type: 'bearer' })
+      .expect('Content-Type', /json/)
+      .expect(404);
+    expect(response.body.msg).toBe('Picture not found');
+  });
+
+  it('should return 400 if id is not a valid option, for example `abc`', async () => {
+    const token = await generateToken('god');
+
+    const response = await request(app)
+      .delete('/api/v1/pictures/abc')
+      .auth(token, { type: 'bearer' })
+      .expect('Content-Type', /json/)
+      .expect(400);
+    expect(response.body).toHaveProperty('error');
+    expect(response.body).toHaveProperty('msg');
+    expect(response.body.error).toBe(true);
+  });
+
+  it('should return 500 if there is an error on the server', async () => {
+    const token = await generateToken('god');
+
+    const stub = sinon.stub(db.Picture, 'destroy').throws();
+
+    const response = await request(app)
+      .delete('/api/v1/pictures/5')
+      .auth(token, { type: 'bearer' })
+      .expect('Content-Type', /json/)
+      .expect(500);
+    expect(response.body).toHaveProperty('error');
+    expect(response.body).toHaveProperty('msg');
+    expect(response.body.error).toBe(true);
+
+    stub.restore();
+  });
 });
 
