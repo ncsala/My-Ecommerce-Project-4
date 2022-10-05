@@ -24,7 +24,7 @@ describe('/products GET',()=>{
     //     server.close();
     // });
 
-    test('/products debe devolver un status 200 y con el formato json correcto',async ()=>{
+    test('/products  must return a status 200 and with the correct json format',async ()=>{
         const token = await generateToken('god');
         let res = await request(app).get('/api/v1/products').auth(token,{type:'bearer'});
 
