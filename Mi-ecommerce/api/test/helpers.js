@@ -124,7 +124,7 @@ const cargarDatos = async ()=>{
 }
 
 const limpiarBdTest = async()=>{
-	await db.sequelize.query('CALL spu_Limpiar')
+	await db.sequelize.query('CALL spu_DatosDePrueba')
 }
 
 module.exports = { limpiarBdTest,cargarDatos ,generateToken, loadingDataInTestingDB, destroyTables };
