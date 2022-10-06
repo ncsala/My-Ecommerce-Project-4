@@ -12,8 +12,8 @@ const generateJWT = (payload) => {
     },
     (err, token) => {
       if (err) {
-        console.log(err);
-        reject('No se pudo generar el JWT');
+        // console.log(err);
+        reject('Failed to generate JWT');
       }
       else resolve(token)
     });

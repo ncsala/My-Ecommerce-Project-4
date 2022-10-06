@@ -1,4 +1,3 @@
-const responses = require('../network/responses');
 const db = require('../database/models');
 
 // /pictures?product=id
@@ -84,9 +83,9 @@ const createPicture = async (req, res, next) => {
 			product_id: productId,
 		});
 
-    if (!newPicture) {
-      return res.status(400).json({ error: true, msg: 'Picture not created' });
-    }
+    // if (!newPicture) {
+    //   return res.status(400).json({ error: true, msg: 'Picture not created' });
+    // }
 
 		res.status(201).json({
 			error: false,
@@ -126,9 +125,9 @@ const updatePicture = async (req, res, next) => {
 			}
 		);
 
-    if (!pictureUpdate) {
-      return res.status(400).json({ error: true, msg: 'Picture not updated' });
-    }
+    // if (!pictureUpdate) {
+    //   return res.status(400).json({ error: true, msg: 'Picture not updated' });
+    // }
 
 		pictureUpdate = await db.Picture.findByPk(pictureId);
 
@@ -162,9 +161,9 @@ const deletePicture = async (req, res, next) => {
 			},
 		});
 
-    if (!pictureDeleted) {
-      return res.status(400).json({ error: true, msg: 'Picture not deleted' });
-    }
+    // if (!pictureDeleted) {
+    //   return res.status(400).json({ error: true, msg: 'Picture not deleted' });
+    // }
 
 		res
 			.status(200)
