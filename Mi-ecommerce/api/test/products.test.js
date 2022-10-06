@@ -571,5 +571,69 @@ describe('/products/:id DELETE',()=>{
     })
 })
 
+describe('/products/:id PUT',()=>{
+    test('/products/5 debe retornar 401 y error true si se manda un token que no tiene permisos',async ()=>{
+        const token = await generateToken('guest');
+        let res = await request(app).put('/api/v1/products/5')
+        .auth(token,{type:'bearer'})
+        .send({title:"shampoo Head & Shoulders"});
+
+        expect(res.statusCode).toBe(401);
+        expect(res.body).toEqual(expect.objectContaining(
+            {
+                error: true,
+                msg:expect.any(String),
+            }
+        ))
+    })
+
+    test('/products/11 debe retornar 404 si se manda un product_id de un producto que no existe',async ()=>{
+        const token = await generateToken('god');
+        let res = await request(app).put('/api/v1/products/11')
+        .auth(token,{type:'bearer'})
+        .send({title:"shampoo Head & Shoulders"});
+
+        expect(res.statusCode).toBe(404);
+        expect(res.body).toEqual(expect.objectContaining(
+            {
+                error: true,
+                msg:"Product with id = 11 does not exist",
+            }
+        ))
+    })
+
+    test('/products/5 debe retornar 400 si se manda un category_id en el body de una categoria que no existe',async ()=>{
+        const token = await generateToken('god');
+        let res = await request(app).put('/api/v1/products/5')
+        .auth(token,{type:'bearer'})
+        .send({title:"shampoo Head & Shoulders",category:5});
+
+        expect(res.body.msg).toBe("a")
+        expect(res.statusCode).toBe(400);
+        expect(res.body).toEqual(expect.objectContaining(
+            {
+                error: true,
+                msg:"category with id = 5 does not exist",
+            }
+        ))
+    })
+
+    test.skip('/products/5 debe retornar 400 si se manda un category_id en el body de una categoria que no existe',async ()=>{
+        const token = await generateToken('god');
+        let res = await request(app).put('/api/v1/products/5')
+        .auth(token,{type:'bearer'})
+        .send({title:"shampoo Head & Shoulders",category:10});
+
+        expect(res.statusCode).toBe(400);
+        expect(res.body).toEqual(expect.objectContaining(
+            {
+                error: true,
+                msg:"category with id = 5 does not exist",
+            }
+        ))
+    })
+    
+})
+
 
 

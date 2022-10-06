@@ -1,13 +1,12 @@
 const db = require('../api/database/models');
 
 //se le pasa un id de categoria y si existe devuelve true sino false
-const existeCat = (id) => {
-	let cat = db.Category.findByPk(id);
-
-	if (cat) {
+const existeCat = async (id) => {
+	let cat = await db.Category.findByPk(id);
+	console.log(cat);
+	if (cat != null) {
 		return true;
 	}
-
 	return false;
 };
 

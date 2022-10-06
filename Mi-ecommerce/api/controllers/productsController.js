@@ -370,39 +370,33 @@ const productsController = {
 
     modificar: async (req, res, next)=>{
 
-        if(req.newUsers.role != 'admin' && req.newUsers.role != 'god'){
-            return res.status(401).json({
-                error: true,
-                msg:'you have to log in in order to see the products'
-            })
-        }
-
         try {
             
             const {id} = req.params;
             const rol = req.newUsers.role;
-            if(rol == "guest"){
+            if(req.newUsers.role != 'admin' && req.newUsers.role != 'god'){
                 return res.status(401).json({
                     error: true,
                     msg:"You don't have permission to modify a product"
                 })
             }
 
-            const {title, description, price, category_id, mostwanted, stock} = req.body;
+            const {title, description, price, category, mostwanted, stock} = req.body;
             let prod = await db.Product.findByPk(id);
-
+            
             if(prod == undefined){
-                return res.status(401).json({
+                return res.status(404).json({
                     error: true,
                     msg:`Product with id = ${id} does not exist`
                 })
             }
-
-            if(category_id != undefined){
-                if(!fileHelpers.existeCat(category_id)){
-                    return res.status(400).jason({
+            
+            if(category != undefined){
+                let cat = await fileHelpers.existeCat(category);
+                if(!cat){
+                    return res.status(400).json({
                         error:true,
-                        msg:`category with id = ${category_id} does not exist`
+                        msg:`category with id = ${category} does not exist`
                     })
                 }
             }
@@ -410,7 +404,7 @@ const productsController = {
                 title: title == undefined? prod.title : title,
                 description: description == undefined? prod.description : description,
                 price : price == undefined? prod.price : price,
-                category_id : category_id == undefined? prod.category_id : category_id,
+                category_id : category == undefined? prod.category_id : category,
                 mostwanted: mostwanted == undefined? prod.mostwanted : mostwanted,
                 stock: stock == undefined? prod.stock : stock
             }
