@@ -44,6 +44,7 @@ describe('/category GET',()=>{
 		name:"Ropas y Calzados"
 	}
 //create category
+describe('/category POST',()=>{
 	test("must return a status 201 and with the new category", async ()=>{
 		const token = await generateToken('god');
 		const res = await request(app).post('/api/v1/category').auth(token,{type:'bearer'}).send(newCategory);
@@ -63,12 +64,15 @@ describe('/category GET',()=>{
         expect(res.statusCode).toBe(500);
 		stub.restore();
 	});
-
-	const newcategorymodif = {
-		name:"bebida"
-	}
+});
+	
 
 //modificar categoria
+
+describe('/category PUT',()=>{
+const newcategorymodif = {
+	name:"bebida"
+}
 	test("must return a status 200 and with new catergory category modified", async ()=>{
 		const token = await generateToken('god');
 		const res = await request(app).put('/api/v1/category/1').auth(token,{type:'bearer'}).send(newcategorymodif);
@@ -88,8 +92,11 @@ describe('/category GET',()=>{
         expect(res.statusCode).toBe(500);
 		stub.restore();
 	});
+});
 
 //eliminar categorias
+
+describe('/category DELETE',()=>{
 test("must return a status 200 and delete de category", async ()=>{
 	const token = await generateToken('god');
 	const res = await request(app).delete('/api/v1/category/1').auth(token,{type:'bearer'});
@@ -109,4 +116,6 @@ test("must return a status 500 and a error ", async ()=>{
 	const res = await request(app).delete('/api/v1/category/3').auth(token,{type:'bearer'});
 	expect(res.statusCode).toBe(500);
 	stub.restore();
+});
+
 });
