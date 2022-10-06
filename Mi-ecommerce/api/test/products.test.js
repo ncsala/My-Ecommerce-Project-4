@@ -5,18 +5,12 @@ const sinon = require('sinon');
 
 const {
 	generateToken,
-	loadingDataInTestingDB,
     cargarDatos,
-    limpiarBdTest
 } = require('./helpers');
 const { Op } = require("sequelize");
 
-beforeAll(async () => {
-
-	// await db.sequelize.sync({ force: true });    
+beforeAll(async () => {  
     await cargarDatos()
-
-	// await loadingDataInTestingDB();
 });
 
 describe('/products GET',()=>{
