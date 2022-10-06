@@ -379,7 +379,7 @@ describe('/products POST',()=>{
         const token = await generateToken('god');
         let res = await request(app).post('/api/v1/products')
         .auth(token,{type:'bearer'})
-        .send({title:"fruta maracuya",price:140});
+        .send({title:"fruta maracuya",price:140,mostwanted:true,description:"muy rica fruta",stock:80});
     
         expect(res.statusCode).toBe(201);
         expect(res.body).toEqual(expect.objectContaining(
@@ -396,7 +396,7 @@ describe('/products POST',()=>{
             description: expect.any(String),
             stock:expect.any(Number),
             product_id:expect.any(Number),
-            mostwanted: expect.toBeOneOf([1,0])
+            mostwanted: expect.toBeOneOf([true,false])
         })
         )
         expect(res.body.data.product_id).toBeGreaterThan(0)
@@ -538,7 +538,7 @@ describe('/products/:id DELETE',()=>{
 
     })
 
-    test('/products/:id debe retornar statusCode 200 si el producto se elimina correctamente',async ()=>{
+    test('/products/:id debe retornar statusCode 404 si el producto ',async ()=>{
         const token = await generateToken('god');
         let res = await request(app).delete('/api/v1/products/10')
         .auth(token,{type:'bearer'});
@@ -621,7 +621,14 @@ describe('/products/:id PUT',()=>{
         const token = await generateToken('god');
         let res = await request(app).put('/api/v1/products/5')
         .auth(token,{type:'bearer'})
-        .send({title:"shampoo Head & Shoulders",category:2});
+        .send({
+            category:2,
+            description:"shampoo expectacular",
+            price:250,
+            category:2,
+            mostwanted:true,
+            stock:44
+        });
 
         expect(res.statusCode).toBe(200);
         expect(res.body).toEqual(expect.objectContaining(
@@ -668,6 +675,92 @@ describe('/products/:id PUT',()=>{
         stub.restore();
     })
     
+})
+
+describe('/products/:id/pictures GET',()=>{
+
+    test('/products/7/pictures debe devolver un status 200 y con el formato json correcto',async ()=>{
+        const token = await generateToken('god');
+        let res = await request(app).get('/api/v1/products/1/pictures').auth(token,{type:'bearer'});
+
+        expect(res.statusCode).toBe(200);
+        expect(res.body).toEqual(expect.objectContaining(
+            {
+                error: false,
+                msg:"Product photo list",
+            }
+        ))
+        let data = res.body.data
+
+        data.forEach(element =>{
+            expect.objectContaining({
+                picture_id: expect.any(Number),
+                picture_url: expect.any(String),
+                picture_description: expect(element.picture_description).toBeOneOf([expect.any(String),null]),
+                product_id: expect.any(Number),
+            })
+
+            expect(element.picture_id).toBeGreaterThan(0)
+            expect(element.product_id).toBeGreaterThan(0)
+        })
+        
+    })
+
+    test('debe devolver status 401 y un json con error:true si se da token erroneo',async ()=>{
+        const token = await generateToken('g');
+        let res = await request(app).get('/api/v1/products/7/pictures').auth(token,{type:'bearer'});
+        expect(res.statusCode).toBe(401);
+        expect(res.body).toEqual(expect.objectContaining(
+            {
+                error: true,
+                msg:'you have to log in in order to see the products pictures',
+            }
+        ))
+    })
+
+    test('deve devolver un status 500 si se da un error interno',async ()=>{
+
+        const stub = await sinon.stub(db.Product, 'findAll').throws();
+        const token = await generateToken('god');
+
+        let res = await request(app).get('/api/v1/products/7/pictures').auth(token,{type:'bearer'});
+
+        expect(res.body).toEqual(expect.objectContaining({
+            error:true,
+            msg:expect.any(String)
+        }))
+
+        stub.restore();
+    
+    })
+
+    test('/products/16/pictures debe devolver un status 404 porque no existe el product_id 16',async ()=>{
+        const token = await generateToken('god');
+        let res = await request(app).get('/api/v1/products/16/pictures').auth(token,{type:'bearer'});
+
+        expect(res.statusCode).toBe(404);
+        expect(res.body).toEqual(expect.objectContaining(
+            {
+                error: true,
+                msg:"Product not found",
+            }
+        ))
+        
+    })
+
+    test('/products/8/pictures debe devolver un status 404 porque el product_id 8 no tiene imagenes',async ()=>{
+        const token = await generateToken('god');
+        let res = await request(app).get('/api/v1/products/8/pictures').auth(token,{type:'bearer'});
+
+        expect(res.statusCode).toBe(404);
+        expect(res.body).toEqual(expect.objectContaining(
+            {
+                error: true,
+                msg:"The product does not have images",
+            }
+        ))
+        
+    })
 })
 
 

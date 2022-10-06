@@ -217,7 +217,7 @@ const productsController = {
             const newProduct = {
                 title: title,
                 description: description == undefined? "" : description,
-                price: price == undefined? 0 : price,
+                price: price,
                 stock: stock == undefined? 0 : stock,
                 mostwanted:mostwanted == undefined? 0 : mostwanted,
                 category_id:category == undefined? null : category
@@ -451,7 +451,7 @@ const productsController = {
         if(req.newUsers.role != 'guest' && req.newUsers.role != 'admin' && req.newUsers.role != 'god'){
             return res.status(401).json({
                 error: true,
-                msg:'you have to log in in order to see the products'
+                msg:'you have to log in in order to see the products pictures'
             })
         }
 
@@ -491,60 +491,60 @@ const productsController = {
         }
     },
 
-    categoria: async (req, res, next)=>{
+    // categoria: async (req, res, next)=>{
 
-        if(req.newUsers.role != 'guest' && req.newUsers.role != 'admin' && req.newUsers.role != 'god'){
-            return res.status(401).json({
-                error: true,
-                msg:'you have to log in in order to see the products'
-            })
-        }
+    //     if(req.newUsers.role != 'guest' && req.newUsers.role != 'admin' && req.newUsers.role != 'god'){
+    //         return res.status(401).json({
+    //             error: true,
+    //             msg:'you have to log in in order to see the products'
+    //         })
+    //     }
 
-        try {
-            const {category} = req.query;
+    //     try {
+    //         const {category} = req.query;
     
-           let products = db.Product.findAll({
-                attributes:{
-                    exclude:['category_id'],
-                    include:[
-                        [sequelize.col('Category.category_name'),'category_name']
-                    ]
-                },
-                where:{
-                    category_id:category
-                },
-                include:[
-                    {
-                        association:"gallery",
-                    },
-                    {
-                        model:db.Category,
-                        as:"category",
-                        attributes:[]
-                    }
-                ]
-           })
+    //        let products = db.Product.findAll({
+    //             attributes:{
+    //                 exclude:['category_id'],
+    //                 include:[
+    //                     [sequelize.col('Category.category_name'),'category_name']
+    //                 ]
+    //             },
+    //             where:{
+    //                 category_id:category
+    //             },
+    //             include:[
+    //                 {
+    //                     association:"gallery",
+    //                 },
+    //                 {
+    //                     model:db.Category,
+    //                     as:"category",
+    //                     attributes:[]
+    //                 }
+    //             ]
+    //        })
     
-            if(products.length == 0){
-                return res.status(404).json({
-                    error:true,
-                    msg: "No products found"
-                })
-            }
+    //         if(products.length == 0){
+    //             return res.status(404).json({
+    //                 error:true,
+    //                 msg: "No products found"
+    //             })
+    //         }
     
-            return res.status(200).json({
-                error:false,
-                msg: "Products filtered by category",
-                data: products
-            })
+    //         return res.status(200).json({
+    //             error:false,
+    //             msg: "Products filtered by category",
+    //             data: products
+    //         })
             
-        } catch (error) {
-            next(error)
-        }
+    //     } catch (error) {
+    //         next(error)
+    //     }
 
 
         
-    }
+    // }
 }
 
 module.exports = productsController;
