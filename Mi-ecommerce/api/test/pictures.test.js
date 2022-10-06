@@ -5,7 +5,6 @@ const db = require('../database/models');
 const sinon = require('sinon');
 const {
 	generateToken,
-	loadingDataInTestingDB,
 	cargarDatos,
 } = require('./helpers');
 

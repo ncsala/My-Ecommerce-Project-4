@@ -35,11 +35,11 @@ route.use('/products', productsRoutes);
 route.use('/pictures', picturesRoutes);
 route.use('/carts', cartsRoutes);
 route.use('/category', categoryRoutes);
-	app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 app.use(logErrors);
 app.use(clientErrorHandler);
-
+  
 //const server = app.listen(process.env.PORT, () => {
 // sequelize.sync(
 // 	//  { force: true }
@@ -49,13 +49,12 @@ app.use(clientErrorHandler);
 
 if (process.env.NODE_ENV !== 'test') {
 	app.listen(process.env.PORT, () => {
-		sequelize
+		sequelize;
 
-			 //.sync(
-			//   { force: true }
-			// );
+		//.sync(
+		//   { force: true }
+		// );
 		// console.log(`Servidor corriendo en el puerto ${process.env.PORT}`)
-
 	});
 }
 
