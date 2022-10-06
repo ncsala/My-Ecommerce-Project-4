@@ -1,7 +1,6 @@
 const express = require('express');
 const router = express.Router();
 const productsController = require('../controllers/productsController');
-const dataValidation = require('../middlewares/productDataValidation');
 const { verifyJWT } = require('../middlewares/verifyJWT');
 const {
 	createProductSchema,
