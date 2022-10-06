@@ -18,7 +18,7 @@ const generateToken = async (role) => {
 const generateTokenWithId = async (role, id) => {
 	return await generateJWT({
 		role: role,
-		id: id
+		user_id: id
 	});
 };
 
