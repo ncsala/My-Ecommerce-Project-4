@@ -3,12 +3,12 @@ const request = require('supertest');
 const { app, server } = require('../../server');
 const db = require('../database/models');
 const sinon = require('sinon');
-const { generateToken, cargarDatos } = require('./helpers');
+const { generateToken, cargarDatos, loadingDataInTestingDB } = require('./helpers');
 
 beforeAll(async () => {
-	// await db.sequelize.sync({ force: true });
-	// await loadingDataInTestingDB();
-	await cargarDatos();
+	await db.sequelize.sync({ force: true });
+	await loadingDataInTestingDB();
+	// await cargarDatos();
 });
 
 // Tests para obtener todas las pictures de un producto
@@ -66,7 +66,7 @@ describe('GET /api/v1/pictures?product=', () => {
 		const token = await generateToken('god');
 
 		const response = await request(app)
-			.get('/api/v1/pictures?product=7')
+			.get('/api/v1/pictures?product=2')
 			.auth(token, { type: 'bearer' })
 			.set('Accept', 'application/json')
 			.expect('Content-Type', /json/)
