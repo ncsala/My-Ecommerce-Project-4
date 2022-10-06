@@ -5,7 +5,6 @@ const db = require('../database/models');
 const sinon = require('sinon');
 const {
 	generateToken,
-	loadingDataInTestingDB,
 	cargarDatos,
 } = require('./helpers');
 
@@ -23,7 +22,7 @@ describe('GET /api/v1/pictures?product=', () => {
 		const token = await generateToken('god');
 
 		const response = await request(app)
-			.get('/api/v1/pictures?product=1')
+			.get('/api/v1/pictures?product=4')
 			.auth(token, { type: 'bearer' })
 			.set('Accept', 'application/json')
 			.expect('Content-Type', /json/)
