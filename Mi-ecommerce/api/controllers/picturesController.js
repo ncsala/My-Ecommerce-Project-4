@@ -1,4 +1,3 @@
-const responses = require('../network/responses');
 const db = require('../database/models');
 
 // /pictures?product=id

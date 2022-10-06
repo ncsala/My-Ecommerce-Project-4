@@ -1,8 +1,9 @@
 const db = require('../database/models');
 const categoryControler = {
-    listCategory: async function(req,res){
-        const allcategorys= await db.Category.findAll();
+    listCategory: async function(req,res,next){
+        
         try {
+            const allcategorys= await db.Category.findAll();
             res.status(200).json({
                 error:false,
                 msg: "Category List",
@@ -12,7 +13,7 @@ const categoryControler = {
             next(error);  
         }
     },
-    createCategory:async function(req,res){ 
+    createCategory:async function(req,res,next){ 
         try {
             const categoryExists = await db.Category.findOne({where:{
                 category_name:req.body.name 
@@ -35,7 +36,7 @@ const categoryControler = {
             next(error)
         }
     },
-    deleteCategory:async function(req,res){
+    deleteCategory:async function(req,res,next){
         try {
             const categoryId = req.params.id;
             const categoryExists = await db.Category.findByPk(categoryId);
@@ -59,7 +60,7 @@ const categoryControler = {
             next(error)
         }
     },
-    updateCategory: async function(req,res){
+    updateCategory: async function(req,res,next){
         try {
             const categoryId = req.params.id;
             const categoryExists = await db.Category.findByPk(categoryId);

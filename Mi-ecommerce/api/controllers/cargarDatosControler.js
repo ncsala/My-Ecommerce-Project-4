@@ -11,7 +11,7 @@ const cartProducts = require('../data.json/cartProduct.json');
 const cargarDatosController = {
 
 	//carga
-	carga: async function (req, res) {
+	carga: async function (req, res , next) {
 		try {
 			//cargar usuarios
 			for await (let u of users) {
@@ -77,8 +77,7 @@ const cargarDatosController = {
 				msg: 'Se cargaron los datos exitosamente',
 			});
 		} catch (error) {
-			console.log(error);
-			res.status(500).json({ error: true, msg: error.message });
+      next(error);
 		}
 	},
 };
