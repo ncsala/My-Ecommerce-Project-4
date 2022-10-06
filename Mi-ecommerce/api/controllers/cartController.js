@@ -1,10 +1,12 @@
 const filesHandler = require('../../helpers/filesHelpers');
 const db = require('../database/models');
+const {Op} = require('sequelize')
 
 //Listar carrito
 const cartList = async (req,res, next) => {
 const role= req.newUsers.role;
 const id = req.params.id
+
 //Checkeo de rol
 if(req.newUsers.user_id == id || role === 'god' || role === 'admin'){
     try {
@@ -17,7 +19,8 @@ if(req.newUsers.user_id == id || role === 'god' || role === 'admin'){
         }
         const cartUsuario = await db.cart_product.findAll({
             where: {
-                cart_id: id
+                cart_id: id,
+                quantity: {[Op.gt] : 0}
             },
             attributes: ['product_id', 'quantity', 'createdAt', 'updatedAt']
 
@@ -123,7 +126,8 @@ const cartEdit = async (req,res,next) => {
             //Imprimir
                 const cart = await db.cart_product.findAll({
                     where:{
-                        'cart_id': id
+                        'cart_id': id,
+                        quantity: {[Op.gt] : 0}
                     },
                     attributes: ['product_id', 'quantity', 'createdAt', 'updatedAt']
                 })
@@ -132,6 +136,11 @@ const cartEdit = async (req,res,next) => {
                     msg: 'Success',
                     data: cart
                 })
+
+                //limpiar bd
+                // const clean = await db.cart_product.destroy({where:{
+                //     quantity: 0
+                // }})
             } catch (error) {
                 next(error);
             }
