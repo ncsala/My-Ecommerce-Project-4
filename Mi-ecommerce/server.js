@@ -52,9 +52,9 @@ app.use(clientErrorHandler);
 if (process.env.NODE_ENV !== 'test') {
 	app.listen(process.env.PORT, () => {
 		sequelize
-			.sync
-			//  { force: true }
-			();
+			 .sync//(
+			//   { force: true }
+			// );
 		// console.log(`Servidor corriendo en el puerto ${process.env.PORT}`)
 	});
 }
