@@ -3,15 +3,12 @@ const request = require('supertest');
 const { app, server } = require('../../server');
 const db = require('../database/models');
 const sinon = require('sinon');
-const {
-	generateToken,
-	cargarDatos,
-} = require('./helpers');
+const { generateToken, cargarDatos } = require('./helpers');
 
 beforeAll(async () => {
-  // await db.sequelize.sync({ force: true });
-  // await loadingDataInTestingDB();
-  await cargarDatos();
+	// await db.sequelize.sync({ force: true });
+	// await loadingDataInTestingDB();
+	await cargarDatos();
 });
 
 // Tests para obtener todas las pictures de un producto
@@ -254,7 +251,7 @@ describe('POST /api/v1/pictures', () => {
 	it('should return 500 if there is an error on the server', async () => {
 		const token = await generateToken('god');
 
-    const newPicture = {
+		const newPicture = {
 			pictureUrl: 'http://www.una-linda-picture.com',
 			pictureDescription: 'Picture description',
 			productId: 3,
@@ -266,7 +263,7 @@ describe('POST /api/v1/pictures', () => {
 		const response = await request(app)
 			.post('/api/v1/pictures')
 			.auth(token, { type: 'bearer' })
-      .send(newPicture)
+			.send(newPicture)
 			.set('Accept', 'application/json')
 			.expect('Content-Type', /json/)
 			.expect(500);
@@ -400,12 +397,15 @@ describe('DELETE /pictures/:id', () => {
 			.auth(token, { type: 'bearer' })
 			.expect('Content-Type', /json/)
 			.expect(200);
+
 		expect(response.body).toEqual(
 			expect.objectContaining({
 				error: false,
 				msg: 'Picture deleted',
 			})
 		);
+		const deletedPicture = await db.Picture.findByPk(1);
+		expect(deletedPicture).toBe(null);
 	});
 
 	it('should return 404 if the picture does not exist', async () => {
@@ -450,4 +450,3 @@ describe('DELETE /pictures/:id', () => {
 	});
 });
 // ---------------------------------------------------------------------------------
-
