@@ -136,7 +136,6 @@ describe('/products?category=category_id GET',()=>{
         const token = await generateToken('god');
         let res = await request(app).get('/api/v1/products?category=4').auth(token,{type:'bearer'});
         expect(res.statusCode).toBe(404);
-        console.log(res.body.msg);
         expect(res.body).toEqual(expect.objectContaining(
             {
                 error: true,

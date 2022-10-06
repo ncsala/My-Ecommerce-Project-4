@@ -1,7 +1,8 @@
 const bcrypt = require('bcrypt');
 const {generateJWT} = require('../../helpers/generateJWT');
 const db = require('../database/models');
-const { Op } = require('sequelize')
+const { Op } = require('sequelize');
+const { raw } = require('express');
 
 const usersController = {
     listUsers: async function(req, res, next) {
@@ -9,7 +10,8 @@ const usersController = {
         try {
             let users = await db.User.findAll(
                 {
-                    attributes: {exclude: ['password']}
+                    attributes: {exclude: ['password']},
+                    raw: true
                 }
             );
             return res.status(200).json({
