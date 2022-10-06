@@ -602,13 +602,12 @@ describe('/products/:id PUT',()=>{
         ))
     })
 
-    test('/products/5 debe retornar 400 si se manda un category_id en el body de una categoria que no existe',async ()=>{
+    test('/products/5 debe retornar 400 si se manda un category en el body de una categoria que no existe',async ()=>{
         const token = await generateToken('god');
         let res = await request(app).put('/api/v1/products/5')
         .auth(token,{type:'bearer'})
         .send({title:"shampoo Head & Shoulders",category:5});
 
-        expect(res.body.msg).toBe("a")
         expect(res.statusCode).toBe(400);
         expect(res.body).toEqual(expect.objectContaining(
             {
@@ -618,19 +617,55 @@ describe('/products/:id PUT',()=>{
         ))
     })
 
-    test.skip('/products/5 debe retornar 400 si se manda un category_id en el body de una categoria que no existe',async ()=>{
+    test('/products/5 debe retornar 200 ,error:false y el formato correcto de json si se moifica correctamente',async ()=>{
         const token = await generateToken('god');
         let res = await request(app).put('/api/v1/products/5')
         .auth(token,{type:'bearer'})
-        .send({title:"shampoo Head & Shoulders",category:10});
+        .send({title:"shampoo Head & Shoulders",category:2});
 
-        expect(res.statusCode).toBe(400);
+        expect(res.statusCode).toBe(200);
         expect(res.body).toEqual(expect.objectContaining(
             {
-                error: true,
-                msg:"category with id = 5 does not exist",
+                error: false,
+                msg:"Product modified",
             }
         ))
+
+        expect(res.body.data).toEqual(expect.objectContaining({
+            category_name:expect.toBeOneOf([expect.any(String),null]),
+            price:expect.any(String),
+            title: expect.any(String),
+            description: expect.any(String),
+            stock:expect.any(Number),
+            product_id:expect.any(Number),
+            mostwanted: expect.toBeOneOf([1,0]),
+            gallery:expect.toBeOneOf([expect.arrayContaining([expect.objectContaining({
+                picture_id: expect.any(Number),
+                picture_url: expect.any(String),
+                picture_description: expect.toBeOneOf([expect.any(String),null]),
+                product_id:expect.any(Number)
+            })]),[]])
+            
+        })
+        )
+        expect(res.body.data.product_id).toBeGreaterThan(0)
+        expect(parseFloat(res.body.data.price)).toBeGreaterThan(0);
+    })
+
+    test('/products/5 debe retornar 500 si eiste un error interno',async ()=>{
+        const stub = await sinon.stub(db.Product, 'update').throws();
+        const token = await generateToken('god');
+    
+        let res = await request(app).put('/api/v1/products/5').auth(token,{type:'bearer'})
+        .send({title:"aaaaaaaaaaaagua"});
+    
+        expect(res.statusCode).toBe(500);
+        expect(res.body).toEqual(expect.objectContaining({
+            error:true,
+            msg:expect.any(String)
+        }))
+    
+        stub.restore();
     })
     
 })
