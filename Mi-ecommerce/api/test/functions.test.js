@@ -8,7 +8,7 @@ const {
 	loadingDataInTestingDB,
 	cargarDatos,
 } = require('./helpers');
-const {generateJWT} = require('../../helpers/generateJWT');
+const { generateJWT } = require('../../helpers/generateJWT');
 
 //si no hay token debe retornar No token provided
 describe('should return 401 if no token provided', () => {
@@ -64,25 +64,27 @@ describe('should return 401 if invalid role provided', () => {
 
 //verificar generate jwt con un payload
 describe('should return a valid token', () => {
-  it('should return a valid token', async () => {
-    const payload = {
-      role: 'god',
-    };
-    const token = await generateJWT(payload);
+	it('should return a valid token', async () => {
+		const payload = {
+			role: 'god',
+		};
+		const token = await generateJWT(payload);
 
-    expect(token).toEqual(expect.any(String));
-  });
+		expect(token).toEqual(expect.any(String));
+	});
 
-  //deberia retornar 'Invalid payload' si el payload es invalido
-  it('should return "Invalid payload" if payload is invalid', async () => {
-    // mandar un rechazo a la promesa del generateJWT sin usar sinon
-    const payload = {
-      role: 'god',
-    };
-    const token = await generateJWT(payload);
+	//deberia retornar 'Invalid payload' si el payload es invalido
+	it('should return "Failed to generate JWT" if payload is invalid', async () => {
+		const payload = 'hola';
 
-    expect(token).toEqual(expect.any(String));
-  });
+		// la promesa retorna 'No se pudo generar el JWT' como resultado
+		generateJWT(payload)
+			.then((result) => {
+				expect(result).toEqual('Failed to generate JWT');
+			})
+			.catch((err) => {
+				console.log(err);
+			});
+	});
+
 });
-
-
