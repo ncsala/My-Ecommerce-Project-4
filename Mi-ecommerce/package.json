@@ -4,10 +4,12 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "test": "jest --watchAll --verbose"
+    "test": "jest --watchAll --verbose --coverage"
   },
-  "jest":{
-    "setupFilesAfterEnv": ["jest-extended/all"]
+  "jest": {
+    "setupFilesAfterEnv": [
+      "jest-extended/all"
+    ]
   },
   "keywords": [],
   "author": "",

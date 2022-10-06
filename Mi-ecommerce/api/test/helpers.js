@@ -15,6 +15,13 @@ const generateToken = async (role) => {
 	});
 };
 
+const generateTokenWithId = async (role, id) => {
+	return await generateJWT({
+		role: role,
+		id: id
+	});
+};
+
 // Carga datos en la base de datos
 async function loadingDataInTestingDB() {
 	for await (let u of users) {
@@ -124,7 +131,7 @@ const cargarDatos = async ()=>{
 }
 
 const limpiarBdTest = async()=>{
-	await db.sequelize.query('CALL spu_DatosDePrueba')
+	await db.sequelize.query('CALL spu_DatosDePrueba()')
 }
 
-module.exports = { limpiarBdTest,cargarDatos ,generateToken, loadingDataInTestingDB, destroyTables };
+module.exports = { limpiarBdTest,cargarDatos ,generateToken, loadingDataInTestingDB, destroyTables, generateTokenWithId };
