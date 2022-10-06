@@ -274,6 +274,28 @@ describe('POST /api/v1/pictures', () => {
 		//Restauro el metodo findAll
 		stub.restore();
 	});
+
+	it('should not allow create a picture if the role is guest', async () => {
+		const token = await generateToken('guest');
+
+		const response = await request(app)
+			.post('/api/v1/pictures')
+			.auth(token, { type: 'bearer' })
+			.send({
+				pictureUrl: 'http://www.una-linda-picture.com',
+				pictureDescription: 'Picture description',
+        product_id: 3,
+			})
+			.set('Accept', 'application/json')
+			.expect('Content-Type', /json/)
+      .expect(401)
+
+		expect(response.body).toEqual({
+			error: true,
+			msg: 'You are not authorized to access this resource',
+		});
+	});
+
 });
 // --------------------------------------------------------------------------------------
 
@@ -384,6 +406,27 @@ describe('PUT /pictures/:id', () => {
 
 		stub.restore();
 	});
+
+  it('should not allow create a picture if the role is guest', async () => {
+		const token = await generateToken('guest');
+
+		const response = await request(app)
+			.put('/api/v1/pictures/1')
+			.auth(token, { type: 'bearer' })
+			.send({
+				pictureUrl: 'http://www.una-linda-picture.com',
+				pictureDescription: 'Picture description',
+        product_id: 3,
+			})
+			.set('Accept', 'application/json')
+			.expect('Content-Type', /json/)
+      .expect(401)
+
+		expect(response.body).toEqual({
+			error: true,
+			msg: 'You are not authorized to access this resource',
+		});
+	});
 });
 // ---------------------------------------------------------------------------------
 
@@ -448,5 +491,19 @@ describe('DELETE /pictures/:id', () => {
 
 		stub.restore();
 	});
+
+  it('should not allow delete picture if the role is guest', async () => {
+    const token = await generateToken('guest')
+
+    const response = await request(app)
+      .delete('/api/v1/pictures/3')
+      .auth(token, {type: 'bearer'})
+      .expect('Content-Type', /json/)
+
+    expect(response.body).toEqual({
+      error: true,
+      msg: 'You are not authorized to access this resource'
+    })
+  })
 });
 // ---------------------------------------------------------------------------------
