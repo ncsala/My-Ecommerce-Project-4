@@ -13,8 +13,6 @@ servers:
     description: Entorno Desarrollo
 
 tags:
-  - name: load
-    description: Todos los endpoints de carga de datos
   - name: login
     description: Endpoint del login
   - name: users
@@ -37,41 +35,6 @@ components:
 
 paths:
 
-  /cargar:
-    post:
-      tags:
-        - load
-      summary: Carga de datos iniciales de la API, no recibe ningun parametro solo ejecutar.
-
-      responses:
-        "500":
-          description: Internal error
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  error:
-                    type: boolean
-                    example: true
-                  msg:
-                    type: string
-                    example: Server Error
-                    
-        "201":
-          description: Data cargada a la base de datos
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  error:
-                    type: boolean
-                    example: false
-                  msg:
-                    type: string
-                    example: Se cargaron los datos exitosamente
-  
   /pictures?product=id:
     get:
       security:
