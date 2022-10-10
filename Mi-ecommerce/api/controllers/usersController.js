@@ -100,10 +100,17 @@ const usersController = {
                 user_id: newUser.user_id
             })
 
+            const userToReturn = await db.User.findByPk(
+                newUser.user_id, 
+                {
+                    attributes: {exclude: ['password']}
+                }
+            );
+
             res.status(201).json({
                 error: false,
                 msg: "User created successfully",
-                data: newUser
+                data: userToReturn
             })
         } catch (error) {
             next(error);

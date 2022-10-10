@@ -50,6 +50,7 @@ describe('/users',()=>{
                             profilepic: expect.toBeOneOf([expect.any(String),null])
                         })
                     );
+                expect(res.body.data).not.toContainKey('password');
         }
     })
 
@@ -84,6 +85,7 @@ describe('/users',()=>{
                             profilepic: expect.toBeOneOf([expect.any(String),null])
                         })
                     );
+                expect(res.body.data).not.toContainKey('password');
         }
     })
 
@@ -155,6 +157,7 @@ describe('/users',()=>{
                         profilepic: expect.toBeOneOf([expect.any(String),null])
                     })
                 );
+            expect(res.body.data).not.toContainKey('password');
     })
 
     test('GET to /users/:id must return status 200 as admin and with a valid JSON format (user requested)',
@@ -186,6 +189,7 @@ describe('/users',()=>{
                     profilepic: expect.toBeOneOf([expect.any(String),null])
                 })
             );
+        expect(res.body.data).not.toContainKey('password');
     })
 
     test('GET to /users/:id must return status 200 when guest user requesting own user data and with a valid JSON format (user requested)',
@@ -217,6 +221,7 @@ describe('/users',()=>{
                     profilepic: expect.toBeOneOf([expect.any(String),null])
                 })
             );
+        expect(res.body.data).not.toContainKey('password');
     })
 
     test('GET to /users/:id must return status 403 when guest user requesting no their own user data and with a valid JSON format',
@@ -307,9 +312,10 @@ describe('/users',()=>{
                                     role: "guest",
                                     profilepic: "https://imageurl.com/image.jpg"
                                 }
-                            ) 
+                            )
                 }
             ))
+        expect(res.body.data).not.toContainKey('password');
         
 
         const userCreated = await db.User.findOne({
@@ -334,5 +340,144 @@ describe('/users',()=>{
             )   
     })
 
+    test('POST to /users must return 400, when username is already registred and return valid JSON', async () => {
+        const res = await request(app)
+            .post('/api/v1/users')
+            .send({
+                "email": "nuevousuario@gmail.com",
+                "username": "nico",
+                "password": "hola",
+                "firstname": "Nuevo",
+                "lastname": "Usuario",
+                "role": "guest",
+                "profilepic": "https://imageurl.com/image.jpg"
+            })
+
+        expect(res.statusCode).toBe(400);
+        expect(res.body)
+            .toEqual(expect
+                .objectContaining(
+                {
+                    error: true,
+                    msg: 'Username is already registred', 
+                }
+            )) 
+    })
+
+    test('POST to /users must return 400, when email is already being used and return valid JSON', async () => {
+        const res = await request(app)
+            .post('/api/v1/users')
+            .send({
+                "email": "nico@gmail.com",
+                "username": "nuevo",
+                "password": "hola",
+                "firstname": "Nuevo",
+                "lastname": "Usuario",
+                "role": "guest",
+                "profilepic": "https://imageurl.com/image.jpg"
+            })
+
+        expect(res.statusCode).toBe(400);
+        expect(res.body)
+            .toEqual(expect
+                .objectContaining(
+                {
+                    error: true,
+                    msg: 'E-mail is already registred', 
+                }
+            )) 
+    })
+
+    test('POST to /users must return status 500 when a server error ocurres', 
+    async () => {
+        const stub = sinon.stub(db.User, 'create').throws();
+        let res = await request(app)
+            .post('/api/v1/users/')
+            .send({
+                "email": "nuevousuario2@gmail.com",
+                "username": "nuevo2",
+                "password": "hola",
+                "firstname": "Nuevo",
+                "lastname": "Usuario",
+                "role": "guest"
+            })
+        expect(res.statusCode)
+            .toBe(500);
+        expect(res.body)
+            .toEqual(expect
+                .objectContaining(
+                {
+                    error: true,
+                }
+            ))
+        stub.restore();
+    })
+
+    ////////////LOGIN USER
+
+    test('POST to /user/login must return 200, and return valid JSON', async () => {
+        const res = await request(app)
+            .post('/api/v1/users/login')
+            .send(
+                {
+                    "username": "feli",
+                    "password": "hola"
+                })
+
+        expect(res.statusCode).toBe(200);
+        expect(res.body)
+            .toEqual(expect
+                .objectContaining(
+                {
+                    "error": false,
+                    "msg": "authorized",
+                    "data": {
+                        "idUser": 5,
+                        "username": "feli"
+                    },
+                    "token": expect.any(String)
+                })
+            )
+        expect(res.body.data).not.toContainKey('password');
+    })
     
+    test('POST to /user/login must return 401 when wrong username, and return valid JSON', async () => {
+        const res = await request(app)
+            .post('/api/v1/users/login')
+            .send(
+                {
+                    "username": "felii",
+                    "password": "hola"
+                })
+
+        expect(res.statusCode).toBe(401);
+        expect(res.body)
+            .toEqual(expect
+                .objectContaining(
+                {
+                    error:true,
+                    msg: "Credentials are not valid"
+                })
+            )
+    })
+
+    test('POST to /user/login must return 401 when wrong password, and return valid JSON', async () => {
+        const res = await request(app)
+            .post('/api/v1/users/login')
+            .send(
+                {
+                    "username": "feli",
+                    "password": "holaa"
+                })
+
+        expect(res.statusCode).toBe(401);
+        expect(res.body)
+            .toEqual(expect
+                .objectContaining(
+                {
+                    error:true,
+                    msg: "Credentials are not valid"
+                })
+            )
+    })
 })
