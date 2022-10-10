@@ -16,13 +16,13 @@ const userAuthMiddleware = {
                             msg: "Not authorized"});
     },
     
-    createUser: function (req, res, next) {
-        next();
-    },
+    // createUser: function (req, res, next) {
+    //     next();
+    // },
 
-    login: function (req, res, next) {
-        next();
-    },
+    // login: function (req, res, next) {
+    //     next();
+    // },
 
     updateUser: function (req, res, next) {
         try{
