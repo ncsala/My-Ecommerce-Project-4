@@ -163,6 +163,10 @@ const usersController = {
 
         try {
 
+            const userExists = await db.User.findByPk(userId)
+
+            if(!userExists){ return res.status(404).json({error: true, msg: "User does not exists."}) }
+
             const userFound = await db.User.findOne(
                 {
                     where: 
@@ -179,6 +183,7 @@ const usersController = {
                     }
                 }
             )
+
             if(userFound)
             {
                 if(userFound.username === userFromRequest.username)
@@ -197,10 +202,9 @@ const usersController = {
                 }
             }
 
-            if(userFromRequest.password)
-                {userFromRequest.password = await bcrypt.hash(userFromRequest.password, 10);}
+            userFromRequest.password = await bcrypt.hash(userFromRequest.password, 10);
 
-            let result = await db.User.update(
+            await db.User.update(
                 {
                     first_name: userFromRequest.firstname, 
                     last_name: userFromRequest.lastname, 
@@ -212,8 +216,6 @@ const usersController = {
                 },
                 {where: {user_id: userId}}
             );
-
-            if(result[0] === 0){ return res.status(404).json({error: true, msg: "User does not exists."}) }
 
             const user = await db.User.findByPk(
                 userId, 
