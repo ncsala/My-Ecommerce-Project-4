@@ -21,6 +21,15 @@ describe('/category GET',()=>{
 		const token = await generateToken('god');
 		const res = await request(app).get('/api/v1/category').auth(token,{type:'bearer'});
         expect(res.statusCode).toBe(200);
+		let data = res.body.data;
+		data.forEach((elemen)=>{
+			expect(elemen).toEqual(expect.objectContaining({
+				category_id: expect.any(Number),
+				category_name: expect.any(String),				
+			 }));
+			 expect(elemen.category_id).toBeGreaterThan(0);
+			
+		});
 	});
 
 	test("must return a status 500 and with error", async ()=>{
@@ -33,6 +42,9 @@ describe('/category GET',()=>{
 		stub.restore();
 	});
 
+	
+//create category
+describe('/category POST',()=>{
 	const newCategory ={
 		name:"hielo1424"
 	};
@@ -43,12 +55,17 @@ describe('/category GET',()=>{
 	const oldCategory1 ={
 		name:"Ropas y Calzados"
 	}
-//create category
-describe('/category POST',()=>{
 	test("must return a status 201 and with the new category", async ()=>{
 		const token = await generateToken('god');
 		const res = await request(app).post('/api/v1/category').auth(token,{type:'bearer'}).send(newCategory);
         expect(res.statusCode).toBe(201);
+		const Categ = await db.Category.findOne({
+			where: { category_id: res.body.data.category_id },
+		});
+        expect(Categ).toEqual(expect.objectContaining({
+			category_name: "hielo1424"
+			})
+		);
 	});
 
 	test("must return a status 400 and a error", async ()=>{
