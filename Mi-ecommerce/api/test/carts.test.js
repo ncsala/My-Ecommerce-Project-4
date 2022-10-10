@@ -7,7 +7,7 @@ const sinon = require('sinon');
 
 
 
-beforeAll(async ()=>{
+beforeEach(async ()=>{
     await cargarDatos()
 })
 
@@ -27,7 +27,7 @@ describe('Get /cart/:id', () => {
                 updatedAt: expect.any(String)
             }))
             expect(element.product_id).toBeGreaterThan(0);
-            expect(element.quantity).toBeGreaterThanOrEqual(0);
+            expect(element.quantity).toBeGreaterThan(0);
             
         });
 
@@ -47,7 +47,7 @@ describe('Get /cart/:id', () => {
                 updatedAt: expect.any(String)
             }))
             expect(element.product_id).toBeGreaterThan(0);
-            expect(element.quantity).toBeGreaterThanOrEqual(0);
+            expect(element.quantity).toBeGreaterThan(0);
             
         });
 
@@ -68,7 +68,7 @@ describe('Get /cart/:id', () => {
                 updatedAt: expect.any(String)
             }))
             expect(element.product_id).toBeGreaterThan(0);
-            expect(element.quantity).toBeGreaterThanOrEqual(0);
+            expect(element.quantity).toBeGreaterThan(0);
             
         });
 
@@ -107,14 +107,22 @@ describe('Get /cart/:id', () => {
     })
 })
 
+
+//PUT 
 describe('PUT /carts/id', () => {
 
+    //Success
     test("Must insert a new product into a user's cart and return status 200 & the user's updated cart ", async() => {
         const token = await generateToken('god');
         const newData = {
             id: 4,
             quantity: 1
         }
+        const original = await db.cart_product.findAll({
+            where:{
+                cart_id: 1
+            }
+        })
         const res = await request(app).put('/api/v1/carts/1').auth(token, {type: 'bearer'})
                     .send(newData)
                     .expect(200);
@@ -126,16 +134,26 @@ describe('PUT /carts/id', () => {
             updatedAt: expect.any(String)
         }))
         expect(element.product_id).toBeGreaterThan(0);
-        expect(element.quantity).toBeGreaterThanOrEqual(0);
+        expect(element.quantity).toBeGreaterThan(0);
         })
+        const confirm = await db.cart_product.findAll({
+            where:{
+                cart_id: 1
+        }})
+        expect(confirm).toHaveLength(original.length + 1);
     })
 
     test("Must insert a new product into a user's cart and return status 200 & the user's updated cart ", async() => {
         const token = await generateTokenWithId('guest', 1);
         const newData = {
-            id: 4,
+            id: 5,
             quantity: 1
         }
+        const original = await db.cart_product.findAll({
+            where:{
+                cart_id: 1
+            }
+        })
         const res = await request(app).put('/api/v1/carts/1').auth(token, {type: 'bearer'})
                     .send(newData)
                     .expect(200);
@@ -147,16 +165,27 @@ describe('PUT /carts/id', () => {
             updatedAt: expect.any(String)
         }))
         expect(element.product_id).toBeGreaterThan(0);
-        expect(element.quantity).toBeGreaterThanOrEqual(0);
+        expect(element.quantity).toBeGreaterThan(0);
         })
+        const confirm = await db.cart_product.findAll({
+            where:{
+                cart_id: 1
+        }})
+        expect(confirm).toHaveLength(original.length + 1);
     })
 
     test("Must insert a new product into a user's cart and return status 200 & the user's updated cart ", async() => {
         const token = await generateTokenWithId('admin', 1);
         const newData = {
-            id: 4,
+            id: 6,
             quantity: 1
         }
+        const original = await db.cart_product.findAll({
+            where:{
+                cart_id: 1
+            }
+        })
+        
         const res = await request(app).put('/api/v1/carts/1').auth(token, {type: 'bearer'})
                     .send(newData)
                     .expect(200);
@@ -168,8 +197,13 @@ describe('PUT /carts/id', () => {
             updatedAt: expect.any(String)
         }))
         expect(element.product_id).toBeGreaterThan(0);
-        expect(element.quantity).toBeGreaterThanOrEqual(0);
+        expect(element.quantity).toBeGreaterThan(0);
         })
+        const confirm = await db.cart_product.findAll({
+            where:{
+                cart_id: 1
+        }})
+        expect(confirm).toHaveLength(original.length + 1);
     })
 
     test("Must insert an existing product into a user's cart and return status 200 & the user's updated cart ", async() => {
@@ -178,6 +212,11 @@ describe('PUT /carts/id', () => {
             id: 2,
             quantity: 1
         }
+        const original = await db.cart_product.findAll({
+            where:{
+                cart_id: 1
+            }
+        })
         const res = await request(app).put('/api/v1/carts/1').auth(token, {type: 'bearer'})
                     .send(newData)
                     .expect(200);
@@ -189,20 +228,28 @@ describe('PUT /carts/id', () => {
             updatedAt: expect.any(String)
         }))
         expect(element.product_id).toBeGreaterThan(0);
-        expect(element.quantity).toBeGreaterThanOrEqual(0);
+        expect(element.quantity).toBeGreaterThan(0);
         })
+        const confirm = await db.cart_product.findAll({
+            where:{
+                cart_id: 1
+        }})
+        expect(confirm).toHaveLength(original.length);
     })
 
+
+    // Errors
     test("Must return status 400 when the new quantity is less than 0 ", async() => {
         const token = await generateToken('god');
         const newData = {
-            id: 2,
+            id: 3,
             quantity: -100
         }
         const res = await request(app).put('/api/v1/carts/1').auth(token, {type: 'bearer'})
                     .send(newData)
                     .expect(400);
-
+        const data = await db.cart_product.findOne({where: {product_id: 2, cart_id: 1}})
+        expect(data.dataValues.quantity).toBeLessThan(100)
     })
 
     test("Must return error 404 when cart does not exist ", async() => {
@@ -214,6 +261,8 @@ describe('PUT /carts/id', () => {
         const res = await request(app).put('/api/v1/carts/10').auth(token, {type: 'bearer'})
                     .send(newData)
                     .expect(404);
+        const cart = await db.Cart.findOne({where:{cart_id:10}})
+        expect(cart).toBeNull();
 
     })
 
@@ -226,6 +275,8 @@ describe('PUT /carts/id', () => {
         const res = await request(app).put('/api/v1/carts/1').auth(token, {type: 'bearer'})
                     .send(newData)
                     .expect(404);
+        const product = await db.Product.findOne({where:{product_id:400}})
+        expect(product).toBeNull();
 
     })
 
@@ -238,6 +289,8 @@ describe('PUT /carts/id', () => {
         const res = await request(app).put('/api/v1/carts/1').auth(token, {type: 'bearer'})
                     .send(newData)
                     .expect(404);
+        const product = await db.Product.findOne({where:{product_id:4}})
+        expect(product.dataValues.stock).toBeLessThan(newData.quantity);
     })
 
     test("Must return error 403 when trying to edit another user's cart ", async() => {

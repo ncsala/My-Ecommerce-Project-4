@@ -3,15 +3,12 @@ const request = require('supertest');
 const { app, server } = require('../../server');
 const db = require('../database/models');
 const sinon = require('sinon');
-const {
-	generateToken,
-	cargarDatos,
-} = require('./helpers');
+const { generateToken, cargarDatos, loadingDataInTestingDB } = require('./helpers');
 
 beforeAll(async () => {
-  // await db.sequelize.sync({ force: true });
-  // await loadingDataInTestingDB();
-  await cargarDatos();
+	await db.sequelize.sync({ force: true });
+	await loadingDataInTestingDB();
+	// await cargarDatos();
 });
 
 // Tests para obtener todas las pictures de un producto
@@ -69,7 +66,7 @@ describe('GET /api/v1/pictures?product=', () => {
 		const token = await generateToken('god');
 
 		const response = await request(app)
-			.get('/api/v1/pictures?product=7')
+			.get('/api/v1/pictures?product=2')
 			.auth(token, { type: 'bearer' })
 			.set('Accept', 'application/json')
 			.expect('Content-Type', /json/)
@@ -254,7 +251,7 @@ describe('POST /api/v1/pictures', () => {
 	it('should return 500 if there is an error on the server', async () => {
 		const token = await generateToken('god');
 
-    const newPicture = {
+		const newPicture = {
 			pictureUrl: 'http://www.una-linda-picture.com',
 			pictureDescription: 'Picture description',
 			productId: 3,
@@ -266,7 +263,7 @@ describe('POST /api/v1/pictures', () => {
 		const response = await request(app)
 			.post('/api/v1/pictures')
 			.auth(token, { type: 'bearer' })
-      .send(newPicture)
+			.send(newPicture)
 			.set('Accept', 'application/json')
 			.expect('Content-Type', /json/)
 			.expect(500);
@@ -277,6 +274,28 @@ describe('POST /api/v1/pictures', () => {
 		//Restauro el metodo findAll
 		stub.restore();
 	});
+
+	it('should not allow create a picture if the role is guest', async () => {
+		const token = await generateToken('guest');
+
+		const response = await request(app)
+			.post('/api/v1/pictures')
+			.auth(token, { type: 'bearer' })
+			.send({
+				pictureUrl: 'http://www.una-linda-picture.com',
+				pictureDescription: 'Picture description',
+        product_id: 3,
+			})
+			.set('Accept', 'application/json')
+			.expect('Content-Type', /json/)
+      .expect(401)
+
+		expect(response.body).toEqual({
+			error: true,
+			msg: 'You are not authorized to access this resource',
+		});
+	});
+
 });
 // --------------------------------------------------------------------------------------
 
@@ -387,6 +406,27 @@ describe('PUT /pictures/:id', () => {
 
 		stub.restore();
 	});
+
+  it('should not allow create a picture if the role is guest', async () => {
+		const token = await generateToken('guest');
+
+		const response = await request(app)
+			.put('/api/v1/pictures/1')
+			.auth(token, { type: 'bearer' })
+			.send({
+				pictureUrl: 'http://www.una-linda-picture.com',
+				pictureDescription: 'Picture description',
+        product_id: 3,
+			})
+			.set('Accept', 'application/json')
+			.expect('Content-Type', /json/)
+      .expect(401)
+
+		expect(response.body).toEqual({
+			error: true,
+			msg: 'You are not authorized to access this resource',
+		});
+	});
 });
 // ---------------------------------------------------------------------------------
 
@@ -400,12 +440,15 @@ describe('DELETE /pictures/:id', () => {
 			.auth(token, { type: 'bearer' })
 			.expect('Content-Type', /json/)
 			.expect(200);
+
 		expect(response.body).toEqual(
 			expect.objectContaining({
 				error: false,
 				msg: 'Picture deleted',
 			})
 		);
+		const deletedPicture = await db.Picture.findByPk(1);
+		expect(deletedPicture).toBe(null);
 	});
 
 	it('should return 404 if the picture does not exist', async () => {
@@ -448,6 +491,19 @@ describe('DELETE /pictures/:id', () => {
 
 		stub.restore();
 	});
+
+  it('should not allow delete picture if the role is guest', async () => {
+    const token = await generateToken('guest')
+
+    const response = await request(app)
+      .delete('/api/v1/pictures/3')
+      .auth(token, {type: 'bearer'})
+      .expect('Content-Type', /json/)
+
+    expect(response.body).toEqual({
+      error: true,
+      msg: 'You are not authorized to access this resource'
+    })
+  })
 });
 // ---------------------------------------------------------------------------------
-

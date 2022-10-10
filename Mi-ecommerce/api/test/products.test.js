@@ -53,8 +53,8 @@ describe('/products GET',()=>{
             expect(parseFloat(element.price)).toBeGreaterThan(0);
         });
     })
-
-    test('debe devolver status 401 y un json con error:true si se da token erroneo',async ()=>{
+    test( 'must return a statusCode 401 , in the json respone , must be an error attribute with the value true, and a data attribute with the correct format'
+    ,async ()=>{
         const token = await generateToken('g');
         let res = await request(app).get('/api/v1/products').auth(token,{type:'bearer'});
         expect(res.statusCode).toBe(401);
@@ -136,7 +136,6 @@ describe('/products?category=category_id GET',()=>{
         const token = await generateToken('god');
         let res = await request(app).get('/api/v1/products?category=4').auth(token,{type:'bearer'});
         expect(res.statusCode).toBe(404);
-        console.log(res.body.msg);
         expect(res.body).toEqual(expect.objectContaining(
             {
                 error: true,
