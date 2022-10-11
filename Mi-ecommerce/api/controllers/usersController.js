@@ -3,6 +3,7 @@ const {generateJWT} = require('../../helpers/generateJWT');
 const db = require('../database/models');
 const { Op } = require('sequelize');
 
+
 const usersController = {
     listUsers: async function(req, res, next) {
 
@@ -63,22 +64,17 @@ const usersController = {
                     }
                 }
             )
-            if(userFound)
-            {
-                if(userFound.username === userFromRequest.username)
-                {
-                    return res.status(400).json({
-                        error: true,
-                        msg: "Username is already registred",
-                    });
-                }
-                if(userFound.email === userFromRequest.email)
-                {
-                    return res.status(400).json({
-                        error: true,
-                        msg: "E-mail is already registred",
-                    });
-                }
+            if(userFound && userFound.username === userFromRequest.username){
+                return res.status(400).json({
+                    error: true,
+                    msg: "Username is already registred",
+                });
+            }
+            if(userFound && userFound.email === userFromRequest.email){
+                return res.status(400).json({
+                    error: true,
+                    msg: "E-mail is already registred",
+                });
             }
             
             const hash = await bcrypt.hash(userFromRequest.password, 10);
@@ -183,22 +179,17 @@ const usersController = {
                 }
             )
 
-            if(userFound)
-            {
-                if(userFound.username === userFromRequest.username)
-                {
-                    return res.status(400).json({
-                        error: true,
-                        msg: "Username is already registred",
-                    });
-                }
-                if(userFound.email === userFromRequest.email)
-                {
-                    return res.status(400).json({
-                        error: true,
-                        msg: "E-mail is already registred",
-                    });
-                }
+            if(userFound && userFound.username === userFromRequest.username){
+                return res.status(400).json({
+                    error: true,
+                    msg: "Username is already registred",
+                });
+            }
+            if(userFound && userFound.email === userFromRequest.email){
+                return res.status(400).json({
+                    error: true,
+                    msg: "E-mail is already registred",
+                });
             }
 
             userFromRequest.password = await bcrypt.hash(userFromRequest.password, 10);
@@ -242,6 +233,35 @@ const usersController = {
             );
 
             if(!user) {return res.status(404).json({error: true, msg: "User does not exists."});}
+
+            const cartuser = await db.Cart.findOne(
+                {
+                    where: {
+                        cart_id: userId
+                    },
+                    attributes: ['cart_id']
+                }
+            );
+
+            const products = await db.cart_product.findAll(
+                {
+                    where: {
+                        cart_id: cartuser.cart_id
+                    }
+                }
+            )
+
+            for await (let product of products)
+            {
+                await db.Product.increment('stock',
+                    {
+                        by: product.quantity,
+                        where: {
+                            product_id: product.product_id
+                        }
+                    }
+                )
+            }
             
             await db.User.destroy({
                 where: {user_id: userId}
