@@ -5,7 +5,8 @@
   "main": "server.js",
   "scripts": {
     "start": "export NODE_ENV=development && node server.js",
-    "test": "jest --watchAll --verbose --coverage --runInBand"
+    "test": "jest --watchAll --verbose --coverage --runInBand",
+    "startdev": "export NODE_ENV=development && nodemon server.js"
   },
   "jest": {
     "setupFilesAfterEnv": [
