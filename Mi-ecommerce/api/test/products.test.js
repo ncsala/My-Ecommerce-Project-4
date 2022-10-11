@@ -373,6 +373,8 @@ describe('/products POST',()=>{
     
     test('/poducts must return a statusCode 200 and the correct json format with the data of the created product',async ()=>{
         const token = await generateToken('god');
+
+
         let res = await request(app).post('/api/v1/products')
         .auth(token,{type:'bearer'})
         .send({title:"fruta maracuya",price:140,mostwanted:true,description:"muy rica fruta",stock:80});
@@ -397,6 +399,16 @@ describe('/products POST',()=>{
         )
         expect(res.body.data.product_id).toBeGreaterThan(0)
         expect(parseFloat(res.body.data.price)).toBeGreaterThan(0);
+
+
+        let prodNuevo = await db.Product.findByPk(res.body.data.product_id);
+        expect(prodNuevo).toEqual(expect.objectContaining({
+            title:"fruta maracuya",
+            price:"140.00",
+            mostwanted:1,
+            description:"muy rica fruta",
+            stock:80
+        }))
 
     })
 
@@ -502,6 +514,9 @@ describe('/products/:id DELETE',()=>{
         expect(res.body.data.product_id).toBeGreaterThan(0)
         expect(parseFloat(res.body.data.price)).toBeGreaterThan(0);
 
+        let deletedProd = await db.Product.findByPk(22);
+
+        expect(deletedProd).toBe(null);
 
     })
 
@@ -621,7 +636,6 @@ describe('/products/:id PUT',()=>{
             category:2,
             description:"shampoo expectacular",
             price:250,
-            category:2,
             mostwanted:true,
             stock:44
         });
@@ -653,6 +667,17 @@ describe('/products/:id PUT',()=>{
         )
         expect(res.body.data.product_id).toBeGreaterThan(0)
         expect(parseFloat(res.body.data.price)).toBeGreaterThan(0);
+
+        let modifyedProd = await db.Product.findByPk(5);
+
+        expect(modifyedProd).toEqual(expect.objectContaining({
+            category_id:2,
+            description:"shampoo expectacular",
+            price:"250.00",
+            mostwanted:1,
+            stock:44
+        }))
+
     })
 
     test('/products/5 must return a 500 statusCode if there is an internal error',async ()=>{
