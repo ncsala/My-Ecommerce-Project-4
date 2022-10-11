@@ -137,11 +137,17 @@ describe('PUT /carts/id', () => {
         expect(element.product_id).toBeGreaterThan(0);
         expect(element.quantity).toBeGreaterThan(0);
         })
-        const confirm = await db.cart_product.findAll({
+        const updated = await db.cart_product.findAll({
             where:{
                 cart_id: 1
         }})
-        expect(confirm).toHaveLength(original.length + 1);
+        expect(updated).toHaveLength(original.length + 1);
+        const confirm = await db.cart_product.findOne({
+            where:{
+                cart_id: 1,
+                product_id: 20
+        }})
+        expect(confirm).not.toBeNull;
     })
 
     test("Must insert a new product into a user's cart and return status 200 & the user's updated cart ", async() => {
@@ -168,11 +174,17 @@ describe('PUT /carts/id', () => {
         expect(element.product_id).toBeGreaterThan(0);
         expect(element.quantity).toBeGreaterThan(0);
         })
-        const confirm = await db.cart_product.findAll({
+        const updated = await db.cart_product.findAll({
             where:{
                 cart_id: 1
         }})
-        expect(confirm).toHaveLength(original.length + 1);
+        expect(updated).toHaveLength(original.length + 1);
+        const confirm = await db.cart_product.findOne({
+            where:{
+                cart_id: 1,
+                product_id: 20
+        }})
+        expect(confirm).not.toBeNull;
     })
 
     test("Must insert a new product into a user's cart and return status 200 & the user's updated cart ", async() => {
@@ -200,11 +212,17 @@ describe('PUT /carts/id', () => {
         expect(element.product_id).toBeGreaterThan(0);
         expect(element.quantity).toBeGreaterThan(0);
         })
-        const confirm = await db.cart_product.findAll({
+        const updated = await db.cart_product.findAll({
             where:{
                 cart_id: 1
         }})
-        expect(confirm).toHaveLength(original.length + 1);
+        expect(updated).toHaveLength(original.length + 1);
+        const confirm = await db.cart_product.findOne({
+            where:{
+                cart_id: 1,
+                product_id: 20
+        }})
+        expect(confirm).not.toBeNull;
     })
 
     test("Must insert an existing product into a user's cart and return status 200 & the user's updated cart ", async() => {
