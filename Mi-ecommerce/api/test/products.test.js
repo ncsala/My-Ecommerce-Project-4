@@ -66,7 +66,7 @@ describe('/products GET',()=>{
         ))
     })
 
-    test('deve devolver un status 500 si se da un error interno',async ()=>{
+    test('Must return a statusCode 500 if there is an internal error',async ()=>{
 
         const stub = await sinon.stub(db.Product, 'findAll').throws();
         const token = await generateToken('god');
@@ -85,7 +85,7 @@ describe('/products GET',()=>{
 
 describe('/products?category=category_id GET',()=>{
 
-    test('/products?category=categoria devolver un status 200 y con el formato json correcto',async ()=>{
+    test('/products?category=categoria must return a statusCode 200 and the correct json format',async ()=>{
         const token = await generateToken('god');
         let res = await request(app).get('/api/v1/products?category=2').auth(token,{type:'bearer'});
     
@@ -119,8 +119,8 @@ describe('/products?category=category_id GET',()=>{
             expect(parseFloat(element.price)).toBeGreaterThan(0);
         });
     })
-    
-    test('debe devolver status 401 y un json con error:true si se da token erroneo',async ()=>{
+
+    test('must return a statusCode 401 and an error:true in the json response if you send an incorrect json',async ()=>{
         const token = await generateToken('g');
         let res = await request(app).get('/api/v1/products?category=2').auth(token,{type:'bearer'});
         expect(res.statusCode).toBe(401);
@@ -132,7 +132,7 @@ describe('/products?category=category_id GET',()=>{
         ))
     })
 
-    test('debe devolver status 404 y un json con error:true si se manda una categoria que no tiene productos',async ()=>{
+    test('must return a statusCode 404 and an error:true in the json respose if any product has the category_id assignated',async ()=>{
         const token = await generateToken('god');
         let res = await request(app).get('/api/v1/products?category=4').auth(token,{type:'bearer'});
         expect(res.statusCode).toBe(404);
@@ -144,7 +144,7 @@ describe('/products?category=category_id GET',()=>{
         ))
     })
     
-    test('deve devolver un status 500 si se da un error interno',async ()=>{
+    test('must return a statusCode 500 if there is an internal error',async ()=>{
     
         const stub = await sinon.stub(db.Product, 'findAll').throws();
         const token = await generateToken('god');
@@ -163,7 +163,7 @@ describe('/products?category=category_id GET',()=>{
 
 describe('/products/search?q=busqueda GET',()=>{
 
-    test('/products/search?q=man debe devolver un status 200 y con el formato json correcto',async ()=>{
+    test('/products/search?q=man must return a statusCode 200 and the correct json format',async ()=>{
         const token = await generateToken('god');
         let res = await request(app).get('/api/v1/products/search?q=man').auth(token,{type:'bearer'});
     
@@ -198,7 +198,7 @@ describe('/products/search?q=busqueda GET',()=>{
         });
     })
 
-    test('/products/search?q=man debe devolver status 401 y un json con error:true si se da token erroneo',async ()=>{
+    test('/products/search?q=man must return a statusCode 401 and an error:true in the json response if the token sent is wrong',async ()=>{
         const token = await generateToken('g');
         let res = await request(app).get('/api/v1/products/search?q=man').auth(token,{type:'bearer'});
         expect(res.statusCode).toBe(401);
@@ -210,7 +210,7 @@ describe('/products/search?q=busqueda GET',()=>{
         ))
     })
 
-    test('deve devolver un status 500 si se da un error interno',async ()=>{
+    test('must return an statusCode 500 if there is an internal error',async ()=>{
     
         const stub = await sinon.stub(db.Product, 'findAll').throws();
         const token = await generateToken('god');
@@ -228,7 +228,7 @@ describe('/products/search?q=busqueda GET',()=>{
 })
 
 describe('/products/:id GET',()=>{
-    test('/products/2 debe devolver un status 200 y con el formato json correcto',async ()=>{
+    test('/products/2 must return a statusCode 200 and the correct json format',async ()=>{
         const token = await generateToken('god');
         let res = await request(app).get('/api/v1/products/2').auth(token,{type:'bearer'});
     
@@ -262,7 +262,7 @@ describe('/products/:id GET',()=>{
         
     })
 
-    test('/products/2 debe devolver status 401 y un json con error:true si se da token erroneo',async ()=>{
+    test('/products/2 must return a 401 statusCode and an error:true in the json respone if the token sent is wrong',async ()=>{
         const token = await generateToken('g');
         let res = await request(app).get('/api/v1/products/2').auth(token,{type:'bearer'});
         expect(res.statusCode).toBe(401);
@@ -274,7 +274,7 @@ describe('/products/:id GET',()=>{
         ))
     })
 
-    test('/products/18 debe devolver status 404 y un json con error:true si se da un product_id que no existe',async ()=>{
+    test('/products/18 must return a 404 statusCode and an error:true in the json response if the product_id sent does not exist',async ()=>{
         const token = await generateToken('god');
         let res = await request(app).get('/api/v1/products/18').auth(token,{type:'bearer'});
         expect(res.statusCode).toBe(404);
@@ -286,7 +286,7 @@ describe('/products/:id GET',()=>{
         ))
     })
 
-    test('deve devolver un status 500 si se da un error interno',async ()=>{
+    test('must return a statusCode 500 if there is an internal error',async ()=>{
     
         const stub = await sinon.stub(db.Product, 'findAll').throws();
         const token = await generateToken('god');
@@ -304,7 +304,7 @@ describe('/products/:id GET',()=>{
 })
 
 describe('/products/mostwanted GET',()=>{
-    test('/products/2 debe devolver un status 200 y con el formato json correcto',async ()=>{
+    test('/products/2 must return a statusCode 200 and the correct json format',async ()=>{
         const token = await generateToken('god');
         let res = await request(app).get('/api/v1/products/mostwanted').auth(token,{type:'bearer'});
     
@@ -339,7 +339,7 @@ describe('/products/mostwanted GET',()=>{
         
     })
 
-    test('/products/mostwanted debe devolver status 401 y un json con error:true si se da token erroneo',async ()=>{
+    test('/products/mostwanted must return a statusCode 401 and an error:true if the token sent is wrong',async ()=>{
         const token = await generateToken('g');
         let res = await request(app).get('/api/v1/products/mostwanted').auth(token,{type:'bearer'});
         expect(res.statusCode).toBe(401);
@@ -351,7 +351,7 @@ describe('/products/mostwanted GET',()=>{
         ))
     })
 
-    test('deve devolver un status 500 si se da un error interno',async ()=>{
+    test('must return a statusCode 500 if there is an internal error',async ()=>{
     
         const stub = await sinon.stub(db.Product, 'findAll').throws();
         const token = await generateToken('god');
@@ -369,7 +369,8 @@ describe('/products/mostwanted GET',()=>{
 })
 
 describe('/products POST',()=>{
-    test('/poducts debe retornar statusCode 200 y el producto creado en la data de su respuesta, ademas del formato correcto de jso',async ()=>{
+    
+    test('/poducts must return a statusCode 200 and the correct json format with the data of the created product',async ()=>{
         const token = await generateToken('god');
         let res = await request(app).post('/api/v1/products')
         .auth(token,{type:'bearer'})
@@ -398,7 +399,7 @@ describe('/products POST',()=>{
 
     })
 
-    test('/products debe retornar statusCode 400 y error en true si no se pasa el precio o el titulo',async ()=>{
+    test('/products must return a statusCode 400 and an error:true in the response if the price or the title are undefined',async ()=>{
         const token = await generateToken('god');
         let res = await request(app).post('/api/v1/products')
         .auth(token,{type:'bearer'})
@@ -414,7 +415,7 @@ describe('/products POST',()=>{
 
     })
 
-    test('/products debe retornar statusCode 401 y error en true si no tenes permisos',async ()=>{
+    test('/products must return a statusCode 401 if your user is not allowed to create a product',async ()=>{
         const token = await generateToken('guest');
         let res = await request(app).post('/api/v1/products')
         .auth(token,{type:'bearer'})
@@ -430,7 +431,7 @@ describe('/products POST',()=>{
 
     })
 
-    test('/products debe retornar un 404 si se envia un category_id que no existe en el sistema',async ()=>{
+    test('/products must return a 404 if you sent an incorrect category_id',async ()=>{
         const token = await generateToken('god');
         let res = await request(app).post('/api/v1/products')
         .auth(token,{type:'bearer'})
@@ -446,7 +447,7 @@ describe('/products POST',()=>{
 
     })
 
-    test('deve devolver un status 500 si se da un error interno',async ()=>{
+    test('must return a statusCode 500 if there is an internal error',async ()=>{
         const stub = await sinon.stub(db.Product, 'create').throws();
 
         const token = await generateToken('god');
@@ -467,7 +468,7 @@ describe('/products POST',()=>{
 
 describe('/products/:id DELETE',()=>{
 
-    test('/products/:id debe retornar statusCode 200 si el producto se elimina correctamente',async ()=>{
+    test('/products/:id must return a statusCode 200 if the product is deleted correctly',async ()=>{
         const token = await generateToken('god');
         let res = await request(app).delete('/api/v1/products/4')
         .auth(token,{type:'bearer'});
@@ -503,7 +504,7 @@ describe('/products/:id DELETE',()=>{
 
     })
 
-    test('/products/:id debe retornar statusCode 400 si el producto esta en algun cart',async ()=>{
+    test('/products/:id must return a statusCode 400 if the product you are trying to delete is included in some carts',async ()=>{
         const token = await generateToken('god');
         let res = await request(app).delete('/api/v1/products/2')
         .auth(token,{type:'bearer'});
@@ -517,7 +518,7 @@ describe('/products/:id DELETE',()=>{
         ))
     })
 
-    test('/products debe retornar statusCode 401 y error en true si no tenes permisos',async ()=>{
+    test('/products must return a statusCode 401 if you are not allowed to do this action',async ()=>{
         const token = await generateToken('guest');
         let res = await request(app).delete('/api/v1/products/1')
         .auth(token,{type:'bearer'});
@@ -532,7 +533,7 @@ describe('/products/:id DELETE',()=>{
 
     })
 
-    test('/products/:id debe retornar statusCode 404 si el producto ',async ()=>{
+    test('/products/:id must return a statusCode 404 if there isnt any product with the id sent in params',async ()=>{
         const token = await generateToken('god');
         let res = await request(app).delete('/api/v1/products/10')
         .auth(token,{type:'bearer'});
@@ -547,7 +548,7 @@ describe('/products/:id DELETE',()=>{
 
     })
 
-    test('deve devolver un status 500 si se da un error interno',async ()=>{
+    test('must return a statusCode 500 if there is an internal error',async ()=>{
         const stub = await sinon.stub(db.Product, 'destroy').throws();
 
         const token = await generateToken('god');
@@ -566,7 +567,7 @@ describe('/products/:id DELETE',()=>{
 })
 
 describe('/products/:id PUT',()=>{
-    test('/products/5 debe retornar 401 y error true si se manda un token que no tiene permisos',async ()=>{
+    test('/products/5 must return a statusCode 401 if you havent enough permissions to do this actions',async ()=>{
         const token = await generateToken('guest');
         let res = await request(app).put('/api/v1/products/5')
         .auth(token,{type:'bearer'})
@@ -581,7 +582,7 @@ describe('/products/:id PUT',()=>{
         ))
     })
 
-    test('/products/11 debe retornar 404 si se manda un product_id de un producto que no existe',async ()=>{
+    test('/products/11 must return a 404 statusCode if there isnt any product with the id sent in params',async ()=>{
         const token = await generateToken('god');
         let res = await request(app).put('/api/v1/products/11')
         .auth(token,{type:'bearer'})
@@ -596,7 +597,7 @@ describe('/products/:id PUT',()=>{
         ))
     })
 
-    test('/products/5 debe retornar 400 si se manda un category en el body de una categoria que no existe',async ()=>{
+    test('/products/5 must return a statusCode 400 if the category sent in the request body does not exist',async ()=>{
         const token = await generateToken('god');
         let res = await request(app).put('/api/v1/products/5')
         .auth(token,{type:'bearer'})
@@ -611,7 +612,7 @@ describe('/products/:id PUT',()=>{
         ))
     })
 
-    test('/products/5 debe retornar 200 ,error:false y el formato correcto de json si se moifica correctamente',async ()=>{
+    test('/products/5 must return a statusCode 200 and an error;false in the json response if the product is updated correctly',async ()=>{
         const token = await generateToken('god');
         let res = await request(app).put('/api/v1/products/5')
         .auth(token,{type:'bearer'})
@@ -653,7 +654,7 @@ describe('/products/:id PUT',()=>{
         expect(parseFloat(res.body.data.price)).toBeGreaterThan(0);
     })
 
-    test('/products/5 debe retornar 500 si eiste un error interno',async ()=>{
+    test('/products/5 must return a 500 statusCode if there is an internal error',async ()=>{
         const stub = await sinon.stub(db.Product, 'update').throws();
         const token = await generateToken('god');
     
@@ -673,7 +674,7 @@ describe('/products/:id PUT',()=>{
 
 describe('/products/:id/pictures GET',()=>{
 
-    test('/products/7/pictures debe devolver un status 200 y con el formato json correcto',async ()=>{
+    test('/products/7/pictures must return a statusCode 200 and the correct json format',async ()=>{
         const token = await generateToken('god');
         let res = await request(app).get('/api/v1/products/1/pictures').auth(token,{type:'bearer'});
 
@@ -700,7 +701,7 @@ describe('/products/:id/pictures GET',()=>{
         
     })
 
-    test('debe devolver status 401 y un json con error:true si se da token erroneo',async ()=>{
+    test('must return a 401 statusCode and an error:true in the json response if the token sent is wrong',async ()=>{
         const token = await generateToken('g');
         let res = await request(app).get('/api/v1/products/7/pictures').auth(token,{type:'bearer'});
         expect(res.statusCode).toBe(401);
@@ -712,7 +713,7 @@ describe('/products/:id/pictures GET',()=>{
         ))
     })
 
-    test('deve devolver un status 500 si se da un error interno',async ()=>{
+    test('must return a statusCode 500 if there is an internal error',async ()=>{
 
         const stub = await sinon.stub(db.Product, 'findAll').throws();
         const token = await generateToken('god');
@@ -728,7 +729,7 @@ describe('/products/:id/pictures GET',()=>{
     
     })
 
-    test('/products/16/pictures debe devolver un status 404 porque no existe el product_id 16',async ()=>{
+    test('/products/16/pictures must return a statusCode 404 if the product_id sent in params does not exist',async ()=>{
         const token = await generateToken('god');
         let res = await request(app).get('/api/v1/products/16/pictures').auth(token,{type:'bearer'});
 
@@ -742,7 +743,7 @@ describe('/products/:id/pictures GET',()=>{
         
     })
 
-    test('/products/8/pictures debe devolver un status 404 porque el product_id 8 no tiene imagenes',async ()=>{
+    test('/products/8/pictures must return a statusCode 404 becouse the product with id sent by params does not have pictures',async ()=>{
         const token = await generateToken('god');
         let res = await request(app).get('/api/v1/products/8/pictures').auth(token,{type:'bearer'});
 
@@ -756,6 +757,3 @@ describe('/products/:id/pictures GET',()=>{
         
     })
 })
-
-
-
