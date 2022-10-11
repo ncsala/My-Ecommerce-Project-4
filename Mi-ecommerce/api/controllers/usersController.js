@@ -64,22 +64,17 @@ const usersController = {
                     }
                 }
             )
-            if(userFound)
-            {
-                if(userFound.username === userFromRequest.username)
-                {
-                    return res.status(400).json({
-                        error: true,
-                        msg: "Username is already registred",
-                    });
-                }
-                if(userFound.email === userFromRequest.email)
-                {
-                    return res.status(400).json({
-                        error: true,
-                        msg: "E-mail is already registred",
-                    });
-                }
+            if(userFound && userFound.username === userFromRequest.username){
+                return res.status(400).json({
+                    error: true,
+                    msg: "Username is already registred",
+                });
+            }
+            if(userFound && userFound.email === userFromRequest.email){
+                return res.status(400).json({
+                    error: true,
+                    msg: "E-mail is already registred",
+                });
             }
             
             const hash = await bcrypt.hash(userFromRequest.password, 10);
@@ -184,22 +179,17 @@ const usersController = {
                 }
             )
 
-            if(userFound)
-            {
-                if(userFound.username === userFromRequest.username)
-                {
-                    return res.status(400).json({
-                        error: true,
-                        msg: "Username is already registred",
-                    });
-                }
-                if(userFound.email === userFromRequest.email)
-                {
-                    return res.status(400).json({
-                        error: true,
-                        msg: "E-mail is already registred",
-                    });
-                }
+            if(userFound && userFound.username === userFromRequest.username){
+                return res.status(400).json({
+                    error: true,
+                    msg: "Username is already registred",
+                });
+            }
+            if(userFound && userFound.email === userFromRequest.email){
+                return res.status(400).json({
+                    error: true,
+                    msg: "E-mail is already registred",
+                });
             }
 
             userFromRequest.password = await bcrypt.hash(userFromRequest.password, 10);
