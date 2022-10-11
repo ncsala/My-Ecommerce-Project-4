@@ -4,7 +4,7 @@ const cors = require('cors');
 const { sequelize } = require('./api/database/models');
 
 //Test
-const {loadingDataInTestingDB} = require('./api/test/helpers')
+const { loadingDataInTestingDB } = require('./api/test/helpers');
 
 //Swagger
 const swaggerUi = require('swagger-ui-express');
@@ -42,7 +42,7 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 app.use(logErrors);
 app.use(clientErrorHandler);
-  
+
 //const server = app.listen(process.env.PORT, () => {
 // sequelize.sync(
 // 	//  { force: true }
@@ -52,16 +52,13 @@ app.use(clientErrorHandler);
 
 if (process.env.NODE_ENV !== 'test') {
 	app.listen(process.env.PORT, async () => {
-		await sequelize.sync(
-		  { force: process.argv[2] === 'init'}
-		);
+		await sequelize.sync({ force: process.argv[2] === 'init' });
 
-		if(process.argv[2] === 'load' || process.argv[3] === 'load')
-		{
+		if (process.argv[2] === 'load' || process.argv[3] === 'load') {
 			await loadingDataInTestingDB();
 		}
 
-		console.log(`Servidor corriendo en el puerto ${process.env.PORT}`)
+		console.log(`Servidor corriendo en el puerto ${process.env.PORT}`);
 	});
 }
 

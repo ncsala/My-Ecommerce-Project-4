@@ -5,13 +5,14 @@ const sinon = require('sinon');
 
 const {
 	generateToken,
-    cargarDatos,
+  loadingDataInTestingDB,
 } = require('./helpers');
 const { Op } = require("sequelize");
 
 
-beforeAll(async () => {  
-    await cargarDatos()
+beforeAll(async () => {
+	await db.sequelize.sync({ force: true });
+	await loadingDataInTestingDB();
 });
 
 describe('/products GET',()=>{
@@ -274,9 +275,9 @@ describe('/products/:id GET',()=>{
         ))
     })
 
-    test('/products/18 must return a 404 statusCode and an error:true in the json response if the product_id sent does not exist',async ()=>{
+    test('/products/30 must return a 404 statusCode and an error:true in the json response if the product_id sent does not exist',async ()=>{
         const token = await generateToken('god');
-        let res = await request(app).get('/api/v1/products/18').auth(token,{type:'bearer'});
+        let res = await request(app).get('/api/v1/products/30').auth(token,{type:'bearer'});
         expect(res.statusCode).toBe(404);
         expect(res.body).toEqual(expect.objectContaining(
             {
@@ -470,7 +471,7 @@ describe('/products/:id DELETE',()=>{
 
     test('/products/:id must return a statusCode 200 if the product is deleted correctly',async ()=>{
         const token = await generateToken('god');
-        let res = await request(app).delete('/api/v1/products/4')
+        let res = await request(app).delete('/api/v1/products/22')
         .auth(token,{type:'bearer'});
 
         expect(res.statusCode).toBe(200)
@@ -535,7 +536,7 @@ describe('/products/:id DELETE',()=>{
 
     test('/products/:id must return a statusCode 404 if there isnt any product with the id sent in params',async ()=>{
         const token = await generateToken('god');
-        let res = await request(app).delete('/api/v1/products/10')
+        let res = await request(app).delete('/api/v1/products/31')
         .auth(token,{type:'bearer'});
 
         expect(res.statusCode).toBe(404)
@@ -552,7 +553,7 @@ describe('/products/:id DELETE',()=>{
         const stub = await sinon.stub(db.Product, 'destroy').throws();
 
         const token = await generateToken('god');
-        let res = await request(app).delete('/api/v1/products/1')
+        let res = await request(app).delete('/api/v1/products/11')
         .auth(token,{type:'bearer'});
 
         expect(res.statusCode).toBe(500)
@@ -582,9 +583,9 @@ describe('/products/:id PUT',()=>{
         ))
     })
 
-    test('/products/11 must return a 404 statusCode if there isnt any product with the id sent in params',async ()=>{
+    test('/products/30 must return a 404 statusCode if there isnt any product with the id sent in params',async ()=>{
         const token = await generateToken('god');
-        let res = await request(app).put('/api/v1/products/11')
+        let res = await request(app).put('/api/v1/products/30')
         .auth(token,{type:'bearer'})
         .send({title:"shampoo Head & Shoulders"});
 
@@ -592,7 +593,7 @@ describe('/products/:id PUT',()=>{
         expect(res.body).toEqual(expect.objectContaining(
             {
                 error: true,
-                msg:"Product with id = 11 does not exist",
+                msg:"Product with id = 30 does not exist",
             }
         ))
     })
@@ -729,9 +730,9 @@ describe('/products/:id/pictures GET',()=>{
     
     })
 
-    test('/products/16/pictures must return a statusCode 404 if the product_id sent in params does not exist',async ()=>{
+    test('/products/30/pictures must return a statusCode 404 if the product_id sent in params does not exist',async ()=>{
         const token = await generateToken('god');
-        let res = await request(app).get('/api/v1/products/16/pictures').auth(token,{type:'bearer'});
+        let res = await request(app).get('/api/v1/products/30/pictures').auth(token,{type:'bearer'});
 
         expect(res.statusCode).toBe(404);
         expect(res.body).toEqual(expect.objectContaining(
