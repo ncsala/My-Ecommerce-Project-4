@@ -5,15 +5,16 @@ const sinon = require('sinon');
 
 const {
 	generateToken,
-	cargarDatos,
+	loadingDataInTestingDB,
 } = require('./helpers');
 
 const { Op } = require("sequelize");
 
 
 beforeAll(async () => {
-
-    await cargarDatos()
+	await db.sequelize.sync({ force: true });
+	await loadingDataInTestingDB();
+	// await cargarDatos();
 });
 //test de devover categorias (GET)
 describe('/category GET',()=>{

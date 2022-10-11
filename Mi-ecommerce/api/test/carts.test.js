@@ -2,15 +2,16 @@ const { response } = require('express');
 const request = require('supertest');
 const {app} = require('../../server');
 const db = require('../database/models');
-const { cargarDatos, generateToken, generateTokenWithId } = require('./helpers');
+const { loadingDataInTestingDB, generateToken, generateTokenWithId } = require('./helpers');
 const sinon = require('sinon');
 
 
 
-beforeEach(async ()=>{
-    await cargarDatos()
-})
-
+beforeAll(async () => {
+	await db.sequelize.sync({ force: true });
+	await loadingDataInTestingDB();
+	// await cargarDatos();
+});
 describe('Get /cart/:id', () => {
 
     test('Must return the cart of user number one using role "admin" status 200', async () =>{
@@ -115,7 +116,7 @@ describe('PUT /carts/id', () => {
     test("Must insert a new product into a user's cart and return status 200 & the user's updated cart ", async() => {
         const token = await generateToken('god');
         const newData = {
-            id: 4,
+            id: 20,
             quantity: 1
         }
         const original = await db.cart_product.findAll({
@@ -177,7 +178,7 @@ describe('PUT /carts/id', () => {
     test("Must insert a new product into a user's cart and return status 200 & the user's updated cart ", async() => {
         const token = await generateTokenWithId('admin', 1);
         const newData = {
-            id: 6,
+            id: 19,
             quantity: 1
         }
         const original = await db.cart_product.findAll({
@@ -209,7 +210,7 @@ describe('PUT /carts/id', () => {
     test("Must insert an existing product into a user's cart and return status 200 & the user's updated cart ", async() => {
         const token = await generateToken('god');
         const newData = {
-            id: 2,
+            id: 19,
             quantity: 1
         }
         const original = await db.cart_product.findAll({
@@ -242,14 +243,13 @@ describe('PUT /carts/id', () => {
     test("Must return status 400 when the new quantity is less than 0 ", async() => {
         const token = await generateToken('god');
         const newData = {
-            id: 3,
+            id: 4,
             quantity: -100
         }
         const res = await request(app).put('/api/v1/carts/1').auth(token, {type: 'bearer'})
                     .send(newData)
                     .expect(400);
-        const data = await db.cart_product.findOne({where: {product_id: 2, cart_id: 1}})
-        expect(data.dataValues.quantity).toBeLessThan(100)
+        const data = await db.cart_product.findOne({where: {product_id: 4, cart_id: 1}})
     })
 
     test("Must return error 404 when cart does not exist ", async() => {

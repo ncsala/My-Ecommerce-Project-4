@@ -2,7 +2,6 @@ const bcrypt = require('bcrypt');
 const {generateJWT} = require('../../helpers/generateJWT');
 const db = require('../database/models');
 const { Op } = require('sequelize');
-const { raw } = require('express');
 
 const usersController = {
     listUsers: async function(req, res, next) {

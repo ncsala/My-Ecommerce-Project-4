@@ -2,7 +2,6 @@ module.exports = (sequelize, DataTypes) => {
 	const alias = 'Picture';
 
 	const cols = {
-
 		picture_id: {
 			type: DataTypes.INTEGER,
 			primaryKey: true,
@@ -24,7 +23,7 @@ module.exports = (sequelize, DataTypes) => {
 			type: DataTypes.INTEGER,
 			allowNull: false,
 			foreignKey: true,
-		}
+		},
 	};
 
 	const config = {
@@ -35,13 +34,13 @@ module.exports = (sequelize, DataTypes) => {
 
 	const Picture = sequelize.define(alias, cols, config);
 
-  Picture.associate = function(models) {
-    Picture.belongsTo(models.Product, {
-      as: 'productpicture',
-      foreignKey: 'product_id',
-	  onDelete:"CASCADE"
-    });
-  }
+	Picture.associate = function (models) {
+		Picture.belongsTo(models.Product, {
+			as: 'productpicture',
+			foreignKey: 'product_id',
+			onDelete: 'CASCADE',
+		});
+	};
 
 	return Picture;
 };
