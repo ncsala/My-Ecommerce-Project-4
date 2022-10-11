@@ -5,7 +5,7 @@
 		"password": "$2b$10$Ln/3PvC3TBuTCX2J1DgVZ.Qak62LgcsXjIZ44XrM7.0mczTs6GFh.",
 		"first_name": "Nicolas",
 		"last_name": "Caceres",
-		"profilepic": "",
+		"profilepic": null,
 		"role": "guest"
 	},
 	{
@@ -14,7 +14,7 @@
 		"password": "$2b$10$ezSIxxeO1vCWWvL0iuNurO/A.3qlhZlth6jqpfqTqPfeQXWiGxYH.",
 		"first_name": "Juan",
 		"last_name": "Cabrera",
-		"profilepic": "",
+		"profilepic": null,
 		"role": "admin"
 	},
 	{
@@ -23,7 +23,7 @@
 		"password": "$2b$10$flCVPOf/g5kb.OeR8O.x1.Dp5fI2LIWpo6/4OQsTFkXYmmF9Hj3Yi",
 		"first_name": "Juan",
 		"last_name": "Galvan",
-		"profilepic": "",
+		"profilepic": null,
 		"role": "god"
 	},
 	{
@@ -32,7 +32,7 @@
 		"password": "$2b$10$yWvH1vemXIdpg7nLowKZA.0ag3goTVArUsyVahG3dL4UPxEEbOyqC",
 		"first_name": "Marco",
 		"last_name": "Bonzini",
-		"profilepic": "",
+		"profilepic": null,
 		"role": "admin"
 	},
 	{
@@ -43,13 +43,13 @@
 		"last_name": "Parada",
 		"role": "god"
 	},
-  {
-    "email": "agus@gmail.com",
-    "username": "agus",
-    "password": "$2b$10$N//koLDHv8j86vfGii1sOOiRSgbZN8MUzwfwUTMjB0N/u6t.Wl6wm",
-    "first_name": "Agustina",
-    "last_name": "Razquin",
-    "profilepic": "",
-    "role": "guest"
-  }
+	{
+		"email": "agus@gmail.com",
+		"username": "agus",
+		"password": "$2b$10$N//koLDHv8j86vfGii1sOOiRSgbZN8MUzwfwUTMjB0N/u6t.Wl6wm",
+		"first_name": "Agustina",
+		"last_name": "Razquin",
+		"profilepic": null,
+		"role": "guest"
+	}
 ]

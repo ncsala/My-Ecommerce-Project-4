@@ -5,14 +5,15 @@ const sinon = require('sinon');
 
 const {
 	generateToken,
-    cargarDatos,
+    loadingDataInTestingDB,
     generateTokenWithId
 } = require('./helpers');
 
 const { Op } = require("sequelize");
 
 beforeAll(async () => {
-    await cargarDatos()
+    await db.sequelize.sync({force: true})
+    await loadingDataInTestingDB();
 });
 
 describe('/users',()=>{
@@ -504,14 +505,71 @@ describe('/users',()=>{
 
     ////////////UPDATE USER
 
-    test('PUT to /users must return 200, when requested by god update and return user updated', async () => {
+    test('PUT to /users/:id must return 200, when requested by god, update and return user updated (with profilepic)', async () => {
         const userIdRequest = 1;
         const token = await generateToken('god');
         const res = await request(app)
             .put('/api/v1/users/' + userIdRequest)
             .auth(token,{type:'bearer'})
             .send({
-                "firstname": "Nicolas",
+                "firstname": "Nico",
+                "lastname": "Caceres",
+                "username": "nico",
+                "password": "hola",
+                "email": "nico@gmail.com",
+                "role": "admin",
+                "profilepic": "https://imagewebsite.io/image.png",
+            })
+
+        expect(res.statusCode).toBe(200);
+        expect(res.body)
+            .toEqual(expect
+                .objectContaining(
+                {
+                    error: false,
+                    msg: 'User updated successfully',
+                    data: expect
+                            .objectContaining(
+                                {
+                                    "user_id": userIdRequest,
+                                    "first_name": "Nico",
+                                    "last_name": "Caceres",
+                                    "username": "nico",
+                                    "email": "nico@gmail.com",
+                                    "role": "admin",
+                                    "profilepic": "https://imagewebsite.io/image.png"
+                                }
+                            )
+                }
+            ))
+        expect(res.body.data).not.toContainKey('password');
+        
+        const userUpdated = await db.User.findByPk(userIdRequest)
+
+        expect(userUpdated)
+            .toEqual(expect
+                .objectContaining(
+                {
+                    user_id: userIdRequest,
+                    first_name: "Nico",
+                    last_name: "Caceres",
+                    username: "nico",
+                    email: "nico@gmail.com",
+                    role: "admin",
+                    password: expect.any(String),
+                    profilepic: "https://imagewebsite.io/image.png"
+                })
+            )   
+    })
+
+    test('PUT to /users/:id must return 200, when requested by god, update and return user updated', async () => {
+        const userIdRequest = 1;
+        const token = await generateToken('god');
+        const res = await request(app)
+            .put('/api/v1/users/' + userIdRequest)
+            .auth(token,{type:'bearer'})
+            .send({
+                "firstname": "Nico",
                 "lastname": "Caceres",
                 "username": "nico",
                 "password": "hola",
@@ -530,7 +588,7 @@ describe('/users',()=>{
                             .objectContaining(
                                 {
                                     "user_id": userIdRequest,
-                                    "first_name": "Nicolas",
+                                    "first_name": "Nico",
                                     "last_name": "Caceres",
                                     "username": "nico",
                                     "email": "nico@gmail.com",
@@ -549,7 +607,7 @@ describe('/users',()=>{
                 .objectContaining(
                 {
                     user_id: userIdRequest,
-                    first_name: "Nicolas",
+                    first_name: "Nico",
                     last_name: "Caceres",
                     username: "nico",
                     email: "nico@gmail.com",
@@ -559,7 +617,7 @@ describe('/users',()=>{
             )   
     })
 
-    test('PUT to /users must return 200, when requested own user(admin) and change role to admin', async () => {
+    test('PUT to /users/:id must return 200, when requested own user(admin) and change role to admin', async () => {
         const userIdRequest = 2;
         const token = await generateTokenWithId('admin', 2);
         const res = await request(app)
@@ -614,7 +672,7 @@ describe('/users',()=>{
             )   
     })
 
-    test('PUT to /users must return 200, when requested own user(admin) and change role to guest', async () => {
+    test('PUT to /users/:id must return 200, when requested own user(admin) and change role to guest', async () => {
         const userIdRequest = 2;
         const token = await generateTokenWithId('admin', 2);
         const res = await request(app)
@@ -669,7 +727,7 @@ describe('/users',()=>{
             )   
     })
 
-    test('PUT to /users must return 200, when requested own user(guest) and change role to guest', async () => {
+    test('PUT to /users/:id must return 200, when requested own user(guest) and change role to guest', async () => {
         const userIdRequest = 1;
         const token = await generateTokenWithId('guest', 1);
         const res = await request(app)
@@ -724,7 +782,7 @@ describe('/users',()=>{
             )   
     })
 
-    test('PUT to /users must return 400, when username already taken', async () => {
+    test('PUT to /users/:id must return 400, when username already taken', async () => {
         const userIdRequest = 1;
         const token = await generateToken('god');
         const res = await request(app)
@@ -750,7 +808,7 @@ describe('/users',()=>{
             ))   
     })
 
-    test('PUT to /users must return 400, when username already taken', async () => {
+    test('PUT to /users/:id must return 400, when email already taken', async () => {
         const userIdRequest = 1;
         const token = await generateToken('god');
         const res = await request(app)
@@ -776,7 +834,7 @@ describe('/users',()=>{
             ))   
     })
 
-    test('PUT to /users must return 403, when role is not god and user is not updating own data', async () => {
+    test('PUT to /users/:id must return 403, when role is not god and user is not updating own data', async () => {
         const userIdRequest = 1;
         const token = await generateTokenWithId('admin', 2);
         const res = await request(app)
@@ -802,7 +860,7 @@ describe('/users',()=>{
             ))
     })
 
-    test('PUT to /users must return 403, when requested own user(admin) and change role to god', async () => {
+    test('PUT to /users/:id must return 403, when requested own user(admin) and change role to god', async () => {
         const userIdRequest = 2;
         const token = await generateTokenWithId('admin', 2);
         const res = await request(app)
@@ -828,7 +886,7 @@ describe('/users',()=>{
             ))
     })
 
-    test('PUT to /users must return 403, when requested own user(guest) and change role to admin', async () => {
+    test('PUT to /users/:id must return 403, when requested own user(guest) and change role to admin', async () => {
         const userIdRequest = 1;
         const token = await generateTokenWithId('guest', 1);
         const res = await request(app)
@@ -854,7 +912,7 @@ describe('/users',()=>{
             ))
     })
 
-    test('PUT to /users must return 403, when requested own user(guest) and change role to god', async () => {
+    test('PUT to /users/:id must return 403, when requested own user(guest) and change role to god', async () => {
         const userIdRequest = 1;
         const token = await generateTokenWithId('guest', 1);
         const res = await request(app)
@@ -880,7 +938,33 @@ describe('/users',()=>{
             ))
     })
 
-    test('PUT to /users must return 404, when user not found', async () => {
+    test('PUT to /users/:id must return 403, when role is not god and user is not updating own data', async () => {
+        const userIdRequest = 1;
+        const token = await generateTokenWithId('admin', 2);
+        const res = await request(app)
+            .put('/api/v1/users/' + userIdRequest)
+            .auth(token,{type:'bearer'})
+            .send({
+                "firstname": "Nicolas",
+                "lastname": "Caceres",
+                "username": "nico",
+                "password": "hola",
+                "email": "nico@gmail.com",
+                "role": "admin"
+            })
+
+        expect(res.statusCode).toBe(403);
+        expect(res.body)
+            .toEqual(expect
+                .objectContaining(
+                {
+                    error: true,
+                    msg: "Not authorized"
+                }
+            ))
+    })
+
+    test('PUT to /users/:id must return 404, when user not found', async () => {
         const userIdRequest = 20;
         const token = await generateToken('god');
         const res = await request(app)
@@ -906,35 +990,7 @@ describe('/users',()=>{
             ))   
     })
 
-
-    test('PUT to /users must return 403, when role is not god and user is not updating own data', async () => {
-        const userIdRequest = 1;
-        const token = await generateTokenWithId('admin', 2);
-        const res = await request(app)
-            .put('/api/v1/users/' + userIdRequest)
-            .auth(token,{type:'bearer'})
-            .send({
-                "firstname": "Nicolas",
-                "lastname": "Caceres",
-                "username": "nico",
-                "password": "hola",
-                "email": "nico@gmail.com",
-                "role": "admin"
-            })
-
-        expect(res.statusCode).toBe(403);
-        expect(res.body)
-            .toEqual(expect
-                .objectContaining(
-                {
-                    error: true,
-                    msg: "Not authorized"
-                }
-            ))
-    })
-    
-
-    test('PUT to /users/ must return status 500 when a server error ocurres', 
+    test('PUT to /users/:id must return status 500 when a server error ocurres', 
     async () => {
         const stub = sinon.stub(db.User, 'findOne').throws();
         const userIdRequest = 1;
@@ -950,6 +1006,189 @@ describe('/users',()=>{
                 "email": "nico@gmail.com",
                 "role": "admin"
             })
+        expect(res.statusCode)
+            .toBe(500);
+        expect(res.body)
+            .toEqual(expect
+                .objectContaining(
+                {
+                    error: true,
+                }
+            ))
+        stub.restore();
+    })
+
+    ////////////DELETE USER
+
+    test('DELETE to /users/:id must return 403 when not god and not requested by owner', async () => {
+        const userIdRequest = 2;
+        const token = await generateTokenWithId('admin', 1);
+        const res = await request(app)
+            .delete('/api/v1/users/' + userIdRequest)
+            .auth(token,{type:'bearer'})
+
+        expect(res.statusCode).toBe(403);
+        expect(res.body)
+            .toEqual(expect
+                .objectContaining(
+                {
+                    error: true,
+                    msg: "Not authorized"
+                }
+            ))
+        
+        const userDeleted = await db.User.findByPk(userIdRequest)
+
+        expect(userDeleted)
+            .toEqual(expect
+                .objectContaining(
+                {
+                    user_id: userIdRequest,
+                    first_name: "Juan",
+                    last_name: "Cabrera",
+                    username: "juanc",
+                    email: "juancabrera@gmail.com",
+                    role: "guest",
+                    password: expect.any(String),
+                }
+        ));
+    })
+
+    test('DELETE to /users/:id must return 200 when requested by god, delete it and return user deleted', async () => {
+        const userIdRequest = 1;
+        const token = await generateToken('god');
+        const res = await request(app)
+            .delete('/api/v1/users/' + userIdRequest)
+            .auth(token,{type:'bearer'})
+
+        expect(res.statusCode).toBe(200);
+        expect(res.body)
+            .toEqual(expect
+                .objectContaining(
+                {
+                    error: false,
+                    msg: 'User deleted successfully',
+                    data: expect
+                            .objectContaining(
+                                {
+                                    "user_id": userIdRequest,
+                                    "first_name": "Nicolas",
+                                    "last_name": "Caceres",
+                                    "username": "nico",
+                                    "email": "nico@gmail.com",
+                                    "role": "guest",
+                                    "profilepic": null
+                                }
+                            )
+                }
+            ))
+        expect(res.body.data).not.toContainKey('password');
+        
+        const userDeleted = await db.User.findByPk(userIdRequest)
+
+        expect(userDeleted).toEqual(null);
+    })
+
+    test('DELETE to /users/:id must return 200 when deleting own user(guest), delete it and return user deleted', async () => {
+        const userIdRequest = 6;
+        const token = await generateTokenWithId('guest', userIdRequest);
+        const res = await request(app)
+            .delete('/api/v1/users/' + userIdRequest)
+            .auth(token,{type:'bearer'})
+
+        expect(res.statusCode).toBe(200);
+        expect(res.body)
+            .toEqual(expect
+                .objectContaining(
+                {
+                    error: false,
+                    msg: 'User deleted successfully',
+                    data: expect
+                            .objectContaining(
+                                {
+                                    "user_id": userIdRequest,
+                                    "first_name": "Agustina",
+                                    "last_name": "Razquin",
+                                    "username": "agus",
+                                    "email": "agus@gmail.com",
+                                    "role": "guest",
+                                    "profilepic": null
+                                }
+                            )
+                }
+            ))
+        expect(res.body.data).not.toContainKey('password');
+        
+        const userDeleted = await db.User.findByPk(userIdRequest)
+
+        expect(userDeleted).toEqual(null);
+    })
+
+    test('DELETE to /users/:id must return 200 when deleting own user(admin), delete it and return user deleted', async () => {
+        const userIdRequest = 4;
+        const token = await generateTokenWithId('admin', userIdRequest);
+        const res = await request(app)
+            .delete('/api/v1/users/' + userIdRequest)
+            .auth(token,{type:'bearer'})
+
+        expect(res.statusCode).toBe(200);
+        expect(res.body)
+            .toEqual(expect
+                .objectContaining(
+                {
+                    error: false,
+                    msg: 'User deleted successfully',
+                    data: expect
+                            .objectContaining(
+                                {
+                                    "user_id": userIdRequest,
+                                    "first_name": "Marco",
+                                    "last_name": "Bonzini",
+                                    "username": "marco",
+                                    "email": "marco@gmail.com",
+                                    "role": "admin",
+                                    "profilepic": null
+                                }
+                            )
+                }
+            ))
+        expect(res.body.data).not.toContainKey('password');
+        
+        const userDeleted = await db.User.findByPk(userIdRequest)
+
+        expect(userDeleted).toEqual(null);
+    })
+
+    test('DELETE to /users/:id must return 200 when deleting own user(admin), delete it and return user deleted', async () => {
+        const userIdRequest = 4;
+        const token = await generateTokenWithId('admin', userIdRequest);
+        const res = await request(app)
+            .delete('/api/v1/users/' + userIdRequest)
+            .auth(token,{type:'bearer'})
+
+        expect(res.statusCode).toBe(404);
+        expect(res.body)
+            .toEqual(expect
+                .objectContaining(
+                {
+                    error: true,
+                    msg: 'User does not exists.'
+                }
+            ))
+        
+        const userDeleted = await db.User.findByPk(userIdRequest)
+
+        expect(userDeleted).toEqual(null);
+    })
+
+    test('DELETE to /users/:id must return status 500 when a server error ocurres', 
+    async () => {
+        const stub = sinon.stub(db.User, 'destroy').throws();
+        const userIdRequest = 5;
+        const token = await generateToken('god');
+        const res = await request(app)
+            .delete('/api/v1/users/' + userIdRequest)
+            .auth(token,{type:'bearer'})
         expect(res.statusCode)
             .toBe(500);
         expect(res.body)
