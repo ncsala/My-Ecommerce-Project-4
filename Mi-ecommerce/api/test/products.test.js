@@ -757,6 +757,3 @@ describe('/products/:id/pictures GET',()=>{
         
     })
 })
-
-
-
