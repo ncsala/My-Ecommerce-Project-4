@@ -1,6 +1,6 @@
 // jest.useFakeTimers();
 const request = require('supertest');
-const { app, server } = require('../../server');
+const { app, server } = require('../../app');
 const db = require('../database/models');
 const sinon = require('sinon');
 const { generateToken, loadingDataInTestingDB } = require('./helpers');

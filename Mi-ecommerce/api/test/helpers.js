@@ -83,9 +83,9 @@ async function loadingDataInTestingDB() {
 	}
 }
 
-const cargarDatos = async ()=>{
-	await db.sequelize.query('CALL spu_DatosDePrueba()')
-}
+// const cargarDatos = async ()=>{
+// 	await db.sequelize.query('CALL spu_DatosDePrueba()')
+// }
 
 
-module.exports = { cargarDatos ,generateToken, generateTokenWithId, loadingDataInTestingDB };
+module.exports = {generateToken, generateTokenWithId, loadingDataInTestingDB };
