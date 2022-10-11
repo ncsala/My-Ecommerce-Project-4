@@ -1,4 +1,4 @@
-const { app } = require("../../server.js")
+const { app } = require("../../app.js")
 const request = require('supertest');
 const db = require('../database/models');
 const sinon = require('sinon');

@@ -1,6 +1,6 @@
 const { response } = require('express');
 const request = require('supertest');
-const {app} = require('../../server');
+const {app} = require('../../app');
 const db = require('../database/models');
 const { loadingDataInTestingDB, generateToken, generateTokenWithId } = require('./helpers');
 const sinon = require('sinon');
