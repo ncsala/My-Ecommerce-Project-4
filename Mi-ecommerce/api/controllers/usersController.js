@@ -1,8 +1,9 @@
 const bcrypt = require('bcrypt');
 const {generateJWT} = require('../../helpers/generateJWT');
 const db = require('../database/models');
-const { Op } = require('sequelize');
+const { Op, where } = require('sequelize');
 const { raw } = require('express');
+//const { Where } = require('sequelize/types/utils');
 
 const usersController = {
     listUsers: async function(req, res, next) {
@@ -233,6 +234,35 @@ const usersController = {
             );
 
             if(!user) {return res.status(404).json({error: true, msg: "User does not exists."});}
+
+            const cartuser = await db.Cart.findOne(
+                {
+                    where: {
+                        cart_id: userId
+                    },
+                    attributes: ['cart_id']
+                }
+            );
+
+            const products = await db.cart_product.findAll(
+                {
+                    where: {
+                        cart_id: cartuser.cart_id
+                    }
+                }
+            )
+
+            for await (let product of products)
+            {
+                await db.Product.increment('stock',
+                    {
+                        by: product.quantity,
+                        where: {
+                            product_id: product.product_id
+                        }
+                    }
+                )
+            }
             
             await db.User.destroy({
                 where: {user_id: userId}

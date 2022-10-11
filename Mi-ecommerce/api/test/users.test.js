@@ -1057,6 +1057,9 @@ describe('/users',()=>{
     test('DELETE to /users/:id must return 200 when requested by god, delete it and return user deleted', async () => {
         const userIdRequest = 1;
         const token = await generateToken('god');
+
+
+
         const res = await request(app)
             .delete('/api/v1/users/' + userIdRequest)
             .auth(token,{type:'bearer'})
@@ -1085,8 +1088,26 @@ describe('/users',()=>{
         expect(res.body.data).not.toContainKey('password');
         
         const userDeleted = await db.User.findByPk(userIdRequest)
-
         expect(userDeleted).toEqual(null);
+
+        const cartDeleted = await db.Cart.findOne(
+            {
+                where:{
+                    user_id: userIdRequest
+                }
+            }
+        )
+        expect(cartDeleted).toEqual(null);
+
+        const cartProductDeleted = await db.cart_product.findAll(
+            {
+                where:{
+                    cart_id: userIdRequest
+                }
+            }
+        )
+
+        expect(cartProductDeleted).toEqual([]);
     })
 
     test('DELETE to /users/:id must return 200 when deleting own user(guest), delete it and return user deleted', async () => {
