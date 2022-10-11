@@ -4,6 +4,7 @@
   "description": "",
   "main": "server.js",
   "scripts": {
+    "start": "export NODE_ENV=development && node server.js",
     "test": "jest --watchAll --verbose --coverage --runInBand"
   },
   "jest": {
