@@ -12,6 +12,7 @@ const {
 const { Op } = require("sequelize");
 
 beforeAll(async () => {
+
     await db.sequelize.sync({force: true})
     await loadingDataInTestingDB();
 });

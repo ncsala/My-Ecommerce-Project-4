@@ -83,10 +83,6 @@ const createPicture = async (req, res, next) => {
 			product_id: productId,
 		});
 
-    // if (!newPicture) {
-    //   return res.status(400).json({ error: true, msg: 'Picture not created' });
-    // }
-
 		res.status(201).json({
 			error: false,
 			msg: 'Picture created',
@@ -125,10 +121,6 @@ const updatePicture = async (req, res, next) => {
 			}
 		);
 
-    // if (!pictureUpdate) {
-    //   return res.status(400).json({ error: true, msg: 'Picture not updated' });
-    // }
-
 		pictureUpdate = await db.Picture.findByPk(pictureId);
 
 		res.status(200).json({
@@ -160,10 +152,6 @@ const deletePicture = async (req, res, next) => {
 				picture_id: pictureId,
 			},
 		});
-
-    // if (!pictureDeleted) {
-    //   return res.status(400).json({ error: true, msg: 'Picture not deleted' });
-    // }
 
 		res
 			.status(200)

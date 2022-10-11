@@ -1,9 +1,8 @@
 const bcrypt = require('bcrypt');
 const {generateJWT} = require('../../helpers/generateJWT');
 const db = require('../database/models');
-const { Op, where } = require('sequelize');
-const { raw } = require('express');
-//const { Where } = require('sequelize/types/utils');
+const { Op } = require('sequelize');
+
 
 const usersController = {
     listUsers: async function(req, res, next) {

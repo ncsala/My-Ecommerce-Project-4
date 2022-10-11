@@ -3,7 +3,7 @@ const request = require('supertest');
 const { app, server } = require('../../server');
 const db = require('../database/models');
 const sinon = require('sinon');
-const { generateToken, cargarDatos, loadingDataInTestingDB } = require('./helpers');
+const { generateToken, loadingDataInTestingDB } = require('./helpers');
 
 beforeAll(async () => {
 	await db.sequelize.sync({ force: true });
