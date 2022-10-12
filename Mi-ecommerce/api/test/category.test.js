@@ -84,7 +84,7 @@ describe('/category POST',()=>{
 		.send(oldCategory);
         expect(res.statusCode).toBe(400);
 	});
-	test('must return a statusCode 401 if your user is not allowed to delete a category',async ()=>{
+	test('must return a status 401 if your user is not allowed to delete a category',async ()=>{
 		const token = await generateToken('guest');
 		const res = await request(app)
 		.post('/api/v1/category')
@@ -163,7 +163,7 @@ test("must return a status 200 and delete the category", async ()=>{
 	});
 	expect(Categ).toBe(null);
 });
-test('must return a statusCode 401 if your user is not allowed to delete a category',async ()=>{
+test('must return a status 401 if your user is not allowed to delete a category',async ()=>{
 	const token = await generateToken('guest');
 	const res = await request(app)
 	.delete('/api/v1/category/2')
