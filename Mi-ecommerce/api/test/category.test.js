@@ -18,7 +18,7 @@ beforeAll(async () => {
 });
 //test de devover categorias (GET)
 describe('/category GET',()=>{
-    test("must return a status 200 and with the correct json format", async ()=>{
+    test("should return all categories with status 200", async ()=>{
 		const token = await generateToken('god');
 		const res = await request(app)
 		.get('/api/v1/category')
@@ -35,7 +35,7 @@ describe('/category GET',()=>{
 		});
 	});
 
-	test("must return a status 500 and with error", async ()=>{
+	test("must return a status 500 if there is an error on the server ", async ()=>{
 		const token = await generateToken('god');
 		const stub =   sinon.stub(db.Category, 'findAll').throws();
 		
@@ -51,14 +51,14 @@ describe('/category GET',()=>{
 //Test create category POST
 describe('/category POST',()=>{
 	const newCategory ={
-		name:"hielo1424"
+		name:"Congelados"
 	};
 	const oldCategory ={
 		name:"Ropa y Calzados"
 	}
 	
 	const oldCategory1 ={
-		name:"Ropas y Calzados"
+		name:"Articulos de cocina"
 	}
 	test("must return a status 201 and with the new category", async ()=>{
 		const token = await generateToken('god');
@@ -71,12 +71,12 @@ describe('/category POST',()=>{
 			where: { category_id: res.body.data.category_id },
 		});
         expect(Categ).toEqual(expect.objectContaining({
-			category_name: "hielo1424"
+			category_name: "Congelados"
 			})
 		);
 	});
 
-	test("must return a status 400 and a error", async ()=>{
+	test("must return a status 400 if Category already exist", async ()=>{
 		const token = await generateToken('god');
 		const res = await request(app)
 		.post('/api/v1/category')
@@ -84,8 +84,16 @@ describe('/category POST',()=>{
 		.send(oldCategory);
         expect(res.statusCode).toBe(400);
 	});
+	test('must return a status 401 if your user is not allowed to delete a category',async ()=>{
+		const token = await generateToken('guest');
+		const res = await request(app)
+		.post('/api/v1/category')
+		.auth(token,{type:'bearer'})
+		.send(oldCategory1);
+        expect(res.statusCode).toBe(401);
 
-	test("must return a status 500 and with the new category", async ()=>{
+	});
+	test("must return a status 500 if there is an error on the server ", async ()=>{
 		const token = await generateToken('god');
 		const stub = await sinon.stub(db.Category, 'create').throws();
 		const res = await request(app)
@@ -104,7 +112,7 @@ describe('/category PUT',()=>{
 const newcategorymodif = {
 	name:"bebida"
 }
-	test("must return a status 200 and with new catergory category modified", async ()=>{
+	test("must return a status 200 with new catergory category modified", async ()=>{
 		const token = await generateToken('god');
 		const res = await request(app)
 		.put('/api/v1/category/1')
@@ -129,7 +137,7 @@ const newcategorymodif = {
         expect(res.statusCode).toBe(404);
 	});
 
-	test("must return a status 500 and a error", async ()=>{
+	test("must return a status 500  if there is an error on the server", async ()=>{
 		const token = await generateToken('god');
 		const stub = await sinon.stub(db.Category, 'update').throws();
 		const res = await request(app)
@@ -144,7 +152,7 @@ const newcategorymodif = {
 //Test eliminar categorias DELETE
 
 describe('/category DELETE',()=>{
-test("must return a status 200 and delete de category", async ()=>{
+test("must return a status 200 and delete the category", async ()=>{
 	const token = await generateToken('god');
 	const res = await request(app)
 	.delete('/api/v1/category/1')
@@ -155,8 +163,14 @@ test("must return a status 200 and delete de category", async ()=>{
 	});
 	expect(Categ).toBe(null);
 });
-
-test("must return a status 404 and error", async ()=>{
+test('must return a status 401 if your user is not allowed to delete a category',async ()=>{
+	const token = await generateToken('guest');
+	const res = await request(app)
+	.delete('/api/v1/category/2')
+	.auth(token,{type:'bearer'});
+	expect(res.statusCode).toBe(401);
+});
+test("must return a status 404 and catery not found", async ()=>{
 	const token = await generateToken('god');
 	const res = await request(app)
 	.delete('/api/v1/category/17777')
@@ -165,7 +179,7 @@ test("must return a status 404 and error", async ()=>{
 });
 });
 
-test("must return a status 500 and a error ", async ()=>{
+test("must return a status 500 if there is an error on the server", async ()=>{
 	const token = await generateToken('god');
 	const stub = await sinon.stub(db.Category, 'destroy').throws();
 	const res = await request(app)
