@@ -12,6 +12,7 @@
    DB_PASS= contraseña de usuario de mysql
    DB_USER= usuario de mysql
    DB_NAME= mi_ecommerce_4
+   DB_NAME_TEST=mi_ecommerce_4_test
    SECRETORPRIVATEKEY= clave secreta para la generación de JWT(a su elección)
    PORT= puerto en el que se va a escuchar
 ``` 
