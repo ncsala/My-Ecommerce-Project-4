@@ -6,7 +6,6 @@ const sinon = require('sinon');
 const {
 	generateToken,
 	loadingDataInTestingDB,
-	cargarDatos,
 } = require('./helpers');
 const { generateJWT } = require('../../helpers/generateJWT');
 
