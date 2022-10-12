@@ -25,7 +25,7 @@ router.post(
 );
 router.delete(
 	'/:id',
-  roleVerification("admin", "god", "guest"),
+  roleVerification("admin", "god"),
 	validatorHandler(idByParamsSchema, 'params'),
 	categoryController.deleteCategory
 );
