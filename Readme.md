@@ -1,6 +1,6 @@
 ## Objetivos del Proyecto
 
-- Utilizando Node.js, Express y Sequelize desarrollar los endpoints para una API de un e-commerce.
+- Utilizando Node.js, Express y Sequelize desarrollar los endpoints para una API de un e-commerce. Proyecto grupal para bootcamp de la empresa.
 ## Comenzando
 
 1. Instalar mysql y crear base de datos llamada `mi_ecommerce_4`.
